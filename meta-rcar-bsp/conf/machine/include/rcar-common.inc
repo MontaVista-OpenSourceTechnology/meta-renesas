@@ -9,8 +9,8 @@ WKS_FILE ?= "image-v3x.wks"
 COMPRESSIONTYPES += "crc"
 CONVERSION_CMD:crc = "${RECIPE_SYSROOT_NATIVE}/usr/bin/perl-native/perl \
                       ${RECIPE_SYSROOT_NATIVE}/usr/bin/crc32 \
-                      ${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.${type} \
-                      > ${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.${type}.crc"
+                      ${IMAGE_NAME}.${type} \
+                      > ${IMAGE_NAME}.${type}.crc"
 
 SERIAL_CONSOLES = "115200;ttySC0"
 

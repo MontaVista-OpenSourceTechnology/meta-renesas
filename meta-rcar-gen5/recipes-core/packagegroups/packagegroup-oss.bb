@@ -81,7 +81,6 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
 # Python3 packages requested by Renesas
 RDEPENDS:packagegroup-bsp-python3 = " \
     python3-dbus \
-    python3-nose \
     python3-numpy \
     python3-pygobject \
     python3-pyyaml \

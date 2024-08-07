@@ -75,7 +75,7 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
     util-linux \
     dbench \
     dhrystone \
-    ${@bb.utils.contains("LICENSE_FLAGS_WHITELIST", "non-commercial", "netperf", "", d)} \
+    ${@bb.utils.contains("LICENSE_FLAGS_ACCEPTED", "non-commercial", "netperf", "", d)} \
     whetstone \
     fio \
 "

@@ -52,8 +52,6 @@ RDEPENDS:packagegroup-bsp-devpkg = " \
     libgpiod libgpiod-tools \
     alsa-utils \
 "
-# Remove strace in due to compile error with Kernel v5.10
-RDEPENDS:packagegroup-bsp-devpkg:remove = "strace"
 
 # Various packages needed for testing
 RDEPENDS:packagegroup-bsp-testpkg = " \

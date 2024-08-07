@@ -30,8 +30,8 @@ do_install:append:rcar-gen5() {
     install -m 0644 ${STAGING_KERNEL_DIR}/include/uapi/linux/renesas_uioctl.h ${D}/usr/include/linux/
 
     # Install dmatest module
-    install -d ${D}/lib/modules/${KERNEL_VERSION}/extra/
-    mv ${D}/lib/modules/${KERNEL_VERSION}/kernel/drivers/dma/dmatest.ko ${D}/lib/modules/${KERNEL_VERSION}/extra/
+    install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    mv ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/kernel/drivers/dma/dmatest.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
 # Deploy vmlinux to deploy directory
 do_deploy:append:rcar-gen5() {

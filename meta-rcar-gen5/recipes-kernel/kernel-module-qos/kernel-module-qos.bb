@@ -21,32 +21,27 @@ SRCREV = "f4c60b4ad0e96e0de3222dc42179bcade931bd76"
 SRC_URI = "${QOS_DRV_URL};branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
-QOS_DRV_DIR = "qos-module/files/qos/drv"
+B = "${WORKDIR}/git/qos-module/files/qos/drv"
 
 # Build Qos kernel module without suffix
 KERNEL_MODULE_PACKAGE_SUFFIX = ""
 
-do_compile() {
-    cd ${S}/${QOS_DRV_DIR}/
-    oe_runmake
-}
-
 do_install () {
     # Create destination directories
-    install -d ${D}/lib/modules/${KERNEL_VERSION}/extra/
+    install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     install -d ${D}/${includedir}
 
     # Install shared library to KERNELSRC(STAGING_KERNEL_DIR) for reference from other modules
     # This file installed in SDK by kernel-devsrc pkg.
-    install -m 644 ${S}/${QOS_DRV_DIR}/Module.symvers ${KERNELSRC}/include/qos.symvers
+    install -m 644 ${B}/Module.symvers ${KERNELSRC}/include/qos.symvers
 
     # Install kernel module
-    install -m 644 ${S}/${QOS_DRV_DIR}/qos.ko ${D}/lib/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${B}/qos.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 
     # Install shared header files
-    install -m 644 ${S}/${QOS_DRV_DIR}/qos.h ${KERNELSRC}/include/
-    install -m 644 ${S}/${QOS_DRV_DIR}/qos_public_common.h ${KERNELSRC}/include/
-    install -m 644 ${S}/${QOS_DRV_DIR}/qos_public_common.h ${D}/${includedir}/
+    install -m 644 ${B}/qos.h ${KERNELSRC}/include/
+    install -m 644 ${B}/qos_public_common.h ${KERNELSRC}/include/
+    install -m 644 ${B}/qos_public_common.h ${D}/${includedir}/
 }
 
 PACKAGES = " \
@@ -56,7 +51,7 @@ PACKAGES = " \
 "
 
 FILES:${PN} = " \
-    /lib/modules/${KERNEL_VERSION}/extra/qos.ko \
+    ${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/qos.ko \
 "
 
 FILES:${PN}-dev = " \

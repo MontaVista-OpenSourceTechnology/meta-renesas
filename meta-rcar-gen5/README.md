@@ -75,7 +75,7 @@ X5H|MACHINE = "x5h"
 * Configure for systemd init in local.conf:
 
 ```
-    DISTRO_FEATURES_append = " systemd"
+    DISTRO_FEATURES:append = " systemd"
     VIRTUAL-RUNTIME_init_manager = "systemd"
 ```
 
@@ -112,7 +112,7 @@ Should define the staticdev in SDK image feature for installing the static libs
 to SDK in local.conf.
 
 ```
-    SDKIMAGE_FEATURES_append = " staticdev-pkgs"
+    SDKIMAGE_FEATURES:append = " staticdev-pkgs"
 ```
 
 ### For 64-bit target SDK (aarch64)

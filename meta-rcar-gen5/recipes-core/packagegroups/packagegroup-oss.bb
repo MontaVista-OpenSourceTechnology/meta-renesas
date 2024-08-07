@@ -12,7 +12,7 @@ PACKAGES = " \
     packagegroup-bsp-utest \
 "
 
-RDEPENDS_packagegroup-oss = " \
+RDEPENDS:packagegroup-oss = " \
     packagegroup-bsp-devpkg \
     packagegroup-bsp-testpkg \
     packagegroup-bsp-python3 \
@@ -20,7 +20,7 @@ RDEPENDS_packagegroup-oss = " \
 "
 
 # OSS packages for development
-RDEPENDS_packagegroup-bsp-devpkg = " \
+RDEPENDS:packagegroup-bsp-devpkg = " \
     cmake \
     g++ \
     gcc \
@@ -53,10 +53,10 @@ RDEPENDS_packagegroup-bsp-devpkg = " \
     alsa-utils \
 "
 # Remove strace in due to compile error with Kernel v5.10
-RDEPENDS_packagegroup-bsp-devpkg_remove = "strace"
+RDEPENDS:packagegroup-bsp-devpkg:remove = "strace"
 
 # Various packages needed for testing
-RDEPENDS_packagegroup-bsp-testpkg = " \
+RDEPENDS:packagegroup-bsp-testpkg = " \
     bonnie++ \
     can-utils \
     e2fsprogs \
@@ -81,7 +81,7 @@ RDEPENDS_packagegroup-bsp-testpkg = " \
 "
 
 # Python3 packages requested by Renesas
-RDEPENDS_packagegroup-bsp-python3 = " \
+RDEPENDS:packagegroup-bsp-python3 = " \
     python3-dbus \
     python3-nose \
     python3-numpy \
@@ -92,7 +92,7 @@ RDEPENDS_packagegroup-bsp-python3 = " \
 "
 
 # Utest (IMR, IMP, etc demos) related packages
-RDEPENDS_packagegroup-bsp-utest = " \
+RDEPENDS:packagegroup-bsp-utest = " \
     gstreamer1.0-plugins-base \
     gstreamer1.0-plugins-base-app \
     libdrm \

@@ -64,10 +64,10 @@ module_clean_symbol() {
     rm -f ${STAGING_KERNEL_BUILDDIR}/GLES.symvers
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     /lib/modules/${KERNEL_VERSION}/extra/pvrsrvkm.ko \
     ${sysconfdir}/modules-load.d \
     ${sysconfdir}/modprobe.d/blacklist.conf \
 "
 
-RPROVIDES_${PN} += "kernel-module-pvrsrvkm"
+RPROVIDES:${PN} += "kernel-module-pvrsrvkm"

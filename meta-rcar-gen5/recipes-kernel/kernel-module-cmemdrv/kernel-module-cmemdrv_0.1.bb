@@ -13,11 +13,11 @@ PV = "0.1"
 RENESAS_CMEM_URL ?= "git://github.com/renesas-rcar/cmem.git;protocol=https"
 SRC_URI = "${RENESAS_CMEM_URL};nobranch=1"
 
-SRCREV_rcar-gen5 = "6c187a3b58adad920a4fe2a194b5ad5406be9524"
+SRCREV:rcar-gen5 = "6c187a3b58adad920a4fe2a194b5ad5406be9524"
 
 S = "${WORKDIR}/git"
 
-do_install_append () {
+do_install:append () {
     install -d ${D}${includedir}/linux
     install -m 644 ${S}/cmemdrv.h ${D}${includedir}/linux/
 }

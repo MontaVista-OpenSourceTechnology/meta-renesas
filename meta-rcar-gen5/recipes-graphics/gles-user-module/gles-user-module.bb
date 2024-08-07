@@ -27,7 +27,7 @@ SRC_URI[sha256sum] = "1079f63faa3b671bb8847eb92cd14ee9201f27a9d618253e7f58f20a3e
 
 inherit systemd
 
-SYSTEMD_SERVICE_${PN} = "rc.pvr.service"
+SYSTEMD_SERVICE:${PN} = "rc.pvr.service"
 
 do_populate_lic[noexec] = "1"
 do_compile[noexec] = "1"
@@ -80,7 +80,7 @@ PACKAGES = "\
     libgles2-${PN}-dev \
 "
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     ${sysconfdir}/* \
     ${libdir}/libdlc_REL.so* \
     ${libdir}/libIMGegl.so* \
@@ -94,46 +94,46 @@ FILES_${PN} = " \
     ${RENESAS_DATADIR}/bin/* \
     ${exec_prefix}/bin/* \
 "
-FILES_libegl-${PN} = "${libdir}/libEGL.so*"
-FILES_libgles2-${PN} = "${libdir}/libGLESv2.so*"
+FILES:libegl-${PN} = "${libdir}/libEGL.so*"
+FILES:libgles2-${PN} = "${libdir}/libGLESv2.so*"
 
-FILES_${PN}-dev = " \
+FILES:${PN}-dev = " \
     ${includedir}/* \
     ${libdir}/pkgconfig/* \
 "
-FILES_libegl-${PN}-dev = " \
+FILES:libegl-${PN}-dev = " \
     ${libdir}/libEGL.* \
     ${includedir}/EGL \
     ${includedir}/KHR/khrplatform.h \
     ${libdir}/pkgconfig/egl.pc \
 "
-FILES_libgles2-${PN}-dev = " \
+FILES:libgles2-${PN}-dev = " \
     ${libdir}/libGLESv2.* \
     ${includedir}/GLES2 \
     ${libdir}/pkgconfig/glesv2.pc \
 "
-FILES_libgles3-${PN}-dev = " \
+FILES:libgles3-${PN}-dev = " \
     ${includedir}/GLES3 \
 "
 
-RPROVIDES_libegl-${PN} = "libegl"
-RPROVIDES_libegl-${PN}-dev = "libegl-dev"
-RPROVIDES_libgles2-${PN} = "libgles2"
-RPROVIDES_libgles2-${PN}-dev = "libgles2-dev"
-RPROVIDES_libgles3-${PN}-dev = "libgles3-dev"
+RPROVIDES:libegl-${PN} = "libegl"
+RPROVIDES:libegl-${PN}-dev = "libegl-dev"
+RPROVIDES:libgles2-${PN} = "libgles2"
+RPROVIDES:libgles2-${PN}-dev = "libgles2-dev"
+RPROVIDES:libgles3-${PN}-dev = "libgles3-dev"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     kernel-module-gles \
 "
 
-INSANE_SKIP_${PN} = "ldflags build-deps file-rdeps"
-INSANE_SKIP_${PN}-dev = "ldflags build-deps file-rdeps"
-INSANE_SKIP_${PN} += "arch"
-INSANE_SKIP_${PN}-dev += "arch"
-INSANE_SKIP_${PN}-dbg = "arch"
+INSANE_SKIP:${PN} = "ldflags build-deps file-rdeps"
+INSANE_SKIP:${PN}-dev = "ldflags build-deps file-rdeps"
+INSANE_SKIP:${PN} += "arch"
+INSANE_SKIP:${PN}-dev += "arch"
+INSANE_SKIP:${PN}-dbg = "arch"
 
 #To avoid already-stripped errors and not stripped libs from packages
-INSANE_SKIP_${PN} += "already-stripped"
+INSANE_SKIP:${PN} += "already-stripped"
 
 # Skip debug split and strip of do_package()
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"

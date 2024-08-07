@@ -8,7 +8,7 @@ PACKAGES = " \
     packagegroup-opencv-sdk \
 "
 
-RDEPENDS_packagegroup-opencv-sdk = " \
+RDEPENDS:packagegroup-opencv-sdk = " \
     gstreamer1.0-plugins-base-app \
     libopencv-calib3d \
     libopencv-core \

@@ -16,7 +16,7 @@ PREFERRED_PROVIDER_virtual/kernel = "linux-renesas"
 EXTRA_IMAGEDEPENDS += " u-boot"
 
 # Add variable to Build Configuration in build log
-BUILDCFG_VARS_append = " SOC_FAMILY"
+BUILDCFG_VARS:append = " SOC_FAMILY"
 
 # Set Image & SDK name for Gen5
 IMAGE_NAME = "${IMAGE_BASENAME}-x5h${IMAGE_VERSION_SUFFIX}"
@@ -24,7 +24,7 @@ IMAGE_LINK_NAME = "${IMAGE_BASENAME}-x5h"
 SDK_NAME_x5h = "${DISTRO}-${TCLIBC}-${SDKMACHINE}-${IMAGE_BASENAME}-${TUNE_PKGARCH}-x5h"
 
 # Configuration for Rcar GFX
-DISTRO_FEATURES_remove = "${@bb.utils.contains('MACHINE_FEATURES', 'gsx', 'opengl', '', d)}"
+DISTRO_FEATURES:remove = "${@bb.utils.contains('MACHINE_FEATURES', 'gsx', 'opengl', '', d)}"
 
 PREFERRED_PROVIDER_virtual/egl = "${@bb.utils.contains('MACHINE_FEATURES', 'gsx', 'gles-user-module', '', d)}"
 PREFERRED_PROVIDER_virtual/libgles2 = "${@bb.utils.contains('MACHINE_FEATURES', 'gsx', 'gles-user-module', '', d)}"

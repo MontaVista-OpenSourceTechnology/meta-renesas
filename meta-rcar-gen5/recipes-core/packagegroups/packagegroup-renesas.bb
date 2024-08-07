@@ -20,7 +20,7 @@ GFX_PKGS = " \
 "
 
 # ADAS common packages: CMEM, CV lib
-RDEPENDS_packagegroup-renesas = " \
+RDEPENDS:packagegroup-renesas = " \
     kernel-module-uio-pdrv-genirq \
     kernel-module-cmemdrv \
     kernel-module-cmemdrv-dev \

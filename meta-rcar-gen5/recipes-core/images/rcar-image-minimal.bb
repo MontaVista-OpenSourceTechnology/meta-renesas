@@ -8,7 +8,7 @@ COMPATIBLE_MACHINE = "x5h"
 EXTRA_IMAGE_FEATURES += "package-management"
 
 # Basic packages
-IMAGE_INSTALL_append = " \
+IMAGE_INSTALL:append = " \
     bash \
     v4l-utils \
     i2c-tools \

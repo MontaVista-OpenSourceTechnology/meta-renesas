@@ -20,11 +20,11 @@ EXTRA_IMAGE_FEATURES += " \
 # Do not install debug packages, it reduces SDK size
 RENESAS_REMOVED_SDKIMAGE_FEATURES = "dbg-pkgs"
 
-SDKIMAGE_FEATURES_remove = " \
+SDKIMAGE_FEATURES:remove = " \
     ${RENESAS_REMOVED_SDKIMAGE_FEATURES} \
 "
 
-IMAGE_INSTALL_append = " \
+IMAGE_INSTALL:append = " \
     packagegroup-renesas \
     packagegroup-oss \
     packagegroup-opencv-sdk \

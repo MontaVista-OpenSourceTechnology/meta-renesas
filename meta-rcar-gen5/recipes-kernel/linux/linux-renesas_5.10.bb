@@ -21,7 +21,7 @@ KBUILD_DEFCONFIG = "defconfig"
 
 PACKAGES += "${PN}-uapi"
 
-do_install_append_rcar-gen5() {
+do_install:append:rcar-gen5() {
     # Install R-Car specific UAPI headers
     install -d ${D}/usr/include/linux/
     install -m 0644 ${STAGING_KERNEL_DIR}/include/uapi/linux/rcar-ipmmu-domains.h ${D}/usr/include/linux/
@@ -32,14 +32,14 @@ do_install_append_rcar-gen5() {
     mv ${D}/lib/modules/${KERNEL_VERSION}/kernel/drivers/dma/dmatest.ko ${D}/lib/modules/${KERNEL_VERSION}/extra/
 }
 # Deploy vmlinux to deploy directory
-do_deploy_append_rcar-gen5() {
+do_deploy:append:rcar-gen5() {
     install -m 0644 ${KERNEL_OUTPUT_DIR}/vmlinux $deployDir/
 }
 
-FILES_${PN}-uapi = "/usr/include"
+FILES:${PN}-uapi = "/usr/include"
 
 # uio_pdrv_genirq and dmatest configuration
-KERNEL_MODULE_AUTOLOAD_append = " uio_pdrv_genirq dmatest"
-KERNEL_MODULE_PROBECONF_append = " uio_pdrv_genirq dmatest"
-module_conf_uio_pdrv_genirq_append = ' options uio_pdrv_genirq of_id="generic-uio"'
+KERNEL_MODULE_AUTOLOAD:append = " uio_pdrv_genirq dmatest"
+KERNEL_MODULE_PROBECONF:append = " uio_pdrv_genirq dmatest"
+module_conf_uio_pdrv_genirq:append = ' options uio_pdrv_genirq of_id="generic-uio"'
 

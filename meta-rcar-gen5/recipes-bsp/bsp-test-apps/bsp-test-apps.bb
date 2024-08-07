@@ -39,7 +39,7 @@ do_install() {
     install -m 755 ${S}/msiof_tp/* ${D}${ROOT_HOME}/msiof_tp/
 }
 
-FILES_${PN} = "${ROOT_HOME}/*"
+FILES:${PN} = "${ROOT_HOME}/*"
 
-RDEPENDS_${PN} = "bash"
+RDEPENDS:${PN} = "bash"
 

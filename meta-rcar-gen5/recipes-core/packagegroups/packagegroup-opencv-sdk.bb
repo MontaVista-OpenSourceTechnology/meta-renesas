@@ -2,6 +2,7 @@ DESCRIPTION = "OpenCV SDK packages"
 
 LICENSE = "BSD-3-Clause & GPL-2.0-or-later & LGPL-2.0-or-later"
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 PACKAGES = " \

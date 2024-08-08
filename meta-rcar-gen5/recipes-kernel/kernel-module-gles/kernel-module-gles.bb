@@ -14,11 +14,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 require include/rcar-gfx-common.inc
 
-SRC_URI = " \
-    ${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_V4H.tar.bz2 \
-    file://blacklist.conf \
-"
-SRC_URI[sha256sum] = "4d3749f0bcc8f7319fb2225fd6d3da9bacebd90f8a8ee6a48d4994f2e4ac5fd1"
+SRC_URI = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_V4H.tar.bz2;\
+sha256sum=4d3749f0bcc8f7319fb2225fd6d3da9bacebd90f8a8ee6a48d4994f2e4ac5fd1"
+
+SRC_URI:append = " file://blacklist.conf"
 
 S = "${WORKDIR}/rogue_km"
 

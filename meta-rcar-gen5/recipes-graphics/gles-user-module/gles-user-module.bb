@@ -19,11 +19,10 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 
 require include/rcar-gfx-common.inc
 
-SRC_URI = " \
-    ${GFX_URL}/raw/${BRANCH}/opengl/r8a779g0_linux_gsx_binaries_gles.tar.bz2 \
-    file://rc.pvr.service \
-"
-SRC_URI[sha256sum] = "1079f63faa3b671bb8847eb92cd14ee9201f27a9d618253e7f58f20a3ece9366"
+SRC_URI = "${GFX_URL}/raw/${BRANCH}/opengl/r8a779g0_linux_gsx_binaries_gles.tar.bz2;\
+sha256sum=007cf0086ef58314511320977b1568064fbcad0d42f83543b588a2c09d39512a"
+
+SRC_URI:append = " file://rc.pvr.service"
 
 inherit systemd
 

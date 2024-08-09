@@ -32,6 +32,3 @@ do_install_basefilesissue:append:rcar-gen5 () {
     echo >> ${D}${sysconfdir}/issue.e2
 }
 
-# Set hostname for X5H
-hostname = "x5h"
-

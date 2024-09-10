@@ -16,6 +16,8 @@ For convenience to use:
 - "r8a779g0-whitehawk-native.dtb": All UIO devices enable except for display
 output, GPU and basic peripherals.
 
+Upstream-Status: Pending
+
 Signed-off-by: Tam Nguyen <tam.nguyen.xa@renesas.com>
 ---
  arch/arm64/boot/dts/renesas/Makefile          |  1 +

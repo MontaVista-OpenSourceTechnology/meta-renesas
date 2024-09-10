@@ -4,7 +4,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 DEPENDS = "linux-renesas"
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/${BPN}-${PV}"
+UNPACKDIR = "${S}"
 
 SRC_URI = "file://ep_setup.sh"
 

@@ -8,6 +8,8 @@ SUMMARY = "'Bad' GStreamer plugins and helper libraries "
 LICENSE = "LGPL-2.1-or-later & GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c"
 
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+
 SRC_URI = "${RENESAS_GST_URL}"
 
 S = "${WORKDIR}/git/subprojects/gst-plugins-bad"

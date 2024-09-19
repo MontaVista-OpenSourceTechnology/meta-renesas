@@ -6,6 +6,8 @@ BUGTRACKER = "https://bugzilla.gnome.org/enter_bug.cgi?product=Gstreamer"
 SECTION = "multimedia"
 LICENSE = "LGPL-2.1-or-later"
 
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+
 DEPENDS = "glib-2.0 glib-2.0-native libxml2 bison-native flex-native"
 
 inherit meson pkgconfig gettext upstream-version-is-even gobject-introspection ptest-gnome

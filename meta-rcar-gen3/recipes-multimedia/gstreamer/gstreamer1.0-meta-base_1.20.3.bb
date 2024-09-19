@@ -1,6 +1,8 @@
 SUMMARY = "Gstreamer1.0 package groups"
 LICENSE = "MIT"
 
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+
 # Due to use of COMBINED_FEATURES
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

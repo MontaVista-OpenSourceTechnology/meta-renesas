@@ -13,12 +13,17 @@ require avb-applications.inc
 DEPENDS = "kernel-module-avb-streaming libyaml cmake-native"
 
 SRC_URI:append = " file://0001-avb-demoapps-add-libs-for-writev-readv.patch"
+SRC_URI:append = " file://0002-avb-demoapps-allow-to-append-application-cflags.patch"
 
 S = "${WORKDIR}/git/avb-demoapps"
 
 includedir = "${RENESAS_DATADIR}/include"
 
 EXTRA_OEMAKE = "'CC=${CC}' 'AR=${AR}'"
+
+# Let the application set CFLAGS itself
+TARGET_CFLAGS = "${DEBUG_PREFIX_MAP}"
+
 
 do_install:append() {
     oe_runmake install INSTALL_DIR=${D}/${bindir}

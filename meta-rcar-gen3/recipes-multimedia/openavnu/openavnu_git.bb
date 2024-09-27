@@ -19,9 +19,14 @@ PV = "1.1+git${SRCPV}"
 SRC_URI = "git://github.com/AVnu/OpenAvnu.git;branch=master;protocol=https"
 SRCREV = "ff076e83234d2207f33447b9bd6d1646d9245566"
 
+SRC_URI:append = " file://0000-allow-to-append-application-cflags.patch"
+
 S = "${WORKDIR}/git"
 
 EXTRA_OEMAKE = "'CC=${CC}' 'CXX=${CXX}'"
+
+# Let the application set CFLAGS itself
+TARGET_CFLAGS = "${DEBUG_PREFIX_MAP}"
 
 do_configure() {
     oe_runmake daemons_all_clean

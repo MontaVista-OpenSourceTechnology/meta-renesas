@@ -1,0 +1,14 @@
+Upstream-Status: Pending
+diff --git a/Makefile b/Makefile
+index aa5d768..ddcee92 100644
+--- a/Makefile
++++ b/Makefile
+@@ -3,7 +3,7 @@ RM = rm -f
+ 
+ INCSHARED ?= $(KERNEL_SRC)/drivers/staging/avb-streaming
+ INC = -I$(INCSHARED)
+-CFLAGS = -c -Wall -ggdb -O2 $(INC) $(EXTRA_CFLAGS)
++CFLAGS += -c -Wall -ggdb -O2 $(INC) $(EXTRA_CFLAGS)
+ LDLIBS  = -lm -lrt $(EXTRA_LDFLAGS)
+ 
+ PRG = avbtool

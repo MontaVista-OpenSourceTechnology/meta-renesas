@@ -14,10 +14,14 @@ SRC_URI = "git://github.com/AVnu/gptp.git;branch=master;protocol=https"
 
 # Fix QA issue of ldflags
 SRC_URI:append = " file://0001-Fix-QA-issue-when-build-with-Yocto.patch"
+SRC_URI:append = " file://0002-allow-to-append-application-cflags.patch"
 
 S = "${WORKDIR}/git"
 
 EXTRA_OEMAKE = "'CC=${CC}' 'CXX=${CXX}'"
+
+# Let the application set CFLAGS itself
+TARGET_CFLAGS = "${DEBUG_PREFIX_MAP}"
 
 do_configure() {
     cd ${S}/linux/build

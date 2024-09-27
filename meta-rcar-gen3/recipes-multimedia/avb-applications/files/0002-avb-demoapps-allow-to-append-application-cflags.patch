@@ -1,0 +1,93 @@
+Upstream-Status: Inappropriate [configuration]
+
+diff --git a/avblauncher/Makefile b/avb-demoapps/avblauncher/Makefile
+index bba7992..40977b8 100644
+--- a/avblauncher/Makefile
++++ b/avblauncher/Makefile
+@@ -19,7 +19,7 @@ LIBS += yaml
+ LIBS += avdecc
+ LIBS += jdksavdecc-c
+ 
+-CFLAGS := -Wall
++CFLAGS += -Wall
+ CFLAGS += -c
+ CFLAGS += -g
+ CFLAGS += -O2
+diff --git a/demo/simple/Makefile b/avb-demoapps/demo/simple/Makefile
+index 9c95765..a316c87 100644
+--- a/demo/simple/Makefile
++++ b/demo/simple/Makefile
+@@ -20,7 +20,7 @@ LIBS += eavb
+ LIBS += avtp
+ LIBS += msrp
+ 
+-CFLAGS := -Wall
++CFLAGS += -Wall
+ CFLAGS += -c
+ CFLAGS += -g
+ CFLAGS += -O2
+diff --git a/lib/avdecc/Makefile b/avb-demoapps/lib/avdecc/Makefile
+index 9da97be..75d0c89 100644
+--- a/lib/avdecc/Makefile
++++ b/lib/avdecc/Makefile
+@@ -12,7 +12,7 @@ ARFLAGS = r
+ 
+ LIBS += jdksavdecc-c
+ 
+-CFLAGS  = -Wall
++CFLAGS += -Wall
+ CFLAGS += -c
+ CFLAGS += -g
+ CFLAGS += -O2
+diff --git a/lib/avtp/Makefile b/avb-demoapps/lib/avtp/Makefile
+index 34557e3..dbf91bd 100644
+--- a/lib/avtp/Makefile
++++ b/lib/avtp/Makefile
+@@ -10,7 +10,7 @@ RM := rm -f
+ 
+ ARFLAGS = r
+ 
+-CFLAGS  = -Wall
++CFLAGS += -Wall
+ CFLAGS += -c
+ CFLAGS += -g
+ CFLAGS += -O2
+diff --git a/lib/eavb/Makefile b/avb-demoapps/lib/eavb/Makefile
+index 5887665..47d3297 100644
+--- a/lib/eavb/Makefile
++++ b/lib/eavb/Makefile
+@@ -11,7 +11,7 @@ RM := rm -f
+ 
+ ARFLAGS = r
+ 
+-CFLAGS  = -Wall
++CFLAGS += -Wall
+ CFLAGS += -c
+ CFLAGS += -g
+ CFLAGS += -O2
+diff --git a/lib/msrp/Makefile b/avb-demoapps/lib/msrp/Makefile
+index d00f71a..a0f767f 100644
+--- a/lib/msrp/Makefile
++++ b/lib/msrp/Makefile
+@@ -10,7 +10,7 @@ RM = rm -f
+ 
+ ARFLAGS = r
+ 
+-CFLAGS  = -Wall
++CFLAGS += -Wall
+ CFLAGS += -c
+ CFLAGS += -g
+ CFLAGS += -O2
+diff --git a/mrpdummy/Makefile b/avb-demoapps/mrpdummy/Makefile
+index 8510ced..5b67598 100644
+--- a/mrpdummy/Makefile
++++ b/mrpdummy/Makefile
+@@ -5,7 +5,7 @@ LIBS := m
+ LIBS += rt
+ LIBS += msrp
+ 
+-CFLAGS := -Wall
++CFLAGS += -Wall
+ CFLAGS += -c
+ CFLAGS += -g
+ CFLAGS += -O2

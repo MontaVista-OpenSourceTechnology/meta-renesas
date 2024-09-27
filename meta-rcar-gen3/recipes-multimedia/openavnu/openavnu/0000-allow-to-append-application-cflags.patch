@@ -1,0 +1,50 @@
+Upstream-Status: Inappropriate [configuration]
+
+diff --git a/daemons/mrpd/Makefile b/daemons/mrpd/Makefile
+index cfb9a841..cedba680 100644
+--- a/daemons/mrpd/Makefile
++++ b/daemons/mrpd/Makefile
+@@ -1,6 +1,6 @@
+ OPT=-O2
+ #CFLAGS=$(OPT) -Wall -Wextra -Wno-parentheses -Wstrict-prototypes -Wmissing-prototypes -ggdb
+-CFLAGS=$(OPT) -Wall -Wextra -Wno-parentheses -ggdb -D_GNU_SOURCE
++CFLAGS += $(OPT) -Wall -Wextra -Wno-parentheses -ggdb -D_GNU_SOURCE
+ 
+ ifeq ($(ARCH),arm)
+ CC?=arm-none-linux-gnueabi-gcc
+diff --git a/daemons/shaper/Makefile b/daemons/shaper/Makefile
+index 13e4b037..8227c7bc 100644
+--- a/daemons/shaper/Makefile
++++ b/daemons/shaper/Makefile
+@@ -1,6 +1,6 @@
+ CC ?= gcc
+ OPT = -O2 -g
+-CFLAGS = $(OPT) -Wall -Wextra
++CFLAGS += $(OPT) -Wall -Wextra
+ INCFLAGS =
+ LDLIBS = -lm -pthread
+ 
+diff --git a/examples/mrp_client/Makefile b/examples/mrp_client/Makefile
+index 79d85a60..047b0905 100644
+--- a/examples/mrp_client/Makefile
++++ b/examples/mrp_client/Makefile
+@@ -1,5 +1,5 @@
+ OPT=-O2
+-CFLAGS=$(OPT) -Wall -Wextra -Wno-parentheses -ggdb
++CFLAGS += $(OPT) -Wall -Wextra -Wno-parentheses -ggdb
+ 
+ ifeq ($(ARCH),arm)
+ CC?=arm-none-linux-gnueabi-gcc
+diff --git a/lib/common/Makefile b/lib/common/Makefile
+index 085f77e0..af6d7a5e 100644
+--- a/lib/common/Makefile
++++ b/lib/common/Makefile
+@@ -14,7 +14,7 @@ endif
+ CC ?= gcc
+ OPT = -O2 -g
+ WARN = -Wall -Wextra -Wno-parentheses
+-CFLAGS = $(OPT) $(WARN) $(EXTRA_CFLAGS)
++CFLAGS += $(OPT) $(WARN) $(EXTRA_CFLAGS)
+ ALL_OBJS = avb_avtp.o avb_gptp.o $(AVB_IGB_OBJ) $(AVB_ATL_OBJ)
+ 
+ .PHONY: all clean

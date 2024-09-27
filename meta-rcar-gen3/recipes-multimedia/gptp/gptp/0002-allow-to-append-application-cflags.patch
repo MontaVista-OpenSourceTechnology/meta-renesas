@@ -1,0 +1,15 @@
+Upstream-Status: Inappropriate [configuration]
+
+diff --git a/linux/build/Makefile b/linux/build/Makefile
+index 1e00b1a..645c2e1 100644
+--- a/linux/build/Makefile
++++ b/linux/build/Makefile
+@@ -129,7 +129,7 @@ endif
+ 
+ LDFLAGS_G += -lpthread -lrt
+ 
+-CFLAGS = $(CFLAGS_G)
++CFLAGS += $(CFLAGS_G)
+ CPPFLAGS = $(CPPFLAGS_G)
+ LDFLAGS += $(LDFLAGS_G)
+ 

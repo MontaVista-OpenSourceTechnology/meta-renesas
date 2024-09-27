@@ -7,9 +7,14 @@ require avb-applications.inc
 
 DEPENDS = "kernel-module-avb-streaming"
 
+SRC_URI:append = " file://0003-avbtool-allow-to-append-application-cflags.patch"
+
 S = "${WORKDIR}/git/avbtool"
 
 EXTRA_OEMAKE = "'CC=${CC}'"
+
+# Let the application set CFLAGS itself
+TARGET_CFLAGS = "${DEBUG_PREFIX_MAP}"
 
 do_install:append() {
     install -d ${D}/${bindir}

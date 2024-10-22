@@ -23,6 +23,10 @@ PR = "r0"
 
 SRC_URI = "${@oe.utils.conditional('USE_VIDEO_OMX', '1', 'file://RTM8RC0000ZMX0DQ00JFL3E.tar.bz2', '', d)}"
 
+SRC_URI:append = "\
+    file://0001-Change-mmngr-symvers-location-in-Makefile.patch \
+"
+
 S = "${WORKDIR}/RTM8RC0000ZMX0DQ00JFL3E"
 B = "${S}/src/makefile"
 

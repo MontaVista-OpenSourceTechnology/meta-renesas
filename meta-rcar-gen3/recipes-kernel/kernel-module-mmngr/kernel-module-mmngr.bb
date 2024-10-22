@@ -41,10 +41,13 @@ do_install () {
     # Create destination directories
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     install -d ${D}/${includedir}
+    if [ ! -d "${KERNELSRC}/mmngr" ]; then
+        install -d ${KERNELSRC}/mmngr/
+    fi
 
     # Install shared library to KERNELSRC(STAGING_KERNEL_DIR) for reference from other modules
     # This file installed in SDK by kernel-devsrc pkg.
-    install -m 644 ${B}/Module.symvers ${KERNELSRC}/include/mmngr.symvers
+    install -m 644 ${B}/Module.symvers ${KERNELSRC}/mmngr/mmngr.symvers
 
     # Install kernel module
     install -m 644 ${B}/mmngr.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
@@ -62,6 +65,29 @@ do_install () {
     install -m 644 ${B}/../include/mmngr_private_cmn.h ${D}/${includedir}/
     install -m 644 ${B}/../include/mmngr_validate.h ${D}/${includedir}/
 }
+
+do_populate_sysroot[sstate-inputdirs] += "${B}/../include/"
+do_populate_sysroot[sstate-outputdirs] += "${KERNELSRC}/include/"
+do_populate_sysroot_setscene[prefuncs] = "mmngr_sstate_check_func"
+SSTATE_ALLOW_OVERLAP_FILES = "${KERNELSRC}/include"
+
+mmngr_sstate_check_func() {
+    # An error is returned when unpack of kernel source has not been completed yet.
+    # By returning error, rebuild task runs by force (Invalidating sstate).
+    # This module installs shared header files in ${KERNELSRC}/include by
+    # sstate cache.
+    # Those files will be deleted by unpack task of kernel.
+    if [ ${WITHIN_EXT_SDK} -eq 1 ]; then
+        :
+    else
+        if [ ! -d "${KERNELSRC}/include" ]; then
+            exit 1
+        fi
+    fi
+}
+
+# Should also clean ${KERNELSRC}/mmngr/ directory
+do_clean[cleandirs] += "${KERNELSRC}/mmngr/"
 
 PACKAGES = "\
     ${PN} \

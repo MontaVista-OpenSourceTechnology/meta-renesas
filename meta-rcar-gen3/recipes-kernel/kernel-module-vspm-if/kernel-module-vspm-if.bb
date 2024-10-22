@@ -20,6 +20,10 @@ BRANCH = "rcar_gen3"
 SRC_URI = "${VSPMIF_DRV_URL};branch=${BRANCH};protocol=https"
 SRCREV = "2fdb2838a5625e4231f1cff5d10079acc4954952"
 
+SRC_URI:append = "\
+    file://0001-Change-vspm-symvers-location-in-Makefile.patch \
+"
+
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/git/vspm_if-module/files/vspm_if/drv"
 

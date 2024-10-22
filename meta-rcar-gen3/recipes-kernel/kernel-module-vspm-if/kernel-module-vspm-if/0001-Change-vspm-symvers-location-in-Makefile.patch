@@ -1,0 +1,15 @@
+Upstream-Status: Inappropriate [configuration]
+
+diff --git a/vspm_if-module/files/vspm_if/drv/Makefile b/vspm_if-module/files/vspm_if/drv/Makefile
+index bf082d7..48e7a9a 100644
+--- a/vspm_if-module/files/vspm_if/drv/Makefile
++++ b/vspm_if-module/files/vspm_if/drv/Makefile
+@@ -9,7 +9,7 @@ U_INCLUDE += -I$(KERNELSRC)/include
+ EXTRA_CFLAGS += $(U_INCLUDE)
+ 
+ all:
+-	make -C $(KERNELSRC) M=$(PWD) KBUILD_EXTRA_SYMBOLS=$(KERNELSRC)/include/vspm.symvers modules
++	make -C $(KERNELSRC) M=$(PWD) KBUILD_EXTRA_SYMBOLS=$(KERNELSRC)/vspm/vspm.symvers modules
+ clean:
+ 	make -C $(KERNELSRC) M=$(PWD) clean
+ install:

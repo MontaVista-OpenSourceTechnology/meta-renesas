@@ -32,17 +32,20 @@ do_install () {
     # Create destination directories
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     install -d ${D}/${includedir}
+    if [ ! -d "${KERNELSRC}/vspm" ]; then
+        install -d ${KERNELSRC}/vspm/
+    fi
 
     # Install shared library to KERNELSRC(STAGING_KERNEL_DIR) for reference from other modules
     # This file installed in SDK by kernel-devsrc pkg.
-    install -m 644 ${B}/Module.symvers ${KERNELSRC}/include/vspm.symvers
+    install -m 644 ${B}/Module.symvers ${KERNELSRC}/vspm/vspm.symvers
 
     # Install kernel module
     install -m 644 ${B}/vspm.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 
     # Install shared header files to KERNELSRC(STAGING_KERNEL_DIR)
     # This file installed in SDK by kernel-devsrc pkg.
-    #install -m 644 ${B}/../include/vspm_public.h ${KERNELSRC}/include/
+    install -m 644 ${B}/../include/vspm_public.h ${KERNELSRC}/include/
     install -m 644 ${B}/../include/vspm_cmn.h ${KERNELSRC}/include/
     install -m 644 ${B}/../include/vsp_drv.h ${KERNELSRC}/include/
     install -m 644 ${B}/../include/fdp_drv.h ${KERNELSRC}/include/
@@ -77,6 +80,8 @@ vspm_sstate_check_func() {
 # Should also clean deploy/licenses directory
 # for module when do_clean.
 do_clean[cleandirs] += "${LICENSE_DIRECTORY}/${PN}"
+# Should also clean ${KERNELSRC}/vspm/ directory
+do_clean[cleandirs] += "${KERNELSRC}/vspm/"
 
 PACKAGES = " \
     ${PN} \

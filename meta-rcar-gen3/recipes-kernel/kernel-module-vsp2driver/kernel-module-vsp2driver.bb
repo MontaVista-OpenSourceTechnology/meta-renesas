@@ -20,6 +20,10 @@ BRANCH = "rcar-gen3"
 SRC_URI = "${VSP2DRIVER_URL};branch=${BRANCH};protocol=https"
 SRCREV = "b3a116d8ce68371cac21011ca3b3190ae3576987"
 
+SRC_URI:append = "\
+    file://0001-Change-vspm-symvers-location-in-Makefile.patch \
+"
+
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/git/vsp2driver"
 
@@ -32,7 +36,7 @@ do_install () {
 
     # Install shared library to KERNELSRC(STAGING_KERNEL_DIR) for reference from other modules
     # This file installed in SDK by kernel-devsrc pkg.
-    install -m 644 ${B}/Module.symvers ${KERNELSRC}/include/vsp2.symvers
+    install -m 644 ${B}/Module.symvers ${KERNELSRC}/vspm/vsp2.symvers
 
     # Copy kernel module
     install -m 644 ${B}/vsp2.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/

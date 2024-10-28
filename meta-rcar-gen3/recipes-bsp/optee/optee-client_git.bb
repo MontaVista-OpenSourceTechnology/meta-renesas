@@ -3,10 +3,10 @@ LICENSE = "BSD-2-Clause"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 PR = "r0"
-PV = "3.22.0+renesas+git${SRCPV}"
+PV = "4.3.0+renesas+git${SRCPV}"
 BRANCH = "master"
 SRC_URI = "git://github.com/OP-TEE/optee_client.git;branch=${BRANCH};protocol=https"
-SRCREV = "8533e0e6329840ee96cf81b6453f257204227e6c"
+SRCREV = "a5b1ffcd26e328af0bbf18ab448a38ecd558e05c"
 
 SRC_URI += " \
     file://optee.service \
@@ -33,13 +33,13 @@ do_install () {
     install -d ${D}/${includedir}
 
     # Install library
-    install -m 0755 ${S}/out/export/usr/lib/libteec.so.1.0.0 ${D}/${libdir}
+    install -m 0755 ${S}/out/export/usr/lib/libteec.so.2.0.0 ${D}/${libdir}
 
     # Create symbolic link
     cd ${D}/${libdir}
-    ln -sf libteec.so.1.0.0 libteec.so.1.0
-    ln -sf libteec.so.1.0 libteec.so.1
-    ln -sf libteec.so.1 libteec.so
+    ln -sf libteec.so.2.0.0 libteec.so.1.0
+    ln -sf libteec.so.2.0 libteec.so.2
+    ln -sf libteec.so.2 libteec.so
 
     # Install header files
     install -m 0644 ${S}/out/export/usr/include/* ${D}/${includedir}

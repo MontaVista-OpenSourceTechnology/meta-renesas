@@ -9,10 +9,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy python3native
 
-PV = "3.22.0+renesas+git${SRCPV}"
+PV = "4.3.0+renesas+git${SRCPV}"
 
-BRANCH = "rcar-gen3_3.22.0"
-SRCREV = "314ecf9d01073bff837cb4f6f8f3d7b10abd0258"
+BRANCH = "rcar-gen3_4.3.0"
+SRCREV = "4204bdae8764704d9343dc7314d25c56f5cebd3e"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
@@ -20,8 +20,6 @@ SRC_URI = " \
 
 SRC_URI:append = " \
     file://0001-mk-gcc.mk-Change-the-path-to-the-library.patch \
-    file://0001-Makefile-Disable-linker-warning.patch \
-    file://0002-core-arch-arm-plat-rcar-main.c.patch \
 "
 
 COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak)"

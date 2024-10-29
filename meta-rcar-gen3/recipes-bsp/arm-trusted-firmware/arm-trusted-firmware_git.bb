@@ -10,13 +10,12 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy
 
-PV = "v2.9+renesas+git${SRCPV}"
+PV = "v2.11+renesas+git${SRCPV}"
 
-BRANCH = "rcar-gen3_v2.9"
+BRANCH = "rcar_gen3_v2.11"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
-SRCREV = "9cdb21f75157fc82e8ca104aa21c4ab722383b04"
+SRCREV = "1a07f8475df0e4642647fed7fa842689e0571d06"
 
-SRC_URI += " file://0001-Makefile-Disable-linker-warning.patch"
 
 S = "${WORKDIR}/git"
 
@@ -63,6 +62,7 @@ LD[unexport] = "1"
 do_install[noexec] = "1"
 
 do_ipl_compile () {
+    export ARCH="arm64"
     oe_runmake distclean
     oe_runmake clean_layout_tool clean_srecord PLAT=${PLATFORM} SPD=opteed MBEDTLS_COMMON_MK=1 ${ATFW_OPT}
     oe_runmake bl2 bl31 rcar_layout_tool rcar_srecord PLAT=${PLATFORM} SPD=opteed MBEDTLS_COMMON_MK=1 ${ATFW_OPT}

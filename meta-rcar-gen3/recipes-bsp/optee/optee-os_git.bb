@@ -21,8 +21,8 @@ SRC_URI = "git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=
 
 SRC_URI:append = " \
     file://0001-mk-gcc.mk-Change-the-path-to-the-library.patch \
-    file://0001-Makefile-Disable-linker-warning.patch \
-    file://0002-core-arch-arm-plat-rcar-main.c.patch \
+    file://0001-plat-rcar-Remove-redundant-delaration.patch \
+    file://0002-plat-rcar-add-no-warn-rwx-segments.patch \
 "
 
 S = "${WORKDIR}/git"

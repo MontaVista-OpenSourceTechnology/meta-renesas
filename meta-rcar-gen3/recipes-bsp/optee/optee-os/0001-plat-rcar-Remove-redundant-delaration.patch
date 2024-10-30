@@ -1,15 +1,27 @@
-Upstream-Status: Pending
+From 42b4eb18708484938b6f94390e321945c22f4ba3 Mon Sep 17 00:00:00 2001
+From: Dien Pham <dien.pham.ry@renesas.com>
+Date: Tue, 29 Oct 2024 11:31:44 +0700
+Subject: [PATCH] plat-rcar: Remove redundant delaration
+
+Upstream-Status: Backport
+
+---
+ core/arch/arm/plat-rcar/main.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/core/arch/arm/plat-rcar/main.c b/core/arch/arm/plat-rcar/main.c
-index 1b3fe7071..88f060566 100644
+index 6e5fbc0df..2eec2b137 100644
 --- a/core/arch/arm/plat-rcar/main.c
 +++ b/core/arch/arm/plat-rcar/main.c
-@@ -57,7 +57,7 @@
+@@ -57,8 +57,6 @@
  #include "rcar_log_func.h"
  #include "rcar_suspend_to_ram.h"
  
 -struct gic_data gic_data __nex_bss;
-+struct gic_data __nex_bss;
- 
+-
  static void main_hook_gic_add(struct itr_chip *chip, size_t it, uint32_t type, uint32_t prio);
  static void rcar_main_secondary_init_gic(void);
+ 
+-- 
+2.34.1
+

@@ -44,5 +44,8 @@ RDEPENDS_packagegroup-renesas = " \
     bsp-test-apps \
     ${VSPM_PKGS} \
     pcie-test \
+    kernel-module-pci-interface \
+    pci-interface-lib \
+    pci-interface-tp \
 "
 

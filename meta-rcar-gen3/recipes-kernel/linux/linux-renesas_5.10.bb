@@ -37,11 +37,13 @@ SRC_URI:append = " \
     file://0001-scripts-Add-module.lds-to-fix-out-of-tree-modules-bu.patch \
 "
 
-# Enable RPMSG_VIRTIO; device tree H3/M3 depend on ICCOM
+# Enable RPMSG_VIRTIO; device tree H3/M3-W+/M3-W/M3N depend on ICCOM
 SUPPORT_ICCOM = " \
     file://iccom.cfg \
     file://0001-arm64-dts-renesas-r8a77951-Support-ICCOM.patch \
     file://0001-arm64-dts-renesas-r8a77961-Support-ICCOM.patch \
+    file://0001-arm64-dts-renesas-r8a77960-Support-ICCOM.patch \
+    file://0001-arm64-dts-renesas-r8a77965-Support-ICCOM.patch \
 "
 
 SRC_URI:append = " \

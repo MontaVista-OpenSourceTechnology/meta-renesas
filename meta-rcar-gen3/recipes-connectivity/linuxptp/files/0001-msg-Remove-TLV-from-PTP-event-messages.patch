@@ -1,0 +1,61 @@
+From 74e1d1aa17134337a7037825f079e81a2f5f8d9c Mon Sep 17 00:00:00 2001
+From: Tri Nguyen <tri.nguyen.ak@bp.renesas.com>
+Date: Tue, 5 Nov 2024 15:34:20 +0700
+Subject: [PATCH] msg: Remove TLV from all PTP event messages
+
+---
+ msg.c | 6 +++---
+ msg.h | 3 ---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/msg.c b/msg.c
+index 7c236c3..7ea5def 100644
+--- a/msg.c
++++ b/msg.c
+@@ -101,13 +101,13 @@ static uint8_t *msg_suffix(struct ptp_message *m)
+ {
+ 	switch (msg_type(m)) {
+ 	case SYNC:
+-		return m->sync.suffix;
++		return NULL;
+ 	case DELAY_REQ:
+ 		return m->delay_req.suffix;
+ 	case PDELAY_REQ:
+-		return m->pdelay_req.suffix;
++		return NULL;
+ 	case PDELAY_RESP:
+-		return m->pdelay_resp.suffix;
++		return NULL;
+ 	case FOLLOW_UP:
+ 		return m->follow_up.suffix;
+ 	case DELAY_RESP:
+diff --git a/msg.h b/msg.h
+index 58c2287..94b90fe 100644
+--- a/msg.h
++++ b/msg.h
+@@ -119,7 +119,6 @@ struct announce_msg {
+ struct sync_msg {
+ 	struct ptp_header   hdr;
+ 	struct Timestamp    originTimestamp;
+-	uint8_t             suffix[0];
+ } PACKED;
+ 
+ struct delay_req_msg {
+@@ -145,14 +144,12 @@ struct pdelay_req_msg {
+ 	struct ptp_header   hdr;
+ 	struct Timestamp    originTimestamp;
+ 	struct PortIdentity reserved;
+-	uint8_t             suffix[0];
+ } PACKED;
+ 
+ struct pdelay_resp_msg {
+ 	struct ptp_header   hdr;
+ 	struct Timestamp    requestReceiptTimestamp;
+ 	struct PortIdentity requestingPortIdentity;
+-	uint8_t             suffix[0];
+ } PACKED;
+ 
+ struct pdelay_resp_fup_msg {
+-- 
+2.25.1
+

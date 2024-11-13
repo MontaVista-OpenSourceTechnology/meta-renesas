@@ -14,15 +14,15 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 require include/rcar-gfx-common.inc
 
-SRC_URI = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_V4H.tar.bz2;\
-sha256sum=4d3749f0bcc8f7319fb2225fd6d3da9bacebd90f8a8ee6a48d4994f2e4ac5fd1"
+SRC_URI = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
+sha256sum=3602701a4f7a025ac9ed55a2496e46530b2c890473f3c1eaae1d1f1a64487fc3"
 
 SRC_URI:append = " file://blacklist.conf"
 
 S = "${WORKDIR}/rogue_km"
 
-KBUILD_DIR = "${S}/build/linux/r8a779g_linux"
-KBUILD_OUTDIR = "binary_r8a779g_linux_nullws_drm_release/target_aarch64/kbuild"
+KBUILD_DIR = "${S}/build/linux/r8a78000_linux"
+KBUILD_OUTDIR = "binary_r8a78000_linux_nullws_drm_release/target_aarch64/kbuild"
 
 B = "${KBUILD_DIR}"
 

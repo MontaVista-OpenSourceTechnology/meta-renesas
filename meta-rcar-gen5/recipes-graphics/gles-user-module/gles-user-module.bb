@@ -19,8 +19,8 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 
 require include/rcar-gfx-common.inc
 
-SRC_URI = "${GFX_URL}/raw/${BRANCH}/opengl/r8a779g0_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=007cf0086ef58314511320977b1568064fbcad0d42f83543b588a2c09d39512a"
+SRC_URI = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
+sha256sum=f4071e02b85ad3f0ea8857440df9e5d7704e1c072bec3e4b23d491ca5716b11f"
 
 SRC_URI:append = " file://rc.pvr.service"
 
@@ -88,6 +88,12 @@ FILES:${PN} = " \
     ${libdir}/libsrv_um.so* \
     ${libdir}/libufwriter.so* \
     ${libdir}/libusc.so* \
+    ${libdir}/libPVROCL.so* \
+    ${libdir}/libOpenCL.so* \
+    ${libdir}/libvulkan.so* \
+    ${libdir}/libvulkan-1.so \
+    ${libdir}/libVK_IMG.so \
+    ${libdir}/libsutu_display.so \
     ${nonarch_base_libdir}/firmware/rgx.fw* \
     ${nonarch_base_libdir}/firmware/rgx.sh* \
     ${RENESAS_DATADIR}/bin/* \

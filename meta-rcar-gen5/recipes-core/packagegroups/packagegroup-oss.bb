@@ -11,6 +11,7 @@ PACKAGES = " \
     packagegroup-bsp-testpkg \
     packagegroup-bsp-python3 \
     packagegroup-bsp-utest \
+    packagegroup-wayland-oss \
 "
 
 RDEPENDS:packagegroup-oss = " \
@@ -18,6 +19,7 @@ RDEPENDS:packagegroup-oss = " \
     packagegroup-bsp-testpkg \
     packagegroup-bsp-python3 \
     packagegroup-bsp-utest \
+    packagegroup-wayland-oss \
 "
 
 # OSS packages for development
@@ -51,7 +53,6 @@ RDEPENDS:packagegroup-bsp-devpkg = " \
     avahi-daemon \
     libdrm-tests \
     libgpiod libgpiod-tools \
-    alsa-utils \
 "
 
 # Various packages needed for testing
@@ -100,3 +101,15 @@ RDEPENDS:packagegroup-bsp-utest = " \
     libyaml \
     libfftw \
 "
+
+# Wayland OSS packages
+RDEPENDS:packagegroup-wayland-oss = " \
+    wayland \
+    weston \
+    weston-examples \
+    alsa-utils \
+    alsa-tools \
+    libdrm-tests \
+    libdrm-kms \
+"
+

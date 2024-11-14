@@ -21,6 +21,13 @@ GFX_PKGS = " \
     libgles2 \
 "
 
+WAYLAND_PKGS = " \
+    libgbm \
+    libgbm-dev \
+    wayland-kms \
+    wayland-wsegl \
+"
+
 # ADAS common packages: CMEM, CV lib
 RDEPENDS:packagegroup-renesas = " \
     kernel-module-uio-pdrv-genirq \
@@ -34,7 +41,7 @@ RDEPENDS:packagegroup-renesas = " \
     kernel-module-qos \
     qosif-user-module \
     qosif-tp-user-module \
-    ${@bb.utils.contains('MACHINE_FEATURES', 'gsx', '${GFX_PKGS}', '', d)} \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'gsx', '${GFX_PKGS}' '${WAYLAND_PKGS}', '', d)} \
     nvme-initscripts \
     bsp-test-apps \
 "

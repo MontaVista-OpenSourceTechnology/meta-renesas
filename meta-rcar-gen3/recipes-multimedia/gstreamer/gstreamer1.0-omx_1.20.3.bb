@@ -9,7 +9,7 @@ SECTION = "multimedia"
 LICENSE = "LGPL-2.1-or-later"
 LICENSE_FLAGS = "commercial"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c \
-    file://omx/gstomx.h;beginline=1;endline=22;md5=4b2e62aace379166f9181a8571a14882 \
+    file://omx/gstomx.h;beginline=1;endline=22;md5=d8e5c6ab48aa67e0c38a8ec0cdff1053 \
 "
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}/:"

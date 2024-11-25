@@ -45,6 +45,9 @@ RDEPENDS:packagegroup-renesas = " \
     nvme-initscripts \
     bsp-test-apps \
     pcie-test \
+    kernel-module-pci-interface \
+    pci-interface-lib \
+    pci-interface-tp \
 "
 # Temporarily remove
 RDEPENDS:packagegroup-renesas:remove = "${CPURTT_PKGS}"

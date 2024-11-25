@@ -44,6 +44,7 @@ RDEPENDS:packagegroup-renesas = " \
     ${@bb.utils.contains('MACHINE_FEATURES', 'gsx', '${GFX_PKGS}' '${WAYLAND_PKGS}', '', d)} \
     nvme-initscripts \
     bsp-test-apps \
+    pcie-test \
 "
 # Temporarily remove
 RDEPENDS:packagegroup-renesas:remove = "${CPURTT_PKGS}"

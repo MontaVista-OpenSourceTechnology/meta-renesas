@@ -20,6 +20,12 @@ GFX_PKGS = " \
     libegl \
     libgles2 \
 "
+VSPM_PKGS = " \
+    kernel-module-vspm \
+    kernel-module-vspm-if \
+    vspmif-user-module \
+    vspmif-tp-user-module \
+"
 
 WAYLAND_PKGS = " \
     libgbm \
@@ -44,6 +50,7 @@ RDEPENDS:packagegroup-renesas = " \
     ${@bb.utils.contains('MACHINE_FEATURES', 'gsx', '${GFX_PKGS}' '${WAYLAND_PKGS}', '', d)} \
     nvme-initscripts \
     bsp-test-apps \
+    ${VSPM_PKGS} \
     pcie-test \
     kernel-module-pci-interface \
     pci-interface-lib \

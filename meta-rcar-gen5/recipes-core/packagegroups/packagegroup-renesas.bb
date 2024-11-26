@@ -38,4 +38,6 @@ RDEPENDS:packagegroup-renesas = " \
     nvme-initscripts \
     bsp-test-apps \
 "
+# Temporarily remove
+RDEPENDS:packagegroup-renesas:remove = "${CPURTT_PKGS}"
 

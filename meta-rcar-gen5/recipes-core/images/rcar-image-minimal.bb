@@ -13,5 +13,6 @@ IMAGE_INSTALL:append = " \
     v4l-utils \
     i2c-tools \
     coreutils \
+    media-ctl \
 "
 

@@ -17,7 +17,7 @@ PR = "r0"
 
 RPCI_DRV_URL = "git://github.com/renesas-rcar/rpci_drv.git"
 BRANCH = "rcar_gen5.rc1"
-SRCREV = "120a64fd6329afad8c18d95f5eac528ecf5f4a33"
+SRCREV = "624d6e934a855204eb4e43dba38db06270fdf229"
 
 SRC_URI = "${RPCI_DRV_URL};branch=${BRANCH};protocol=https"
 

@@ -14,12 +14,12 @@ This layer depends on:
 ```
   URI: git://git.yoctoproject.org/poky
   layers: meta, meta-poky, meta-yocto-bsp
-  branch: dunfell
+  branch: scarthgap
 ```
 ```
   URI: git://git.openembedded.org/meta-openembedded
   layers: meta-oe, meta-python
-  branch: dunfell
+  branch: scarthgap
 ```
 
 ## Contribution

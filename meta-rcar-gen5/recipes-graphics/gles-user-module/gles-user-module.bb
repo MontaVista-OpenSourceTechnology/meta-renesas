@@ -130,6 +130,7 @@ RPROVIDES:libgles3-${PN}-dev = "libgles3-dev"
 
 RDEPENDS:${PN} = " \
     kernel-module-gles \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'libgbm wayland-kms', '', d)} \
 "
 
 INSANE_SKIP:${PN} = "ldflags build-deps file-rdeps"

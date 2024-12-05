@@ -20,7 +20,7 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=f4071e02b85ad3f0ea8857440df9e5d7704e1c072bec3e4b23d491ca5716b11f"
+sha256sum=0fcc087d9c0cd9003e251cc073e6e677628dad5da3e03b491fc2bdd90315367d"
 
 SRC_URI:append = " file://rc.pvr.service"
 
@@ -35,6 +35,7 @@ do_install() {
     # Install configuration files
     install -d ${D}${sysconfdir}/udev/rules.d
     install -m 644 ${S}/etc/udev/rules.d/72-pvr-seat.rules ${D}${sysconfdir}/udev/rules.d/
+    install -m 644 ${S}/etc/powervr.ini ${D}${sysconfdir}
 
     # Install header files
     install -d ${D}${includedir}/EGL
@@ -129,6 +130,7 @@ RPROVIDES:libgles3-${PN}-dev = "libgles3-dev"
 
 RDEPENDS:${PN} = " \
     kernel-module-gles \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'libgbm wayland-kms', '', d)} \
 "
 
 INSANE_SKIP:${PN} = "ldflags build-deps file-rdeps"

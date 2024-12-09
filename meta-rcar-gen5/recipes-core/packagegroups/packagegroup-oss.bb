@@ -53,6 +53,7 @@ RDEPENDS:packagegroup-bsp-devpkg = " \
     avahi-daemon \
     libdrm-tests \
     libgpiod libgpiod-tools \
+    libsysfs \
 "
 
 # Various packages needed for testing

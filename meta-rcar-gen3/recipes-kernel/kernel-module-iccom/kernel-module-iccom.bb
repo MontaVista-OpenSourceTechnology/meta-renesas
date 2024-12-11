@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://GPL-COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 require include/rcar-gen3-modules-common.inc
 inherit module
 
-COMPATIBLE_MACHINE = "salvator-x"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb)"
 
 DEPENDS = "linux-renesas"
 PN = "kernel-module-iccom"

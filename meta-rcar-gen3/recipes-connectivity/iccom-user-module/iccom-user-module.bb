@@ -13,7 +13,7 @@ REQUIRED_DISTRO_FEATURES = "iccom"
 SRC_URI = "file://linux_iccom_library.tar.gz"
 S = "${WORKDIR}/linux_iccom_library"
 
-COMPATIBLE_MACHINE = "salvator-x"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

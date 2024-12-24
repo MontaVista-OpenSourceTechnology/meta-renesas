@@ -32,4 +32,7 @@ IMAGE_INSTALL:append = " \
     kernel-devicetree \
     kernel-modules \
 "
+IMAGE_INSTALL:append:r8a78000 = " \
+    packagegroup-gstreamer1.0-plugins \
+"
 

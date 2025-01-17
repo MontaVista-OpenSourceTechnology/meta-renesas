@@ -12,4 +12,4 @@ StandardError=journal
 PermissionsStartOnly=true
 IgnoreSIGPIPE=no
 
-ExecStart=/usr/bin/weston-start -v -e -- --idle-time=0 --use-pixman $OPTARGS
+ExecStart=/usr/bin/weston-start -v -e -- $OPTARGS

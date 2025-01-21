@@ -7,8 +7,8 @@ require include/rcar-bsp-modules-common.inc
 require include/rcar-bsp-path-common.inc
 
 VSPMIF_LIB_URL = "git://github.com/renesas-rcar/vspmif_lib.git"
-BRANCH = "rcar_gen5_4.15.0"
-SRCREV = "fdb921327a27fa4e314d98296e45a98306d22457"
+BRANCH = "rcar_gen5_4.20.0"
+SRCREV = "9e87ba88770faee1551163e3b9256dd1f9e2aa5c"
 
 SRC_URI = "${VSPMIF_LIB_URL};branch=${BRANCH};protocol=https"
 

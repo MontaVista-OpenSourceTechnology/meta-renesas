@@ -79,6 +79,7 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
     ${@bb.utils.contains("LICENSE_FLAGS_ACCEPTED", "non-commercial", "netperf", "", d)} \
     whetstone \
     fio \
+    mtd-utils-jffs2 \
 "
 
 # Python3 packages requested by Renesas

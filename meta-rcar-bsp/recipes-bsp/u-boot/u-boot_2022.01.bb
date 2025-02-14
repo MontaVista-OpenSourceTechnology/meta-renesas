@@ -15,7 +15,7 @@ UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
 BRANCH = "v2022.01/rcar-6.0.0.rc11"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
-SRCREV = "80a3a980c998ec837c15db0701df28e64cb58f32"
+SRCREV = "c0bbda8c1fda2f149d199bb2ac87531f1cfb64f8"
 PV = "v2022.01+git${SRCPV}"
 
 UBOOT_SREC_SUFFIX = "srec"

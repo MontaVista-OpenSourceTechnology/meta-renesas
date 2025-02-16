@@ -18,6 +18,8 @@ SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
 SRCREV = "504d9e373a5802b3d38f54804e23e2cd8f5e32ee"
 PV = "v2022.01+git${SRCPV}"
 
+SRC_URI:append:r8a779h0 = " ${@oe.utils.conditional("UBOOT_LPM", "1", "file://0001-Revert-ARM-renesas-Disable-relocation-on-R-Car-Gen3.patch", "", d )}"
+
 UBOOT_SREC_SUFFIX = "srec"
 UBOOT_SREC ?= "u-boot-elf.${UBOOT_SREC_SUFFIX}"
 UBOOT_SREC_IMAGE ?= "u-boot-elf-${MACHINE}-${PV}-${PR}.${UBOOT_SREC_SUFFIX}"

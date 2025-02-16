@@ -1,0 +1,37 @@
+From 207d406c81448985395c1c71a47d7c65705e29c3 Mon Sep 17 00:00:00 2001
+From: Khanh Le <khanh.le.xr@renesas.com>
+Date: Wed, 9 Oct 2024 23:47:22 +0700
+Subject: [PATCH] Revert "ARM: renesas: Disable relocation on R-Car Gen3"
+
+This reverts commit 3731cc98a0625ebb921f3b4d944d19b0c2ef2614.
+
+After waking up from Low Power Mode,
+U-Boot hangs when being executed from its start address.
+Reinstate the U-Boot relocation to avoid this issue.
+
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+---
+ board/renesas/rcar-common/common.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/board/renesas/rcar-common/common.c b/board/renesas/rcar-common/common.c
+index 3257bc8d573..f0ff36721df 100644
+--- a/board/renesas/rcar-common/common.c
++++ b/board/renesas/rcar-common/common.c
+@@ -49,13 +49,6 @@ int dram_init_banksize(void)
+ 	return 0;
+ }
+ 
+-/* Inhibit U-Boot relocation. */
+-int mach_cpu_init(void)
+-{
+-	gd->flags |= GD_FLG_SKIP_RELOC;
+-	return 0;
+-}
+-
+ #if defined(CONFIG_RCAR_GEN3)
+ #define RST_BASE	0xE6160000
+ #define RST_CA57RESCNT	(RST_BASE + 0x40)
+-- 
+2.25.1
+

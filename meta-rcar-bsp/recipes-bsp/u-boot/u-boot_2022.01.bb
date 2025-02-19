@@ -12,10 +12,10 @@ require u-boot.inc
 DEPENDS += "flex-native bison-native bc-native dtc-native lzop-native srecord-native"
 
 UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
-BRANCH = "v2022.01/rcar-6.0.0.rc11"
+BRANCH = "v2022.01/rcar-6.0.0.rc12"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
-SRCREV = "c0bbda8c1fda2f149d199bb2ac87531f1cfb64f8"
+SRCREV = "dcaa7e607b7784a1516169e8f190fb753d01accc"
 PV = "v2022.01+git${SRCPV}"
 
 SRC_URI_append_r8a779h0 = " ${@oe.utils.conditional("UBOOT_LPM", "1", "file://0001-Revert-ARM-renesas-Disable-relocation-on-R-Car-Gen3.patch", "", d )}"

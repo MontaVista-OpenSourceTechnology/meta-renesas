@@ -59,3 +59,6 @@ FILES:${PN}-dev = " \
 
 RPROVIDES:${PN} += "kernel-module-rcar-pci-host kernel-module-rcar-pci-epf"
 
+KERNEL_MODULE_PROBECONF += "kernel-module-rcar-pci-host kernel-module-rcar-pci-epf"
+module_conf_kernel-module-rcar-pci-host = "blacklist kernel-module-rcar-pci-host"
+module_conf_kernel-module-rcar-pci-epf = "blacklist kernel-module-rcar-pci-epf"

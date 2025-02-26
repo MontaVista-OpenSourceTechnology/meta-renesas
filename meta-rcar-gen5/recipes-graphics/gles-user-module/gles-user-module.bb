@@ -20,7 +20,7 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=0fcc087d9c0cd9003e251cc073e6e677628dad5da3e03b491fc2bdd90315367d"
+sha256sum=e2f3af9b1eee5f077e88406c0fb7e9d6d21de7fc94e580227f9b799e818b011b"
 
 SRC_URI:append = " file://rc.pvr.service"
 

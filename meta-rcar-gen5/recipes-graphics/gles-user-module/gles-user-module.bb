@@ -46,7 +46,11 @@ do_install() {
     install -m 644 ${S}/usr/include/GLES3/*.h ${D}${includedir}/GLES3/
     install -d ${D}${includedir}/KHR
     install -m 644 ${S}/usr/include/KHR/khrplatform.h ${D}${includedir}/KHR/khrplatform.h
-
+    install -d ${D}${includedir}/CL
+    install -m 644 ${S}/usr/include/CL/*.h ${D}${includedir}/CL/
+    install -d ${D}${includedir}/vulkan
+    install -m 644 ${S}/usr/include/vulkan/*.h ${D}${includedir}/vulkan/
+    
     # Install pre-builded binaries
     install -d ${D}${libdir}
     install -m 755 ${S}/usr/lib/*.so ${D}${libdir}/

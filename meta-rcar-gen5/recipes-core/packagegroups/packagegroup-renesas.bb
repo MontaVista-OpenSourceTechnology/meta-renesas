@@ -55,6 +55,8 @@ RDEPENDS:packagegroup-renesas = " \
     kernel-module-pci-interface \
     pci-interface-lib \
     pci-interface-tp \
+    libmetal \
+    open-amp \
 "
 # Temporarily remove
 RDEPENDS:packagegroup-renesas:remove = "${CPURTT_PKGS}"

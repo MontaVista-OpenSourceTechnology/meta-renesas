@@ -20,7 +20,10 @@ do_install() {
     # Install WCRC tp
     install -m 755 ${S}/sample_wcrc ${D}${ROOT_HOME}/
     install -m 755 ${S}/sample_wcrc_indepent_mode ${D}${ROOT_HOME}/
-
+    install -m 755 ${S}/sample_wcrc_data_through ${D}${ROOT_HOME}/
+    install -m 755 ${S}/sample_wcrc_e2e_crc ${D}${ROOT_HOME}/
+    install -m 755 ${S}/sample_wcrc_e2e_data_through ${D}${ROOT_HOME}/
+    install -m 755 ${S}/sample_wcrc_independent_crc ${D}${ROOT_HOME}/        
     # Install I3C tp
     install -m 755 ${S}/i3ctransfer ${D}${ROOT_HOME}/
 

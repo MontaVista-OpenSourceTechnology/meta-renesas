@@ -49,9 +49,23 @@ do_install() {
     install -d ${D}${includedir}/CL
     install -m 644 ${S}/usr/include/CL/*.h ${D}${includedir}/CL/
     install -d ${D}${includedir}/vulkan
-    install -m 644 ${S}/usr/include/vulkan/*.h ${D}${includedir}/vulkan/
-    
-    # Install pre-builded binaries
+    install -m 644 ${S}/usr/include/vulkan/* ${D}${includedir}/vulkan/
+
+    # Install additional header files
+    install -d ${D}${includedir}/drv/CL
+    install -m 644 ${S}/usr/include/drv/CL/*.h ${D}${includedir}/drv/CL/
+    install -d ${D}${includedir}/drv/EGL
+    install -m 644 ${S}/usr/include/drv/EGL/*.h ${D}${includedir}/drv/EGL/
+    install -d ${D}${includedir}/drv/GLES
+    install -m 644 ${S}/usr/include/drv/GLES/*.h ${D}${includedir}/drv/GLES/
+    install -d ${D}${includedir}/drv/GLES3
+    install -m 644 ${S}/usr/include/drv/GLES3/*.h ${D}${includedir}/drv/GLES3/
+    install -d ${D}${includedir}/spirv
+    install -m 644 ${S}/usr/include/spirv/* ${D}${includedir}/spirv/
+    install -d ${D}${includedir}/vk_video
+    install -m 644 ${S}/usr/include/vk_video/*.h ${D}${includedir}/vk_video/
+
+    # Install pre-built binaries
     install -d ${D}${libdir}
     install -m 755 ${S}/usr/lib/*.so ${D}${libdir}/
     install -d ${D}${RENESAS_DATADIR}/bin

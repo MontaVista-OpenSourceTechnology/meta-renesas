@@ -27,12 +27,12 @@ KERNEL_MODULE_PACKAGE_SUFFIX = ""
 
 do_install () {
     # Create destination directories
-    install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -d ${D}${nonarch_base_libdir}/rcar-pci
     install -d ${D}/${includedir}
 
     # Install kernel module
-    install -m 644 ${S}/rcar-pci-host.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
-    install -m 644 ${S}/rcar-pci-epf.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${S}/rcar-pci-host.ko ${D}${nonarch_base_libdir}/rcar-pci/
+    install -m 644 ${S}/rcar-pci-epf.ko ${D}${nonarch_base_libdir}/rcar-pci/
 
     # Install shared header files to KERNELSRC(STAGING_KERNEL_DIR)
     # This file installed in SDK by kernel-devsrc pkg.
@@ -49,8 +49,8 @@ PACKAGES = " \
 "
 
 FILES:${PN} = " \
-    ${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/rcar-pci-host.ko \
-    ${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/rcar-pci-epf.ko \
+    ${nonarch_base_libdir}/rcar-pci/rcar-pci-host.ko \
+    ${nonarch_base_libdir}/rcar-pci/rcar-pci-epf.ko \
 "
 
 FILES:${PN}-dev = " \
@@ -58,7 +58,3 @@ FILES:${PN}-dev = " \
 "
 
 RPROVIDES:${PN} += "kernel-module-rcar-pci-host kernel-module-rcar-pci-epf"
-
-KERNEL_MODULE_PROBECONF += "kernel-module-rcar-pci-host kernel-module-rcar-pci-epf"
-module_conf_kernel-module-rcar-pci-host = "blacklist kernel-module-rcar-pci-host"
-module_conf_kernel-module-rcar-pci-epf = "blacklist kernel-module-rcar-pci-epf"

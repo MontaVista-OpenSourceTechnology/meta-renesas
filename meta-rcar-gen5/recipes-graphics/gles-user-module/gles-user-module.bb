@@ -81,6 +81,8 @@ do_install() {
     cd ${D}${libdir}
     ln -s libEGL.so libEGL.so.1
     ln -s libGLESv2.so libGLESv2.so.2
+    ln -s libvulkan.so libvulkan.so.1
+    ln -s libPVROCL.so libPVROCL.so.1
 
     # Install systemd service
     install -d ${D}${systemd_system_unitdir}/

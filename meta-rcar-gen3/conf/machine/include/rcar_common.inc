@@ -47,3 +47,6 @@ PREFERRED_VERSION_gstreamer1.0-plugins-ugly = "${@bb.utils.contains('MACHINE_FEA
 
 # for weston
 PREFERRED_VERSION_weston = "13.0.3"
+
+# for ofono
+PREFERRED_VERSION_ofono = "2.10"

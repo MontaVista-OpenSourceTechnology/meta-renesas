@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = " \
 inherit module
 
 RENESAS_CPURTTDRV_URL ?= "git://github.com/renesas-rcar/cpurttdrv3.git;protocol=https"
-SRCREV = "a6e76ed8ee2ab9de5ed3d2ff48b3636570e46fa4"
+SRCREV = "0d9296d6745415c58b48c8e543ea0304f1792c67"
 
 SRC_URI = "${RENESAS_CPURTTDRV_URL};nobranch=1"
 
@@ -18,6 +18,9 @@ PR = "r0"
 PV = "0.1"
 
 libmoduledir = "${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/"
+
+# Add the compile option RGID_ON=1 when RGID_ON = "1" in local.conf
+EXTRA_OEMAKE += "${@oe.utils.conditional("RGID_ON", "1", "RGID_ON=1", "", d )}"
 
 do_install () {
     install -d ${D}${libmoduledir}

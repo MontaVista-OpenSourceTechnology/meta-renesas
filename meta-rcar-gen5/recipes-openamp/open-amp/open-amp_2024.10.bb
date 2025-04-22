@@ -6,8 +6,8 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dfc0adf4d04cc738ba65b7d3f587dca5"
 
 require include/rcar-bsp-path-common.inc
 
-SRC_URI = "git://github.com/renesas-rcar/open-amp.git;protocol=https;branch=v2024.10/rcar_v2025.03"
-SRCREV = "65650922c95dd28cc202c5605de8360d4bc07550"
+SRC_URI = "git://github.com/renesas-rcar/open-amp.git;protocol=https;branch=v2024.10/rcar_v2025.05"
+SRCREV = "1232378b8fdd6eff1956610fbeafcef06867f3cd"
 
 S = "${WORKDIR}/git"
 

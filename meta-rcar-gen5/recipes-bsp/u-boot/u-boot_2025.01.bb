@@ -2,21 +2,21 @@ HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
 SECTION = "bootloaders"
 
 LICENSE = "GPL-2.0-or-later"
-LIC_FILES_CHKSUM = "file://Licenses/README;md5=5a7450c57ffe5ae63fd732446b988025"
+LIC_FILES_CHKSUM = "file://Licenses/README;md5=2ca5f2c35c8cc335f0a19756634782f1"
 PE = "1"
 
 S = "${WORKDIR}/git"
 
 require u-boot.inc
 
-DEPENDS += "flex-native bison-native bc-native dtc-native lzop-native srecord-native"
+DEPENDS += "flex-native bison-native bc-native dtc-native lzop-native srecord-native gnutls-native"
 
 UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
-BRANCH = "v2022.01/rcar-6.0.0.rc6_vpf.rc8"
+BRANCH = "v2025.01/rcar-7.0.0.rc2"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
-SRCREV = "6897a8bfc7c2a0d3a2b4d81f68b85cbf9bc6f242"
-PV = "v2022.01+git${SRCPV}"
+SRCREV = "ad4e16cb4a9cc88b469bef8ff3e80f9657031786"
+PV = "v2025.01+git${SRCPV}"
 
 UBOOT_SREC_SUFFIX = "srec"
 UBOOT_SREC ?= "u-boot-elf.${UBOOT_SREC_SUFFIX}"

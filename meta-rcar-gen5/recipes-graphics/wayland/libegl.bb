@@ -1,7 +1,7 @@
 SUMMARY = "Recipe for libegl"
 LICENSE = "CLOSED"
 
-COMPATIBLE_MACHINE = "x5h"
+COMPATIBLE_MACHINE = "ironhide"
 
 DEPENDS = "gles-user-module \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'libgbm wayland-kms', '', d)} \

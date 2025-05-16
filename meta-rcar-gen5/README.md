@@ -70,7 +70,7 @@ e.g.:
 
 Board|MACHINE
 -----|-------
-Ironhide|MACHINE = "ironhide"
+X5H|MACHINE = "x5h"
 
 * Configure for systemd init in local.conf:
 

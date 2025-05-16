@@ -7,7 +7,7 @@ require include/rcar-bsp-path-common.inc
 PN = "gles-user-module"
 PR = "r0"
 
-COMPATIBLE_MACHINE = "ironhide"
+COMPATIBLE_MACHINE = "x5h"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 DEPENDS = "kernel-module-gles"

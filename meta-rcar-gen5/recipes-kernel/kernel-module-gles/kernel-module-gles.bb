@@ -9,7 +9,7 @@ DEPENDS += "linux-renesas"
 PN = "kernel-module-gles"
 PR = "r0"
 
-COMPATIBLE_MACHINE = "ironhide"
+COMPATIBLE_MACHINE = "x5h"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 require include/rcar-gfx-common.inc

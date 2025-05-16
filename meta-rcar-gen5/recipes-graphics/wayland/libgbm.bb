@@ -10,7 +10,7 @@ SRC_URI = "git://github.com/renesas-rcar/libgbm;branch=match-mesa-20.0.1;protoco
 
 S = "${WORKDIR}/git"
 
-COMPATIBLE_MACHINE = "ironhide"
+COMPATIBLE_MACHINE = "x5h"
 DEPENDS = "wayland-kms udev"
 
 inherit autotools pkgconfig

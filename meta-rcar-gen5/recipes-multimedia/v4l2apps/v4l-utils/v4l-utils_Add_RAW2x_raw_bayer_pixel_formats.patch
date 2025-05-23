@@ -1,0 +1,121 @@
+diff --git a/include/linux/media-bus-format.h b/include/linux/media-bus-format.h
+index ff62056f..153f04b5 100644
+--- a/include/linux/media-bus-format.h
++++ b/include/linux/media-bus-format.h
+@@ -156,6 +156,18 @@
+ #define MEDIA_BUS_FMT_SGBRG16_1X16		0x301e
+ #define MEDIA_BUS_FMT_SGRBG16_1X16		0x301f
+ #define MEDIA_BUS_FMT_SRGGB16_1X16		0x3020
++#define MEDIA_BUS_FMT_SBGGR20_1X20		0x3021
++#define MEDIA_BUS_FMT_SGBRG20_1X20		0x3022
++#define MEDIA_BUS_FMT_SGRBG20_1X20		0x3023
++#define MEDIA_BUS_FMT_SRGGB20_1X20		0x3024
++#define MEDIA_BUS_FMT_SBGGR24_1X24		0x3025
++#define MEDIA_BUS_FMT_SGBRG24_1X24		0x3026
++#define MEDIA_BUS_FMT_SGRBG24_1X24		0x3027
++#define MEDIA_BUS_FMT_SRGGB24_1X24		0x3028
++#define MEDIA_BUS_FMT_SBGGR28_1X28		0x3029
++#define MEDIA_BUS_FMT_SGBRG28_1X28		0x302a
++#define MEDIA_BUS_FMT_SGRBG28_1X28		0x302b
++#define MEDIA_BUS_FMT_SRGGB28_1X28		0x302c
+ 
+ /* JPEG compressed formats - next is	0x4002 */
+ #define MEDIA_BUS_FMT_JPEG_1X8			0x4001
+diff --git a/include/linux/v4l2-mediabus.h b/include/linux/v4l2-mediabus.h
+index 097ef739..89f58112 100644
+--- a/include/linux/v4l2-mediabus.h
++++ b/include/linux/v4l2-mediabus.h
+@@ -141,6 +141,26 @@ enum v4l2_mbus_pixelcode {
+ 	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGBRG12_1X12),
+ 	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGRBG12_1X12),
+ 	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SRGGB12_1X12),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SBGGR14_1X14),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGBRG14_1X14),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGRBG14_1X14),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SRGGB14_1X14),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SBGGR16_1X16),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGBRG16_1X16),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGRBG16_1X16),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SRGGB16_1X16),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SBGGR20_1X20),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGBRG20_1X20),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGRBG20_1X20),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SRGGB20_1X20),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SBGGR24_1X24),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGBRG24_1X24),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGRBG24_1X24),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SRGGB24_1X24),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SBGGR28_1X28),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGBRG28_1X28),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGRBG28_1X28),
++	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SRGGB28_1X28),
+ 
+ 	V4L2_MBUS_FROM_MEDIA_BUS_FMT(JPEG_1X8),
+ 
+diff --git a/include/linux/videodev2.h b/include/linux/videodev2.h
+index f5f87294..4d4d949a 100644
+--- a/include/linux/videodev2.h
++++ b/include/linux/videodev2.h
+@@ -703,11 +703,31 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_SGBRG14P v4l2_fourcc('p', 'G', 'E', 'E')
+ #define V4L2_PIX_FMT_SGRBG14P v4l2_fourcc('p', 'g', 'E', 'E')
+ #define V4L2_PIX_FMT_SRGGB14P v4l2_fourcc('p', 'R', 'E', 'E')
++
++	/* 16bit raw bayer packed, 8 bytes for every 4 pixel */
+ #define V4L2_PIX_FMT_SBGGR16 v4l2_fourcc('B', 'Y', 'R', '2') /* 16  BGBG.. GRGR.. */
+ #define V4L2_PIX_FMT_SGBRG16 v4l2_fourcc('G', 'B', '1', '6') /* 16  GBGB.. RGRG.. */
+ #define V4L2_PIX_FMT_SGRBG16 v4l2_fourcc('G', 'R', '1', '6') /* 16  GRGR.. BGBG.. */
+ #define V4L2_PIX_FMT_SRGGB16 v4l2_fourcc('R', 'G', '1', '6') /* 16  RGRG.. GBGB.. */
+ 
++	/* 20bit raw bayer packed, 5 bytes for every 2 pixel */
++#define V4L2_PIX_FMT_SBGGR20 v4l2_fourcc('B', 'G', '2', '0') /* 20  BGBG.. GRGR.. */
++#define V4L2_PIX_FMT_SGBRG20 v4l2_fourcc('G', 'B', '2', '0') /* 20  GBGB.. RGRG.. */
++#define V4L2_PIX_FMT_SGRBG20 v4l2_fourcc('G', 'R', '2', '0') /* 20  GRGR.. BGBG.. */
++#define V4L2_PIX_FMT_SRGGB20 v4l2_fourcc('R', 'G', '2', '0') /* 20  RGRG.. GBGB.. */
++
++	/* 24bit raw bayer packed, 6 bytes for every 2 pixel */
++#define V4L2_PIX_FMT_SBGGR24 v4l2_fourcc('B', 'G', '2', '4') /* 24  BGBG.. GRGR.. */
++#define V4L2_PIX_FMT_SGBRG24 v4l2_fourcc('G', 'B', '2', '4') /* 24  GBGB.. RGRG.. */
++#define V4L2_PIX_FMT_SGRBG24 v4l2_fourcc('G', 'R', '2', '4') /* 24  GRGR.. BGBG.. */
++#define V4L2_PIX_FMT_SRGGB24 v4l2_fourcc('R', 'G', '2', '4') /* 24  RGRG.. GBGB.. */
++
++	/* 28bit raw bayer packed, 7 bytes for every 2 pixel */
++#define V4L2_PIX_FMT_SBGGR28 v4l2_fourcc('B', 'G', '2', '8') /* 28  BGBG.. GRGR.. */
++#define V4L2_PIX_FMT_SGBRG28 v4l2_fourcc('G', 'B', '2', '8') /* 28  GBGB.. RGRG.. */
++#define V4L2_PIX_FMT_SGRBG28 v4l2_fourcc('G', 'R', '2', '8') /* 28  GRGR.. BGBG.. */
++#define V4L2_PIX_FMT_SRGGB28 v4l2_fourcc('R', 'G', '2', '8') /* 28  RGRG.. GBGB.. */
++
+ /* HSV formats */
+ #define V4L2_PIX_FMT_HSV24 v4l2_fourcc('H', 'S', 'V', '3')
+ #define V4L2_PIX_FMT_HSV32 v4l2_fourcc('H', 'S', 'V', '4')
+diff --git a/utils/media-ctl/libv4l2subdev.c b/utils/media-ctl/libv4l2subdev.c
+index f8f2bdec..b57dc8a0 100644
+--- a/utils/media-ctl/libv4l2subdev.c
++++ b/utils/media-ctl/libv4l2subdev.c
+@@ -1197,6 +1197,26 @@ static const struct {
+ 	{ "SGBRG12", MEDIA_BUS_FMT_SGBRG12_1X12 },
+ 	{ "SGRBG12", MEDIA_BUS_FMT_SGRBG12_1X12 },
+ 	{ "SRGGB12", MEDIA_BUS_FMT_SRGGB12_1X12 },
++	{ "SBGGR14", MEDIA_BUS_FMT_SBGGR14_1X14 },
++	{ "SGBRG14", MEDIA_BUS_FMT_SGBRG14_1X14 },
++	{ "SGRBG14", MEDIA_BUS_FMT_SGRBG14_1X14 },
++	{ "SRGGB14", MEDIA_BUS_FMT_SRGGB14_1X14 },
++	{ "SBGGR16", MEDIA_BUS_FMT_SBGGR16_1X16 },
++	{ "SGBRG16", MEDIA_BUS_FMT_SGBRG16_1X16 },
++	{ "SGRBG16", MEDIA_BUS_FMT_SGRBG16_1X16 },
++	{ "SRGGB16", MEDIA_BUS_FMT_SRGGB16_1X16 },
++	{ "SBGGR20", MEDIA_BUS_FMT_SBGGR20_1X20 },
++	{ "SGBRG20", MEDIA_BUS_FMT_SGBRG20_1X20 },
++	{ "SGRBG20", MEDIA_BUS_FMT_SGRBG20_1X20 },
++	{ "SRGGB20", MEDIA_BUS_FMT_SRGGB20_1X20 },
++	{ "SBGGR24", MEDIA_BUS_FMT_SBGGR24_1X24 },
++	{ "SGBRG24", MEDIA_BUS_FMT_SGBRG24_1X24 },
++	{ "SGRBG24", MEDIA_BUS_FMT_SGRBG24_1X24 },
++	{ "SRGGB24", MEDIA_BUS_FMT_SRGGB24_1X24 },
++	{ "SBGGR28", MEDIA_BUS_FMT_SBGGR28_1X28 },
++	{ "SGBRG28", MEDIA_BUS_FMT_SGBRG28_1X28 },
++	{ "SGRBG28", MEDIA_BUS_FMT_SGRBG28_1X28 },
++	{ "SRGGB28", MEDIA_BUS_FMT_SRGGB28_1X28 },
+ 	{ "AYUV32", MEDIA_BUS_FMT_AYUV8_1X32 },
+ 	{ "RBG24", MEDIA_BUS_FMT_RBG888_1X24 },
+ 	{ "RGB32", MEDIA_BUS_FMT_RGB888_1X32_PADHI },

@@ -17,7 +17,7 @@ SRC_URI:append:rcar-v4x = "${@oe.utils.conditional("RGID_ON", "1", " file://rcar
 # Work-around to fix perf build error
 SRC_URI:append = " file://init_disassemble_info-signature-changes-causes-compile-failures.patch"
 
-LINUX_VERSION ?= "5.10.147"
+LINUX_VERSION ?= "5.10.235"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 PR = "r1"
 

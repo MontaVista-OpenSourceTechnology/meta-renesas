@@ -13,5 +13,6 @@ IMAGE_INSTALL:append:rcar = " \
 IMAGE_INSTALL:append:rcar-v4x = " \
     nvme-initscripts \
     pcietest \
+    optee-client \
 "
 

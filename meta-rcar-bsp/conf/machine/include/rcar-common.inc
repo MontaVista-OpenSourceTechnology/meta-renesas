@@ -20,6 +20,7 @@ OLDEST_KERNEL = "5.10"
 
 # u-boot
 EXTRA_IMAGEDEPENDS += " u-boot arm-trusted-firmware"
+EXTRA_IMAGEDEPENDS:append:rcar-v4x = " optee-os"
 
 # Add variable to Build Configuration in build log
 BUILDCFG_VARS:append = " SOC_FAMILY"

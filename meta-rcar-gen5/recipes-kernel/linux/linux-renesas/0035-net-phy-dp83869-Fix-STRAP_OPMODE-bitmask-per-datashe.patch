@@ -1,0 +1,44 @@
+From 8e1e765b8836947e3c9a6e71c99f73995dcaf050 Mon Sep 17 00:00:00 2001
+From: Thanh Quan <thanh.quan.xn@renesas.com>
+Date: Tue, 27 May 2025 22:24:02 +0700
+Subject: [PATCH 35/46] net: phy: dp83869: Fix STRAP_OPMODE bitmask per
+ datasheet
+
+Update the STRAP_OPMODE bitmask in the DP83869 driver to match the
+correct bit positions as defined in the DP83869HM datasheet (Rev. C,
+April 2024). According to section 7.6.1.41 (STRAP_STS Register),
+the operation mode bits are located at [11:9], not [2:0].
+
+This patch corrects both the bitmask definition and the shift logic
+when extracting the mode value.
+
+Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
+---
+ drivers/net/phy/dp83869.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/phy/dp83869.c b/drivers/net/phy/dp83869.c
+index 9ab5eff502b7..cbb43fed34a9 100644
+--- a/drivers/net/phy/dp83869.c
++++ b/drivers/net/phy/dp83869.c
+@@ -84,7 +84,7 @@
+ #define DP83869_CLK_DELAY_DEF			7
+ 
+ /* STRAP_STS1 bits */
+-#define DP83869_STRAP_OP_MODE_MASK		GENMASK(2, 0)
++#define DP83869_STRAP_OP_MODE_MASK		GENMASK(11, 9)
+ #define DP83869_STRAP_STS1_RESERVED		BIT(11)
+ #define DP83869_STRAP_MIRROR_ENABLED           BIT(12)
+ 
+@@ -515,7 +515,7 @@ static int dp83869_set_strapped_mode(struct phy_device *phydev)
+ 	if (val < 0)
+ 		return val;
+ 
+-	dp83869->mode = val & DP83869_STRAP_OP_MODE_MASK;
++	dp83869->mode = (val & DP83869_STRAP_OP_MODE_MASK) >> 9;
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
+

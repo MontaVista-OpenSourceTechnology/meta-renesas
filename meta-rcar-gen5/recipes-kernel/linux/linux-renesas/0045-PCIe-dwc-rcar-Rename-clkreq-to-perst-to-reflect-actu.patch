@@ -1,0 +1,44 @@
+From 7629cd08968d7fb7b009a90feb21fdcd95ce89c7 Mon Sep 17 00:00:00 2001
+From: Tin Tran <tin.tran.xk@renesas.com>
+Date: Fri, 30 May 2025 19:48:35 +0700
+Subject: [PATCH 45/46] PCIe: dwc: rcar: Rename clkreq to perst to reflect
+ actual usage
+
+Rename the member variable from clkreq to perst to clarify
+its actual purpose and improve code readability.
+
+Signed-off-by: Tin Tran <tin.tran.xk@renesas.com>
+---
+ drivers/pci/controller/dwc/pcie4-rcar-host.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie4-rcar-host.c b/drivers/pci/controller/dwc/pcie4-rcar-host.c
+index 9ce0f10273fe..b8fa6814aa3e 100644
+--- a/drivers/pci/controller/dwc/pcie4-rcar-host.c
++++ b/drivers/pci/controller/dwc/pcie4-rcar-host.c
+@@ -78,7 +78,7 @@ struct rcar_pcie4 {
+ 	void __iomem			*phy_base;
+ 	struct reset_control		*rst;
+ 	struct clk			*bus_clk;
+-	struct gpio_desc		*clkreq;
++	struct gpio_desc		*perst;
+ };
+ 
+ static void rcar_gen5_pcie_ltssm_enable(struct rcar_pcie4 *rcar_pcie4,
+@@ -418,10 +418,10 @@ int rcar_gen5_pcie_devm_reset_get(struct rcar_pcie4 *rcar_pcie4,
+ 		return PTR_ERR(rcar_pcie4->bus_clk);
+ 	}
+ 
+-	rcar_pcie4->clkreq = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+-	if (IS_ERR(rcar_pcie4->clkreq)) {
++	rcar_pcie4->perst = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
++	if (IS_ERR(rcar_pcie4->perst)) {
+ 		dev_err(dev, "Failed to get PERST GPIO\n");
+-		return PTR_ERR(rcar_pcie4->clkreq);
++		return PTR_ERR(rcar_pcie4->perst);
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
+

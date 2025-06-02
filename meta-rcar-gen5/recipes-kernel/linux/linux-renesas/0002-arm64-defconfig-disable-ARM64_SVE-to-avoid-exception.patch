@@ -1,0 +1,25 @@
+From 84255b52fe99f77f347bd50894e787ff3cf38233 Mon Sep 17 00:00:00 2001
+From: Takeshi Kihara <takeshi.kihara.df@renesas.com>
+Date: Tue, 9 Apr 2024 13:46:58 +0900
+Subject: [PATCH 02/46] arm64: defconfig: disable ARM64_SVE to avoid exceptions
+
+Signed-off-by: Takeshi Kihara <takeshi.kihara.df@renesas.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 76e64d69b261..ec0050ec24ed 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -77,6 +77,7 @@ CONFIG_KEXEC_FILE=y
+ CONFIG_CRASH_DUMP=y
+ CONFIG_XEN=y
+ CONFIG_COMPAT=y
++# CONFIG_ARM64_SVE is not set
+ CONFIG_RANDOMIZE_BASE=y
+ CONFIG_HIBERNATION=y
+ CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
+-- 
+2.34.1
+

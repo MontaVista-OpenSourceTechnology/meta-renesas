@@ -1,0 +1,32 @@
+From f122d18a6f79b81f9a3133ec98074e3c965173fa Mon Sep 17 00:00:00 2001
+From: Tam Nguyen <tam.nguyen.xa@renesas.com>
+Date: Tue, 27 May 2025 21:54:10 +0700
+Subject: [PATCH 31/46] arm64: dts: renesas: ironhide: Enable Ethernet PCS
+
+Enable the Ethernet PCS and connect it to Multi-Protocol PHY
+
+Signed-off-by: Tam Nguyen <tam.nguyen.xa@renesas.com>
+Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts b/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
+index d2c63970ed9b..366402ee4682 100644
+--- a/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
++++ b/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
+@@ -93,6 +93,11 @@ rt_vram: rt_vram@1200000000 {
+         };
+ };
+ 
++&eth_pcs {
++	phys = <&mp_phy 2 1>;
++	status = "okay";
++};
++
+ &extal_clk {
+ 	clock-frequency = <16666666>;
+ };
+-- 
+2.34.1
+

@@ -1,0 +1,29 @@
+From 979d941f99407887c5966b0bffa669fd40ee2a33 Mon Sep 17 00:00:00 2001
+From: Minh Le <minh.le.aj@renesas.com>
+Date: Thu, 8 May 2025 13:38:56 +0700
+Subject: [PATCH 24/46] arm64: dts: renesas: r8a78000: Enable RWDT node
+
+This patch enables the RWDT node.
+
+Signed-off-by: Minh Le <minh.le.aj@renesas.com>
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts b/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
+index 4a6a40f2dd41..115d7e285c41 100644
+--- a/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
++++ b/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
+@@ -152,3 +152,8 @@ i2c1_pins: i2c1 {
+ 		function = "i2c1";
+ 	};
+ };
++
++&rwdt {
++	timeout-sec = <60>;
++	status = "okay";
++};
+-- 
+2.34.1
+

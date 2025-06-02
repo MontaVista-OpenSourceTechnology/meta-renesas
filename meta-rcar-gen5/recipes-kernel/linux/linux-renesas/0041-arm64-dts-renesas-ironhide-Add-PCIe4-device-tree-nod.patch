@@ -1,0 +1,69 @@
+From 92fcfa8dcc736d9c90745cf15285360ea2f00d92 Mon Sep 17 00:00:00 2001
+From: Tin Tran <tin.tran.xk@renesas.com>
+Date: Fri, 30 May 2025 15:29:50 +0700
+Subject: [PATCH 41/46] arm64: dts: renesas: ironhide: Add PCIe4 device tree
+ node
+
+Add PCIe4 node to support on R-Car X5H (r8a78000) SoC.
+
+Signed-off-by: Tin Tran <tin.tran.xk@renesas.com>
+---
+ .../boot/dts/renesas/r8a78000-ironhide.dts    | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts b/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
+index 5508cf293f2c..67f3c978742b 100644
+--- a/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
++++ b/arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts
+@@ -120,6 +120,14 @@ &scif_clk {
+ 	clock-frequency = <26000000>;
+ };
+ 
++&gpio10 {
++	pcie0_clkreq {
++		gpio-hog;
++		gpios = <12 1>;
++		output-high;
++	};
++};
++
+ &i2c0 {
+ 	pinctrl-0 = <&i2c0_pins>;
+ 	pinctrl-names = "default";
+@@ -132,6 +140,14 @@ eeprom@50 {
+ 		reg = <0x50>;
+ 		pagesize = <8>;
+ 	};
++
++	io_expander_pcie: gpio@77 {
++		compatible = "ti,tca9539";
++		reg = <0x77>;
++		gpio-controller;
++		#gpio-cells = <2>;
++	};
++
+ };
+ 
+ &i2c1 {
+@@ -179,6 +195,18 @@ rsw3_pins: rsw3 {
+ 		function = "rsw3";
+ 		drive-strength = <24>;
+ 	};
++
++	pcie40_pins: pcie40 {
++		groups = "pcie40_clkreq_n";
++		function = "pcie4";
++	};
++
++};
++
++&pciec40 {
++	status = "okay";
++	phys = <&mp_phy 0 1>;
++	reset-gpios = <&io_expander_pcie 0 1>;
+ };
+ 
+ &rsw3_clk {
+-- 
+2.34.1
+

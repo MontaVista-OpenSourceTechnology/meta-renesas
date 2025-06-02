@@ -1,0 +1,1223 @@
+From 895483177c0d8adeeb3e58560bba6e72b4644ec8 Mon Sep 17 00:00:00 2001
+From: Tuyen Dang <tuyen.dang.xa@renesas.com>
+Date: Tue, 29 Apr 2025 16:51:06 +0700
+Subject: [PATCH 43/52] arm64: renesas: gen5-common: Add baremetal clock and
+ module controllers
+
+Add baremetal clock and module controllers
+gen5-clk-ctrl.c
+gen5-module-ctrl.c
+gen5-clk-ctrl.h
+
+Signed-off-by: Tuyen Dang <tuyen.dang.xa@renesas.com>
+---
+ arch/arm/mach-renesas/Kconfig           |   5 +
+ board/renesas/common/Makefile           |   5 +
+ board/renesas/common/gen5-clk-ctrl.c    | 202 +++++++++
+ board/renesas/common/gen5-common.c      |  16 +
+ board/renesas/common/gen5-module-ctrl.c | 529 ++++++++++++++++++++++++
+ include/renesas/gen5-clk-ctrl.h         | 374 +++++++++++++++++
+ 6 files changed, 1131 insertions(+)
+ create mode 100644 board/renesas/common/gen5-clk-ctrl.c
+ create mode 100644 board/renesas/common/gen5-module-ctrl.c
+ create mode 100644 include/renesas/gen5-clk-ctrl.h
+
+diff --git a/arch/arm/mach-renesas/Kconfig b/arch/arm/mach-renesas/Kconfig
+index 82212d69a20..1493f2322c1 100644
+--- a/arch/arm/mach-renesas/Kconfig
++++ b/arch/arm/mach-renesas/Kconfig
+@@ -40,6 +40,11 @@ config RCAR_GEN5
+ 	select RCAR_64
+ 	select PINCTRL_PFC
+ 
++config BAREMETAL_CLK_MDL_CTRL
++	depends on RCAR_GEN5
++	default n
++	bool "Renesas CLK BAREMETAL Gen5"
++
+ config RZA1
+ 	prompt "Renesas ARM SoCs RZ/A1 (32bit)"
+ 	select CPU_V7A
+diff --git a/board/renesas/common/Makefile b/board/renesas/common/Makefile
+index ea7f9e00bc8..97d51a73089 100644
+--- a/board/renesas/common/Makefile
++++ b/board/renesas/common/Makefile
+@@ -45,6 +45,11 @@ endif
+ 
+ ifdef CONFIG_RCAR_GEN5
+ obj-y	+= gen5-common.o
++
++ifdef CONFIG_BAREMETAL_CLK_MDL_CTRL
++obj-y	+= gen5-clk-ctrl.o gen5-module-ctrl.o
++endif
++
+ endif
+ endif
+ 
+diff --git a/board/renesas/common/gen5-clk-ctrl.c b/board/renesas/common/gen5-clk-ctrl.c
+new file mode 100644
+index 00000000000..89ade3d911e
+--- /dev/null
++++ b/board/renesas/common/gen5-clk-ctrl.c
+@@ -0,0 +1,202 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * gen5-clk-ctrl.c
++ *
++ * Copyright (C) 2025 Renesas Electronics Corp.
++ */
++
++#include <asm/io.h>
++#include <asm/mach-types.h>
++#include <linux/errno.h>
++#include <linux/delay.h>
++#include <renesas/gen5-clk-ctrl.h>
++
++static const size_t pll_ctrl_reg2[PLL_MAX] = {
++	/* Register address */
++	PLL1_0_CR2,
++	PLL1_1_CR2,
++	PLL2_0_CR2,
++	PLL2_1_CR2,
++	PLL2_2_CR2,
++	PLL2_3_CR2,
++	PLL2_4_CR2,
++	PLL2_5_CR2,
++	PLL2_6_CR2,
++	PLL2_7_CR2,
++	PLL3_0_CR2,
++	PLL3_1_CR2,
++	PLL3_2_CR2,
++	PLL3_3_CR2,
++	PLL4_CR2,
++	PLL5_CR2,
++	PLL6_CR2,
++	PLL7_CR2,
++	PLL8_CR2,
++	PLL9_0_CR2,
++	PLL9_1_CR2,
++	PLL10_CR2,
++	PLL11_CR2,
++	PLL12_CR2,
++	PLL13_CR2,
++	PLL14_CR2,
++	PLL15_0_CR2,
++	PLL15_1_CR2,
++	PLL15_2_CR2,
++	PLL15_3_CR2
++};
++
++static const size_t pll_sel_ctrl_reg[PLL_MAX][2U] = {
++	/* Register address, Setting value */
++	{PLL1_0SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL1_1SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_0SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_1SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_2SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_3SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_4SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_5SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_6SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL2_7SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL3_0SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL3_1SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL3_2SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL3_3SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL4SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL5SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL6SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL7SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL8SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL9_0SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL9_1SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL10SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL11SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL12SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL13SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL14SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL15_0SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL15_1SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL15_2SCR,	PLL_SCR_PLLSELID_CLK_PLL},
++	{PLL15_3SCR,	PLL_SCR_PLLSELID_CLK_PLL}
++};
++
++static u32 get_pd_hier_from_pll(u32 pll_num)
++{
++	u32 pd_hier = 0xFFFFFFFFU;
++
++	switch (pll_num) {
++	case PLL1_0:
++		pd_hier = PD_HIER_TOP;
++		break;
++	case PLL1_1:
++		pd_hier = PD_HIER_TOP;
++		break;
++	case PLL5:
++		pd_hier = PD_HIER_TOP;
++		break;
++	case PLL7:
++		pd_hier = PD_HIER_TOP;
++		break;
++	case PLL12:
++		pd_hier = PD_HIER_TOP;
++		break;
++	default:
++		log_debug("PD_hier = Unknown PD_Hier error. Func:\n");
++	}
++
++	return pd_hier;
++}
++
++static void clock_controller_reg_write(size_t pd_hier, size_t reg_addr, size_t reg_val)
++{
++	/* Dummy read   */
++	readl(reg_addr);
++
++	switch (pd_hier) {
++	case PD_HIER_PERE:
++		writel(WRITE_KEY_CODE_EN, CLKPEREPKCPROT0);
++		writel(reg_val, reg_addr);
++		writel(WRITE_KEY_CODE_DIS, CLKPEREPKCPROT0);
++		break;
++	case PD_HIER_TOP:
++		writel(WRITE_KEY_CODE_EN, CLKTOPPKCPROT0);
++		writel(reg_val, reg_addr);
++		writel(WRITE_KEY_CODE_DIS, CLKTOPPKCPROT0);
++		break;
++	case PD_HIER_HSCS:
++		writel(WRITE_KEY_CODE_EN, CLKHSCSPKCPROT0);
++		writel(reg_val, reg_addr);
++		writel(WRITE_KEY_CODE_DIS, CLKHSCSPKCPROT0);
++		break;
++	case PD_HIER_SCP:
++		writel(WRITE_KEY_CODE_EN, CLKSCPPKCPROT0);
++		writel(reg_val, reg_addr);
++		writel(WRITE_KEY_CODE_DIS, CLKSCPPKCPROT0);
++		break;
++	default:
++		/* This PD Hier does not have Key Code Protection. */
++		writel(reg_val, reg_addr);
++		break;
++	}
++
++} /* End of function clock_controller_reg_write(u32 pd_hier, u32 reg_addr, u32 reg_val) */
++
++static void pll_reg_write(u32 pll_num)
++{
++	u32 pd_hier = 0xFFFFFFFFU;
++
++	pd_hier = get_pd_hier_from_pll(pll_num);
++
++	clock_controller_reg_write(pd_hier, pll_sel_ctrl_reg[pll_num][0],
++				   pll_sel_ctrl_reg[pll_num][1]);
++
++} /* End of function pll_reg_write(u32 pll_num) */
++
++u32 switch_clock_source_pll(u32 pll_num)
++{
++	/* Initial value of stable status is set to unstable. */
++	u32 clk_stable_stat = PLL_CR2_PLLCLKSTAB_UNSTABLE;
++	/* Initial value of clock source status is set to IOSC. */
++	u32 clk_src_stat = PLL_SCR_PLLSELACT_CLK_IOSC;
++	u32 cnt;
++	u32 pd_hier;
++	u32 pd_hier_impl_bit;
++	u32 mx_info;
++
++	// mx_info = read_register(PD_HIER_VR_PIN_ADDR);
++	mx_info = readl(PD_HIER_VR_PIN_ADDR);
++	pd_hier = get_pd_hier_from_pll(pll_num);
++	pd_hier_impl_bit = BIT(0) << pd_hier;
++
++	if ((mx_info & pd_hier_impl_bit) == PD_HIER_NOT_IMPL) {
++		log_debug("PD_hier is not implemented.\n");
++		return 0;
++	}
++
++	cnt = 0U;
++	do {
++		clk_stable_stat = PLL_CR2_PLLCLKSTAB_MASK &
++				  readl((void __iomem *)pll_ctrl_reg2[pll_num]);
++		cnt++;
++		if (cnt > 1000) {
++			log_debug("CPGM =  Give up waiting for clock stable state (PLLn_CR2.PLLCLKSTAB)\n");
++			break;
++		}
++	} while (clk_stable_stat != PLL_CR2_PLLCLKSTAB_STABLE);
++
++	/* 3. Change clock source to PLL. */
++	pll_reg_write(pll_num);
++
++	/* 4. Confirm that the clock source change is complete. */
++	cnt = 0U;
++	do {
++		clk_src_stat = PLL_SCR_PLLSELACT_MASK &
++			       readl((void __iomem *)pll_sel_ctrl_reg[pll_num][0]);
++		cnt++;
++		if (cnt > 1000) {
++			log_debug(" Give up waiting for switching to PLL. (PLLnSCRegister.PLLnSELACT)\n");
++			break;
++		}
++	} while (clk_src_stat != PLL_SCR_PLLSELACT_CLK_PLL);
++
++	return 0;
++}
+diff --git a/board/renesas/common/gen5-common.c b/board/renesas/common/gen5-common.c
+index 7dad9588f9b..3e226c5a631 100644
+--- a/board/renesas/common/gen5-common.c
++++ b/board/renesas/common/gen5-common.c
+@@ -13,6 +13,7 @@
+ #include <asm/processor.h>
+ #include <asm/system.h>
+ #include <linux/errno.h>
++#include <renesas/gen5-clk-ctrl.h>
+ 
+ DECLARE_GLOBAL_DATA_PTR;
+ 
+@@ -49,6 +50,17 @@ void s_init(void)
+ 
+ int board_early_init_f(void)
+ {
++
++#if defined(CONFIG_BAREMETAL_CLK_MDL_CTRL)
++	switch_clock_source_pll(PLL1_0);	/* HSCIF/SCIF */
++	switch_clock_source_pll(PLL1_1);	/* RSW3 */
++	switch_clock_source_pll(PLL5);		/* I2C, HSCIF/SCIF, RSW3 */
++	switch_clock_source_pll(PLL7);		/* RSW3 */
++	switch_clock_source_pll(PLL12);		/* RSW3 */
++
++	module_standby_early_init();
++#endif
++
+ 	return 0;
+ }
+ 
+@@ -58,6 +70,10 @@ int board_init(void)
+ 	writel(RST_KCPROT_DIS, RST_RESKCPROT0);
+ 	clrbits_le32(RST_WDTRSTCR, RST_WWDT_RSTMSK | RST_RWDT_RSTMSK);
+ 
++#if defined(CONFIG_BAREMETAL_CLK_MDL_CTRL)
++	module_standby_init();
++#endif
++
+ 	if (current_el() != 3)
+ 		return 0;
+ 	init_gic_v3();
+diff --git a/board/renesas/common/gen5-module-ctrl.c b/board/renesas/common/gen5-module-ctrl.c
+new file mode 100644
+index 00000000000..6967db8723c
+--- /dev/null
++++ b/board/renesas/common/gen5-module-ctrl.c
+@@ -0,0 +1,529 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * gen5-module-ctrl.c
++ *
++ * Copyright (C) 2025 Renesas Electronics Corp.
++ */
++
++#include <asm/io.h>
++#include <asm/mach-types.h>
++#include <linux/errno.h>
++#include <linux/delay.h>
++#include <renesas/gen5-clk-ctrl.h>
++
++static u32 pdidMaxNums[28] = {
++	[MOD_HIER_VIPN] =  1,
++	[MOD_HIER_VIPS] =  1,
++	[MOD_HIER_VIO]  =  7,
++	[MOD_HIER_PERE] =  1,
++	[MOD_HIER_PERW] =  0,
++	[MOD_HIER_DDR0] =  0,
++	[MOD_HIER_DDR1] =  0,
++	[MOD_HIER_DDR2] =  0,
++	[MOD_HIER_DDR3] =  0,
++	[MOD_HIER_DDR4] =  0,
++	[MOD_HIER_DDR5] =  0,
++	[MOD_HIER_DDR6] =  0,
++	[MOD_HIER_DDR7] =  0,
++	[MOD_HIER_HSCN] =  6,
++	[MOD_HIER_RT]   = 11,
++	[MOD_HIER_TOP]  =  0,
++	[MOD_HIER_HSCS] =  1,
++	[MOD_HIER_IMN]  =  1,
++	[MOD_HIER_IMS]  =  1,
++	[MOD_HIER_GPC]  =  3,
++	[MOD_HIER_DSP]  =  4,
++	[MOD_HIER_MM]   =  0,
++	[MOD_HIER_NPU0] = 13,
++	[MOD_HIER_NPU1] = 13,
++	[MOD_HIER_CMNN] = 20,
++	[MOD_HIER_CMNS] = 19,
++	[MOD_HIER_SCP]  =  0,
++	[MOD_HIER_AON]  =  0,
++};
++
++static uintptr_t mdlc_returnBase(u32 mod_hier)
++{
++	switch (mod_hier) {
++	case MOD_HIER_VIPN:
++		return MDLC_BASE_VIPN;
++	case MOD_HIER_VIPS:
++		return MDLC_BASE_VIPS;
++	case MOD_HIER_VIO:
++		return MDLC_BASE_VIO;
++	case MOD_HIER_PERE:
++		return MDLC_BASE_PERE;
++	case MOD_HIER_PERW:
++		return MDLC_BASE_PERW;
++	case MOD_HIER_DDR0:
++		return MDLC_BASE_DDR0;
++	case MOD_HIER_DDR1:
++		return MDLC_BASE_DDR1;
++	case MOD_HIER_DDR2:
++		return MDLC_BASE_DDR2;
++	case MOD_HIER_DDR3:
++		return MDLC_BASE_DDR3;
++	case MOD_HIER_DDR4:
++		return MDLC_BASE_DDR4;
++	case MOD_HIER_DDR5:
++		return MDLC_BASE_DDR5;
++	case MOD_HIER_DDR6:
++		return MDLC_BASE_DDR6;
++	case MOD_HIER_DDR7:
++		return MDLC_BASE_DDR7;
++	case MOD_HIER_HSCN:
++		return MDLC_BASE_HSCN;
++	case MOD_HIER_RT:
++		return MDLC_BASE_RT;
++	case MOD_HIER_TOP:
++		return MDLC_BASE_TOP;
++	case MOD_HIER_HSCS:
++		return MDLC_BASE_HSCS;
++	case MOD_HIER_IMN:
++		return MDLC_BASE_IMN;
++	case MOD_HIER_IMS:
++		return MDLC_BASE_IMS;
++	case MOD_HIER_GPC:
++		return MDLC_BASE_GPC;
++	case MOD_HIER_DSP:
++		return MDLC_BASE_DSP;
++	case MOD_HIER_MM:
++		return MDLC_BASE_MM;
++	case MOD_HIER_NPU0:
++		return MDLC_BASE_NPU0;
++	case MOD_HIER_NPU1:
++		return MDLC_BASE_NPU1;
++	case MOD_HIER_CMNN:
++		return MDLC_BASE_CMNN;
++	case MOD_HIER_CMNS:
++		return MDLC_BASE_CMNS;
++	case MOD_HIER_SCP:
++		return MDLC_BASE_SCP;
++	case MOD_HIER_AON:
++		return MDLC_BASE_AON;
++	default:
++		log_debug("** Module Hierarchy %d is illegal.\n", mod_hier);
++	}
++	return 0;
++}
++
++static void mdlc_mpg_DisableWriteProtect(u32 mod_hier)
++{
++	/* Disable Write Protection */
++	writel(MDLC_WRITE_EN, MDLC_PKCPROT0(mdlc_returnBase(mod_hier)));
++}
++
++static void mdlc_mpg_EnableWriteProtect(u32 mod_hier)
++{
++	/* Enable Write Protection */
++	writel(MDLC_WRITE_DIS, MDLC_PKCPROT0(mdlc_returnBase(mod_hier)));
++}
++
++static void mdlc_ms_DisableWriteProtect(u32 mod_hier)
++{
++	/* Disable Write Protection */
++	writel(MDLC_WRITE_EN, MDLC_PKCPROT1(mdlc_returnBase(mod_hier)));
++}
++
++static void mdlc_ms_EnableWriteProtect(u32 mod_hier)
++{
++	/* Enable Write Protection */
++	writel(MDLC_WRITE_DIS, MDLC_PKCPROT1(mdlc_returnBase(mod_hier)));
++}
++
++static u32 mdlc_ms_checkStReg(uintptr_t base, u32 regNo)
++{
++	u32 ret = ERROR_END;
++	u32 msress, msres;
++	u32 timeout = 500000;
++
++	while (--timeout) {
++		msress = readl(MDLC_MSRESS(base, regNo));
++		msres  = readl(MDLC_MSRES(base, regNo));
++		if (msress == msres) {
++			ret = NORMAL_END;
++			break;
++		}
++		udelay(1000);
++	}
++	if (timeout == 0) {
++		log_debug("** MS Status and Trigger are unmatched.\n");
++		log_debug("MSRESS ( 0x%08lX )= 0x%08X\n", MDLC_MSRESS(base, regNo), msress);
++		log_debug("MSRES  ( 0x%08lX )= 0x%08X\n", MDLC_MSRES(base, regNo), msres);
++	}
++
++	return ret;
++}
++
++static u32 mdlc_ms_ctrlStatus(u32 mod_hier, u32 regNo, u32 regBit, u32 mask)
++{
++	uintptr_t base = mdlc_returnBase(mod_hier);
++	u32 msress;
++	u32 val;
++
++	/* Check current status. and if the transition does not need, skip following processes. */
++	msress = readl(MDLC_MSRESS(base, regNo));
++	if ((msress & mask) == regBit)
++		return NORMAL_END;
++
++	/* Check MSRES & MSRESS coherency */
++	if (mdlc_ms_checkStReg(base, regNo) == ERROR_END) {
++		log_debug("[NG] Current Status Error! [Hier=%d, RegNo=%d]\n", mod_hier, regNo);
++		return ERROR_END;
++	}
++
++	/*------------------------------------------------------------------------*/
++	mdlc_ms_DisableWriteProtect(mod_hier);
++
++	/* Setting Module Standby */
++	val = msress & (~mask);
++	val |= regBit;
++	writel(val, MDLC_MSRES(base, regNo));
++
++	mdlc_ms_EnableWriteProtect(mod_hier);
++	/*------------------------------------------------------------------------*/
++
++	if (mdlc_ms_checkStReg(base, regNo) == ERROR_END) {
++		log_debug("[NG] Transition is failed [Hier=%d, RegNo=%d, TargetBit=0x%x]\n",
++		       mod_hier, regNo, regBit);
++		return ERROR_END;
++	}
++
++	return NORMAL_END;
++}
++
++static u32 mdlc_ctrlModuleStandby(u32 mod_hier, u32 regNo, u32 bitpos, u32 status)
++{
++	uintptr_t base = mdlc_returnBase(mod_hier);
++	u32 val, mask, timeout;
++	u32 ret = NORMAL_END;
++
++	/* Check Module Hierarchy */
++	if (base == 0x0)
++		return ERROR_END;
++
++	val = status << bitpos;
++	mask = 0x3 << bitpos;
++	if (mdlc_ms_ctrlStatus(mod_hier, regNo, val, mask))
++		ret = ERROR_END;
++
++	/* Check Status */
++	timeout = 10000;
++	while (--timeout) {
++		if ((readl(MDLC_MSRESS(base, regNo)) & mask) == val) {
++			break;
++		}
++		udelay(1000);
++	}
++	if (timeout == 0) {
++		log_debug("[NG] Transition is failed [Hier=%d, RegNo=%d, TargetBit=%d:%d]\n",
++		       mod_hier, regNo, bitpos + 1, bitpos);
++		log_debug("    MSRES  ( 0x%08lX )= 0x%08X\n", MDLC_MSRES(base, regNo),
++			readl(MDLC_MSRES(base, regNo)));
++		log_debug("        write-value = 0x%08X\n", val);
++		ret = ERROR_END;
++	}
++
++	return ret;
++}
++
++static u32 mdlc_mpg_checkStReg(uintptr_t base, u32 pdid)
++{
++	u32 ret = ERROR_END;
++	u32 mpdgs, mpdg;
++	u32 timeout = 500000;
++
++	while (--timeout) {
++		mpdgs = readl(MDLC_MPDGS(base, pdid));
++		mpdg = readl(MDLC_MPDG(base, pdid));
++		if (mpdgs == mpdg) {
++			ret = NORMAL_END;
++			break;
++		}
++	}
++	if (timeout == 0) {
++		log_debug("** MPG Status and Trigger are unmatched.\n");
++		log_debug("    MPDGS ( 0x%08lX )= 0x%08X\n", MDLC_MPDGS(base, pdid), mpdgs);
++		log_debug("    MPDG  ( 0x%08lX )= 0x%08X\n", MDLC_MPDG(base, pdid), mpdg);
++	}
++
++	return ret;
++}
++
++static u32 mdlc_mpg_ctrlStatus(u32 mod_hier, u32 pdid)
++{
++	uintptr_t base = mdlc_returnBase(mod_hier);
++	u32 curSt;
++	u32 mpier, mpimr;
++
++	/* Check current status. and if the transition does not need, skip following processes. */
++	curSt = readl(MDLC_MPDGS(base, pdid));
++	if (curSt == MPG_RUN)
++		return NORMAL_END;
++
++	/* Check MPDG & MPDGS coherency */
++	if (mdlc_mpg_checkStReg(base, pdid) == ERROR_END) {
++		log_debug("[NG] Current Status Error! [Hier=%d, PDID=%d]\n",
++		       mod_hier, pdid);
++		return ERROR_END;
++	}
++
++	/*------------------------------------------------------------------------*/
++	mdlc_mpg_DisableWriteProtect(mod_hier);
++
++	mpier = 0x00000000;
++	mpimr = 0xFFFFFFFF;
++
++	writel(mpier, MDLC_MPIER0(base));
++	writel(mpimr, MDLC_MPIMR0(base));
++
++	/* Transition to "Module Power Reset" */
++	writel(MPG_RESET, MDLC_MPDG(base, pdid));
++	if (mdlc_mpg_checkStReg(base, pdid) == ERROR_END) {
++		mdlc_mpg_EnableWriteProtect(mod_hier);
++		log_debug("[NG] Transition to \"Module Power Reset\" is failed [Hier=%d, PDID=%d]\n",
++		       mod_hier, pdid);
++		return ERROR_END;
++	}
++
++	writel(0x00000000, MDLC_MPIER0(base));
++	writel(0xFFFFFFFF, MDLC_MPIMR0(base));
++
++	/* Transition to "Module Power RUN" or "Module Power Gating" */
++	writel(MPG_RUN, MDLC_MPDG(base, pdid));
++
++	mdlc_mpg_EnableWriteProtect(mod_hier);
++	/*------------------------------------------------------------------------*/
++
++	if (mdlc_mpg_checkStReg(base, pdid) == ERROR_END) {
++		log_debug("[NG] Transition to \"Module Power %s\" is failed [Hier=%d, PDID=%d]\n",
++		       "RUN", mod_hier, pdid);
++		return ERROR_END;
++	}
++
++	return NORMAL_END;
++}
++
++static u32 mdlc_ctrlModulePowerGating(u32 mod_hier)
++{
++	u32 pdid_max;
++	s32 pdid, loop_lim;
++
++	/* Check Module Hierarchy */
++	if (mdlc_returnBase(mod_hier) == 0x0)
++		return ERROR_END;
++
++	/* Get Max value of each Module Hierarchy */
++	pdid_max = pdidMaxNums[mod_hier];
++	if (pdid_max == 0) {
++		log_debug("** Module Number (%d) controlling is skip.\n", mod_hier);
++		return NORMAL_END;
++	}
++
++	/* Controlling for each Power Domain in target module */
++	pdid = pdid_max; /* PowerON : Control from highest to lowest PDIDs */
++	loop_lim = 0;	 /* PowerOFF: Control from lowest to highest PDIDs */
++	while (1) {
++		/* Power Control */
++		if (mdlc_mpg_ctrlStatus(mod_hier, pdid) == ERROR_END) {
++			log_debug("** Module Number (%d) Power-%s is failure.\n", mod_hier, "ON");
++			return ERROR_END;
++		}
++
++		/* Check if this PDID is the last element */
++		if (pdid == loop_lim)
++			break;
++
++		pdid--;
++	}
++
++	return NORMAL_END;
++}
++
++void module_standby_set(u32 mod_hier, struct ms_info *p_ms)
++{
++	u32 msSequence;
++	uintptr_t base = mdlc_returnBase(mod_hier);
++	u32 ret = NORMAL_END;
++
++	if (mdlc_ctrlModulePowerGating(mod_hier) != NORMAL_END) {
++		log_debug("[NG] %s(), line: %d\n", __func__, __LINE__);
++		ret = ERROR_END;
++	}
++
++	for (u32 i = 0;; i++) {
++		/* Checking MS-table tail */
++		if (p_ms[i].regNo == MDLC_TBL_END)
++			break;
++
++		log_debug("MDLC:  Clock-ON: Hier=%d, regNo=%d[%d:%d]\n", mod_hier,
++		       p_ms[i].regNo, p_ms[i].regBit + 1, p_ms[i].regBit);
++
++		/* Control clock */
++		msSequence = MS_RESET;
++		if (mdlc_ctrlModuleStandby(mod_hier,
++					   p_ms[i].regNo,
++					   p_ms[i].regBit,
++					   msSequence) != NORMAL_END) {
++			log_debug("[NG] %s(), line: %d\n", __func__, __LINE__);
++			log_debug("     HIER:%d, regNo:%d, regBit:%d\n", mod_hier,
++			       p_ms[i].regNo, p_ms[i].regBit);
++
++			ret = ERROR_END;
++		}
++		log_debug("  MDLC%dMSRESS%d  ( 0x%08lX )= 0x%08X\n",
++		       mod_hier,
++		       p_ms[i].regNo,
++		       MDLC_MSRESS(base, p_ms[i].regNo),
++		       readl(MDLC_MSRESS(base, p_ms[i].regNo)));
++
++		msSequence = MS_RUN;
++		if (mdlc_ctrlModuleStandby(mod_hier,
++					   p_ms[i].regNo,
++					   p_ms[i].regBit,
++					   msSequence) != NORMAL_END) {
++			log_debug("[NG] %s(), line: %d\n", __func__, __LINE__);
++			log_debug("     HIER:%d, regNo:%d, regBit:%d\n",
++			       mod_hier,
++			       p_ms[i].regNo,
++			       p_ms[i].regBit);
++
++			ret = ERROR_END;
++		}
++		log_debug("  MDLC%dMSRESS%d  ( 0x%08lX )= 0x%08X\n",
++		       mod_hier,
++		       p_ms[i].regNo,
++		       MDLC_MSRESS(base, p_ms[i].regNo),
++		       readl(MDLC_MSRESS(base, p_ms[i].regNo)));
++	}
++}
++
++static void module_standby_pfc(void)
++{
++	uint32_t mod_hier = MOD_HIER_PERE;
++	struct ms_info ms1[] = {
++		{ 3,  0 },
++		{ 3,  2 },
++		{ 3,  4 },
++		{ 3,  6 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++
++	module_standby_set(mod_hier, ms1);
++
++	mod_hier = MOD_HIER_PERW;
++	struct ms_info ms2[] = {
++		{ 3,  0 },
++		{ 3,  2 },
++		{ 3,  4 },
++		{ 3,  6 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++
++	module_standby_set(mod_hier, ms2);
++
++	mod_hier = MOD_HIER_HSCN;
++	struct ms_info ms3[] = {
++		{ 5,  0 },
++		{ 5,  2 },
++		{ 5,  4 },
++		{ 5,  6 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++
++	module_standby_set(mod_hier, ms3);
++
++	mod_hier = MOD_HIER_AON;
++	struct ms_info ms4[] = {
++		{ 2,  0 },
++		{ 2,  2 },
++		{ 2,  4 },
++		{ 2,  6 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++
++	module_standby_set(mod_hier, ms4);
++}
++
++static void module_standby_i2c(void)
++{
++	uint32_t mod_hier;
++	mod_hier = MOD_HIER_PERW;
++	struct ms_info ms1[] = {
++		{ 4,  8 },
++		{ 4,  10 },
++		{ 4,  12 },
++		{ 4,  14 },
++		{ 4,  16 },
++		{ 4,  18 },
++		{ 4,  20 },
++		{ 4,  22 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++	module_standby_set(mod_hier, ms1);
++
++	mod_hier = MOD_HIER_SCP;
++	struct ms_info ms2[] = {
++		{ 5,  8 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++	module_standby_set(mod_hier, ms2);
++}
++
++void module_standby_pcs_rsw3_mpphy(void)
++{
++	uint32_t mod_hier;
++	mod_hier = MOD_HIER_HSCN;
++	struct ms_info ms1[] = {
++		{ 3,  0 },
++		{ 3,  2 },
++		{ 3,  4 },
++		{ 3,  6 },
++		{ 3,  8 },
++		{ 3,  10 },
++		{ 3,  12 },
++		{ 3,  14 },
++		{ 3,  16 },
++		{ 3,  18 },
++		{ 3,  20 },
++		{ 3,  22 },
++		{ 3,  24 },
++		{ 3,  26 },
++		{ 3,  28 },
++		{ 3,  30 },
++		{ 4,  0 },
++		{ 4,  2 },
++		{ 4,  4 },
++		{ 4,  6 },
++		{ 6,  8 },
++		{ 6,  10 },
++		{ 6,  12 },
++		{ 6,  14 },
++		{ 6,  16 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++	module_standby_set(mod_hier, ms1);
++}
++
++static void module_standby_mmc(void)
++{
++	uint32_t mod_hier;
++	mod_hier = MOD_HIER_PERE;
++	struct ms_info ms1[] = {
++		{ 7,  0 },
++		{ MDLC_TBL_END, 0 },
++	};      /* Target Registers on the hierarchy */
++	module_standby_set(mod_hier, ms1);
++}
++
++void module_standby_early_init(void)
++{
++	module_standby_pfc();
++	module_standby_i2c();
++}
++
++void module_standby_init(void)
++{
++	module_standby_pcs_rsw3_mpphy();
++	module_standby_mmc();
++}
+diff --git a/include/renesas/gen5-clk-ctrl.h b/include/renesas/gen5-clk-ctrl.h
+new file mode 100644
+index 00000000000..8ff815b3d4d
+--- /dev/null
++++ b/include/renesas/gen5-clk-ctrl.h
+@@ -0,0 +1,374 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * gen5-clk-ctrl.h
++ *
++ * Copyright (C) 2025 Renesas Electronics Corp.
++ */
++#ifndef CLK_CTRL_H
++#define CLK_CTRL_H
++
++struct ms_info {
++	u32 regNo;
++	u32 regBit;
++};
++
++#define PLL_MAX		(30U)
++
++#define PD_HIER_TOP	(15U)
++#define PD_HIER_HSCS	(16U)
++#define PD_HIER_SCP	(26U)
++#define PD_HIER_PERE	(3U)
++
++#define PLL1_0		(0U)	/* TOP Hierarchy */
++#define PLL1_1		(1U)	/* TOP Hierarchy */
++#define PLL5		(15U)	/* TOP Hierarchy */
++#define PLL7		(17U)	/* TOP Hierarchy */
++#define PLL12		(23U)	/* TOP Hierarchy */
++
++#define PLL_CR2_PLLCLKSTAB_UNSTABLE	(0x00000000U)
++#define PLL_SCR_PLLSELACT_CLK_IOSC	(0x00010000U)
++#define PD_HIER_NOT_IMPL		(0x0U)
++#define PLL_CR2_PLLCLKSTAB_MASK		(0x80000000U)
++#define PLL_CR2_PLLCLKSTAB_STABLE	(0x80000000U)
++#define PLL_SCR_PLLSELACT_MASK		(0x00010000U)
++#define PLL_SCR_PLLSELACT_CLK_PLL	(0x00000000U)
++
++#define PLL_SCR_PLLSELID_CLK_PLL	(0x00000000U)
++
++/* PD Hier virtual pin address */
++#define PD_HIER_VR_PIN_ADDR	(0x34004020U)
++
++#define BASE_ADDR_HIER_TOP	(0xC6480000U)	/* Hier Structure: 15, TOP */
++
++//===================================================================
++/* PLL1_0 Register, TOP Hierarchy */
++#define PLL1_0_CR0	(BASE_ADDR_HIER_TOP + 0x00001108U)
++#define PLL1_0_CR1	(BASE_ADDR_HIER_TOP + 0x0000110CU)
++#define PLL1_0_CR2	(BASE_ADDR_HIER_TOP + 0x00001110U)
++#define PLL1_0SCR	(BASE_ADDR_HIER_TOP + 0x00001270U)
++#define PLL1_0DCR	(BASE_ADDR_HIER_TOP + 0x00001274U)
++
++/* PLL1_1 Register, TOP Hierarchy */
++#define PLL1_1_CR0	(BASE_ADDR_HIER_TOP + 0x00001114U)
++#define PLL1_1_CR1	(BASE_ADDR_HIER_TOP + 0x00001118U)
++#define PLL1_1_CR2	(BASE_ADDR_HIER_TOP + 0x0000111CU)
++#define PLL1_1SCR	(BASE_ADDR_HIER_TOP + 0x00001278U)
++#define PLL1_1DCR	(BASE_ADDR_HIER_TOP + 0x0000127CU)
++
++/* PLL2_0 Register, TOP Hierarchy */
++#define PLL2_0_CR0	(BASE_ADDR_HIER_TOP + 0x00001120U)
++#define PLL2_0_CR1	(BASE_ADDR_HIER_TOP + 0x00001124U)
++#define PLL2_0_CR2	(BASE_ADDR_HIER_TOP + 0x00001128U)
++#define PLL2_0SCR	(BASE_ADDR_HIER_TOP + 0x00001280U)
++#define PLL2_0DCR	(BASE_ADDR_HIER_TOP + 0x00001284U)
++
++/* PLL2_1 Register, TOP Hierarchy */
++#define PLL2_1_CR0	(BASE_ADDR_HIER_TOP + 0x0000112CU)
++#define PLL2_1_CR1	(BASE_ADDR_HIER_TOP + 0x00001130U)
++#define PLL2_1_CR2	(BASE_ADDR_HIER_TOP + 0x00001134U)
++#define PLL2_1SCR	(BASE_ADDR_HIER_TOP + 0x00001288U)
++#define PLL2_1DCR	(BASE_ADDR_HIER_TOP + 0x0000128CU)
++
++/* PLL2_2 Register, TOP Hierarchy */
++#define PLL2_2_CR0	(BASE_ADDR_HIER_TOP + 0x00001138U)
++#define PLL2_2_CR1	(BASE_ADDR_HIER_TOP + 0x0000113CU)
++#define PLL2_2_CR2	(BASE_ADDR_HIER_TOP + 0x00001140U)
++#define PLL2_2SCR	(BASE_ADDR_HIER_TOP + 0x00001290U)
++#define PLL2_2DCR	(BASE_ADDR_HIER_TOP + 0x00001294U)
++
++/* PLL2_3 Register, TOP Hierarchy */
++#define PLL2_3_CR0	(BASE_ADDR_HIER_TOP + 0x00001144U)
++#define PLL2_3_CR1	(BASE_ADDR_HIER_TOP + 0x00001148U)
++#define PLL2_3_CR2	(BASE_ADDR_HIER_TOP + 0x0000114CU)
++#define PLL2_3SCR	(BASE_ADDR_HIER_TOP + 0x00001298U)
++#define PLL2_3DCR	(BASE_ADDR_HIER_TOP + 0x0000129CU)
++
++/* PLL2_4 Register, TOP Hierarchy */
++#define PLL2_4_CR0	(BASE_ADDR_HIER_TOP + 0x00001150U)
++#define PLL2_4_CR1	(BASE_ADDR_HIER_TOP + 0x00001154U)
++#define PLL2_4_CR2	(BASE_ADDR_HIER_TOP + 0x00001158U)
++#define PLL2_4SCR	(BASE_ADDR_HIER_TOP + 0x000012A0U)
++#define PLL2_4DCR	(BASE_ADDR_HIER_TOP + 0x000012A4U)
++
++/* PLL2_5 Register, TOP Hierarchy */
++#define PLL2_5_CR0	(BASE_ADDR_HIER_TOP + 0x0000115CU)
++#define PLL2_5_CR1	(BASE_ADDR_HIER_TOP + 0x00001160U)
++#define PLL2_5_CR2	(BASE_ADDR_HIER_TOP + 0x00001164U)
++#define PLL2_5SCR	(BASE_ADDR_HIER_TOP + 0x000012A8U)
++#define PLL2_5DCR	(BASE_ADDR_HIER_TOP + 0x000012ACU)
++
++/* PLL2_6 Register, TOP Hierarchy */
++#define PLL2_6_CR0	(BASE_ADDR_HIER_TOP + 0x00001168U)
++#define PLL2_6_CR1	(BASE_ADDR_HIER_TOP + 0x0000116CU)
++#define PLL2_6_CR2	(BASE_ADDR_HIER_TOP + 0x00001170U)
++#define PLL2_6SCR	(BASE_ADDR_HIER_TOP + 0x000012B0U)
++#define PLL2_6DCR	(BASE_ADDR_HIER_TOP + 0x000012B4U)
++
++/* PLL2_7 Register, TOP Hierarchy */
++#define PLL2_7_CR0	(BASE_ADDR_HIER_TOP + 0x00001174U)
++#define PLL2_7_CR1	(BASE_ADDR_HIER_TOP + 0x00001178U)
++#define PLL2_7_CR2	(BASE_ADDR_HIER_TOP + 0x0000117CU)
++#define PLL2_7SCR	(BASE_ADDR_HIER_TOP + 0x000012B8U)
++#define PLL2_7DCR	(BASE_ADDR_HIER_TOP + 0x000012BCU)
++
++/* PLL3_0 Register, TOP Hierarchy */
++#define PLL3_0_CR0	(BASE_ADDR_HIER_TOP + 0x00001180U)
++#define PLL3_0_CR1	(BASE_ADDR_HIER_TOP + 0x00001184U)
++#define PLL3_0_CR2	(BASE_ADDR_HIER_TOP + 0x00001188U)
++#define PLL3_0SCR	(BASE_ADDR_HIER_TOP + 0x000012C0U)
++#define PLL3_0DCR	(BASE_ADDR_HIER_TOP + 0x000012C4U)
++
++/* PLL3_1 Register, TOP Hierarchy */
++#define PLL3_1_CR0	(BASE_ADDR_HIER_TOP + 0x0000118CU)
++#define PLL3_1_CR1	(BASE_ADDR_HIER_TOP + 0x00001190U)
++#define PLL3_1_CR2	(BASE_ADDR_HIER_TOP + 0x00001194U)
++#define PLL3_1SCR	(BASE_ADDR_HIER_TOP + 0x000012C8U)
++#define PLL3_1DCR	(BASE_ADDR_HIER_TOP + 0x000012CCU)
++
++/* PLL3_2 Register, TOP Hierarchy */
++#define PLL3_2_CR0	(BASE_ADDR_HIER_TOP + 0x00001198U)
++#define PLL3_2_CR1	(BASE_ADDR_HIER_TOP + 0x0000119CU)
++#define PLL3_2_CR2	(BASE_ADDR_HIER_TOP + 0x000011A0U)
++#define PLL3_2SCR	(BASE_ADDR_HIER_TOP + 0x000012D0U)
++#define PLL3_2DCR	(BASE_ADDR_HIER_TOP + 0x000012D4U)
++
++/* PLL3_3 Register, TOP Hierarchy */
++#define PLL3_3_CR0	(BASE_ADDR_HIER_TOP + 0x000011A4U)
++#define PLL3_3_CR1	(BASE_ADDR_HIER_TOP + 0x000011A8U)
++#define PLL3_3_CR2	(BASE_ADDR_HIER_TOP + 0x000011ACU)
++#define PLL3_3SCR	(BASE_ADDR_HIER_TOP + 0x000012D8U)
++#define PLL3_3DCR	(BASE_ADDR_HIER_TOP + 0x000012DCU)
++
++/* PLL4 Register,	TOP Hierarchy */
++#define PLL4_CR0	(BASE_ADDR_HIER_TOP + 0x000011B0U)
++#define PLL4_CR1	(BASE_ADDR_HIER_TOP + 0x000011B4U)
++#define PLL4_CR2	(BASE_ADDR_HIER_TOP + 0x000011B8U)
++#define PLL4SCR		(BASE_ADDR_HIER_TOP + 0x000012E0U)
++#define PLL4DCR		(BASE_ADDR_HIER_TOP + 0x000012E4U)
++
++/* PLL5 Register,	TOP Hierarchy */
++#define PLL5_CR0	(BASE_ADDR_HIER_TOP + 0x000011BCU)
++#define PLL5_CR1	(BASE_ADDR_HIER_TOP + 0x000011C0U)
++#define PLL5_CR2	(BASE_ADDR_HIER_TOP + 0x000011C4U)
++#define PLL5SCR		(BASE_ADDR_HIER_TOP + 0x000012E8U)
++#define PLL5DCR		(BASE_ADDR_HIER_TOP + 0x000012ECU)
++
++/* PLL6 Register,	TOP Hierarchy */
++#define PLL6_CR0	(BASE_ADDR_HIER_TOP + 0x000011C8U)
++#define PLL6_CR1	(BASE_ADDR_HIER_TOP + 0x000011CCU)
++#define PLL6_CR2	(BASE_ADDR_HIER_TOP + 0x000011D0U)
++#define PLL6SCR		(BASE_ADDR_HIER_TOP + 0x000012F0U)
++#define PLL6DCR		(BASE_ADDR_HIER_TOP + 0x000012F4U)
++
++/* PLL7 Register,	TOP Hierarchy */
++#define PLL7_CR0	(BASE_ADDR_HIER_TOP + 0x000011D4U)
++#define PLL7_CR1	(BASE_ADDR_HIER_TOP + 0x000011D8U)
++#define PLL7_CR2	(BASE_ADDR_HIER_TOP + 0x000011DCU)
++#define PLL7SCR		(BASE_ADDR_HIER_TOP + 0x000012F8U)
++#define PLL7DCR		(BASE_ADDR_HIER_TOP + 0x000012FCU)
++
++/* PLL8 Register,	TOP Hierarchy */
++#define PLL8_CR0	(BASE_ADDR_HIER_TOP + 0x000011E0U)
++#define PLL8_CR1	(BASE_ADDR_HIER_TOP + 0x000011E4U)
++#define PLL8_CR2	(BASE_ADDR_HIER_TOP + 0x000011E8U)
++#define PLL8SCR		(BASE_ADDR_HIER_TOP + 0x00001300U)
++#define PLL8DCR		(BASE_ADDR_HIER_TOP + 0x00001304U)
++
++/* PLL9_0 Register, HSCS Hierarchy */
++#define PLL9_0_CR0	0
++#define PLL9_0_CR1	0
++#define PLL9_0_CR2	0
++#define PLL9_0SCR	0
++#define PLL9_0DCR	0
++
++/* PLL9_1 Register, HSCS Hierarchy */
++#define PLL9_1_CR0	0
++#define PLL9_1_CR1	0
++#define PLL9_1_CR2	0
++#define PLL9_1SCR	0
++#define PLL9_1DCR	0
++
++/* PLL10 Register, TOP Hierarchy */
++#define PLL10_CR0	(BASE_ADDR_HIER_TOP + 0x00001204U)
++#define PLL10_CR1	(BASE_ADDR_HIER_TOP + 0x00001208U)
++#define PLL10_CR2	(BASE_ADDR_HIER_TOP + 0x0000120CU)
++#define PLL10SCR	(BASE_ADDR_HIER_TOP + 0x00001318U)
++#define PLL10DCR	(BASE_ADDR_HIER_TOP + 0x0000131CU)
++
++/* PLL11 Register, TOP Hierarchy */
++#define PLL11_CR0	(BASE_ADDR_HIER_TOP + 0x00001210U)
++#define PLL11_CR1	(BASE_ADDR_HIER_TOP + 0x00001214U)
++#define PLL11_CR2	(BASE_ADDR_HIER_TOP + 0x00001218U)
++#define PLL11SCR	(BASE_ADDR_HIER_TOP + 0x00001320U)
++#define PLL11DCR	(BASE_ADDR_HIER_TOP + 0x00001324U)
++
++/* PLL12 Register, TOP Hierarchy */
++#define PLL12_CR0	(BASE_ADDR_HIER_TOP + 0x0000121CU)
++#define PLL12_CR1	(BASE_ADDR_HIER_TOP + 0x00001220U)
++#define PLL12_CR2	(BASE_ADDR_HIER_TOP + 0x00001224U)
++#define PLL12SCR	(BASE_ADDR_HIER_TOP + 0x00001328U)
++#define PLL12DCR	(BASE_ADDR_HIER_TOP + 0x0000132CU)
++
++/* PLL13 Register, SCP (PSO) Hierarchy */
++#define PLL13_CR0	0
++#define PLL13_CR1	0
++#define PLL13_CR2	0
++#define PLL13SCR	0
++#define PLL13DCR	0
++
++/* PLL14 Register, TOP Hierarchy */
++#define PLL14_CR0	(BASE_ADDR_HIER_TOP + 0x00001234U)
++#define PLL14_CR1	(BASE_ADDR_HIER_TOP + 0x00001238U)
++#define PLL14_CR2	(BASE_ADDR_HIER_TOP + 0x0000123CU)
++#define PLL14SCR	(BASE_ADDR_HIER_TOP + 0x00001338U)
++#define PLL14DCR	(BASE_ADDR_HIER_TOP + 0x0000133CU)
++
++/* PLL15_0 Register,  TOP Hierarchy */
++#define PLL15_0_CR0	(BASE_ADDR_HIER_TOP + 0x00001240U)
++#define PLL15_0_CR1	(BASE_ADDR_HIER_TOP + 0x00001244U)
++#define PLL15_0_CR2	(BASE_ADDR_HIER_TOP + 0x00001248U)
++#define PLL15_0SCR	(BASE_ADDR_HIER_TOP + 0x00001340U)
++#define PLL15_0DCR	(BASE_ADDR_HIER_TOP + 0x00001344U)
++
++/* PLL15_1 Register,  TOP Hierarchy */
++#define PLL15_1_CR0	(BASE_ADDR_HIER_TOP + 0x0000124CU)
++#define PLL15_1_CR1	(BASE_ADDR_HIER_TOP + 0x00001250U)
++#define PLL15_1_CR2	(BASE_ADDR_HIER_TOP + 0x00001254U)
++#define PLL15_1SCR	(BASE_ADDR_HIER_TOP + 0x00001348U)
++#define PLL15_1DCR	(BASE_ADDR_HIER_TOP + 0x0000134CU)
++
++/* PLL15_2 Register,  TOP Hierarchy */
++#define PLL15_2_CR0	(BASE_ADDR_HIER_TOP + 0x00001258U)
++#define PLL15_2_CR1	(BASE_ADDR_HIER_TOP + 0x0000125CU)
++#define PLL15_2_CR2	(BASE_ADDR_HIER_TOP + 0x00001260U)
++#define PLL15_2SCR	(BASE_ADDR_HIER_TOP + 0x00001350U)
++#define PLL15_2DCR	(BASE_ADDR_HIER_TOP + 0x00001354U)
++
++/* PLL15_3 Register,  TOP Hierarchy */
++#define PLL15_3_CR0	(BASE_ADDR_HIER_TOP + 0x00001264U)
++#define PLL15_3_CR1	(BASE_ADDR_HIER_TOP + 0x00001268U)
++#define PLL15_3_CR2	(BASE_ADDR_HIER_TOP + 0x0000126CU)
++#define PLL15_3SCR	(BASE_ADDR_HIER_TOP + 0x00001358U)
++#define PLL15_3DCR	(BASE_ADDR_HIER_TOP + 0x0000135CU)
++
++/* Clock Controller Register 0 Key Code Protection Register for Hierarchy */
++#define OFFSET_CLK_HIER_PKCPROT0	(0x00001370U)
++#define CLKPEREPKCPROT0			0
++/* TOP Hierarchy */
++#define CLKTOPPKCPROT0	(BASE_ADDR_HIER_TOP + OFFSET_CLK_HIER_PKCPROT0)
++#define CLKHSCSPKCPROT0	0
++#define CLKSCPPKCPROT0	0
++
++#define WRITE_KEY_CODE_DIS		(0xA5A5A500U)
++#define WRITE_KEY_CODE_EN		(0xA5A5A501U)
++
++/* CTRL DEFINE */
++#define MDLC_WRITE_EN			(0xA5A5A501U)
++#define MDLC_WRITE_DIS			(0xA5A5A500U)
++
++#define MDLC_PKCPROT0_OFFSET		(0x0CF0U)
++#define MDLC_PKCPROT0(base)		((base) + MDLC_PKCPROT0_OFFSET)
++
++#define MDLC_PKCPROT1_OFFSET		(0x0CF4U)
++#define MDLC_PKCPROT1(base)		((base) + MDLC_PKCPROT1_OFFSET)
++
++#define MDLC_MSRESS_OFFSET(l)		(0x0960U + (0x4 * (l)))
++#define MDLC_MSRESS(base, regNo)	((base) + MDLC_MSRESS_OFFSET(regNo))
++
++#define MDLC_MSRES_OFFSET(l)		(0x0900U + (0x4 * (l)))
++#define MDLC_MSRES(base, regNo)		((base) + MDLC_MSRES_OFFSET(regNo))
++
++#define MDLC_MPDG_OFFSET(k)		(0x0200U + (0x4 * (k)))
++#define MDLC_MPDG(base, pdid)		((base) + MDLC_MPDG_OFFSET(pdid))
++
++#define MDLC_MPDGS_OFFSET(k)		(0x0300U + (0x4 * (k)))
++#define MDLC_MPDGS(base, pdid)		((base) + MDLC_MPDGS_OFFSET(pdid))
++
++#define MDLC_MPIER0_OFFSET		(0x0110U)
++#define MDLC_MPIER0(base)		((base) + MDLC_MPIER0_OFFSET)
++
++#define MDLC_MPIMR0_OFFSET		(0x0120U)
++#define MDLC_MPIMR0(base)		((base) + MDLC_MPIMR0_OFFSET)
++
++#define	NORMAL_END	0
++#define	ERROR		1
++#define	ERROR_END	1
++
++#define MDLC_TBL_END		(0xDEADBEEFU)
++
++#define MPG_GATING		(0x0U)
++#define MPG_RESET		(0x1U)
++#define MPG_RUN			(0x3U)
++
++#define MS_RESET		(0x1U)
++#define MS_STOP			(0x2U)
++#define MS_RUN			(0x3U)
++
++#define MDLC_BASE_VIPN		(0xC3060000U)
++#define MDLC_BASE_VIPS		(0xC3460000U)
++#define MDLC_BASE_VIO		(0xC5000000U)
++#define MDLC_BASE_PERE		(0xC08F0000U)
++#define MDLC_BASE_PERW		(0xC05D0000U)
++#define MDLC_BASE_DDR0		(0xE8000000U)
++#define MDLC_BASE_DDR1		(0xE8080000U)
++#define MDLC_BASE_DDR2		(0xE8100000U)
++#define MDLC_BASE_DDR3		(0xE8180000U)
++#define MDLC_BASE_DDR4		(0xE8200000U)
++#define MDLC_BASE_DDR5		(0xE8280000U)
++#define MDLC_BASE_DDR6		(0xE8300000U)
++#define MDLC_BASE_DDR7		(0xE8380000U)
++#define MDLC_BASE_HSCN		(0xC9C90000U)
++#define MDLC_BASE_RT		(0x19440000U)
++#define MDLC_BASE_TOP		(0xC6480000U)
++#define MDLC_BASE_HSCS		(0xDE200000U)
++#define MDLC_BASE_IMN		(0xC1990000U)
++#define MDLC_BASE_IMS		(0xC1D90000U)
++#define MDLC_BASE_GPC		(0xCB510000U)
++#define MDLC_BASE_DSP		(0xCBE90000U)
++#define MDLC_BASE_MM		(0xE9980000U)
++#define MDLC_BASE_NPU0		(0xD2C30000U)
++#define MDLC_BASE_NPU1		(0xD6C30000U)
++#define MDLC_BASE_CMNN		(0xCA410000U)
++#define MDLC_BASE_CMNS		(0xCA510000U)
++#define MDLC_BASE_SCP		(0xC1330000U)
++#define MDLC_BASE_AON		(0xC1338000U)
++
++/* Module Hierarchy */
++enum {					// Module Number
++	MOD_HIER_VIPN = 0,		// 00
++	MOD_HIER_VIPS,			// 01
++	MOD_HIER_VIO,			// 02
++	MOD_HIER_PERE,			// 03
++	MOD_HIER_PERW,			// 04
++	MOD_HIER_DDR0,			// 05
++	MOD_HIER_DDR1,			// 06
++	MOD_HIER_DDR2,			// 07
++	MOD_HIER_DDR3,			// 08
++	MOD_HIER_DDR4,			// 09
++	MOD_HIER_DDR5,			// 10
++	MOD_HIER_DDR6,			// 11
++	MOD_HIER_DDR7,			// 12
++	MOD_HIER_HSCN,			// 13
++	MOD_HIER_RT,			// 14
++	MOD_HIER_TOP,			// 15
++	MOD_HIER_HSCS,			// 16
++	MOD_HIER_IMN,			// 17
++	MOD_HIER_IMS,			// 18
++	MOD_HIER_GPC,			// 19
++	MOD_HIER_DSP,			// 20
++	MOD_HIER_MM,			// 21
++	MOD_HIER_NPU0,			// 22
++	MOD_HIER_NPU1,			// 23
++	MOD_HIER_CMNN,			// 24
++	MOD_HIER_CMNS,			// 25
++	MOD_HIER_SCP,			// 26
++	MOD_HIER_AON,			// 27
++	MOD_HIER_ILLEGAL,
++};
++
++//CLK
++u32 switch_clock_source_pll(u32 pll_num);
++void module_standby_early_init(void);
++void module_standby_init(void);
++
++#endif // CLK_CTRL_H
+-- 
+2.34.1
+

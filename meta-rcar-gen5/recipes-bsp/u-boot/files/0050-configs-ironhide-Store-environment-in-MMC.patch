@@ -1,0 +1,38 @@
+From b1d82e3903ac3c9f0902ccff1ac21dc7890abeaf Mon Sep 17 00:00:00 2001
+From: Khanh Le <khanh.le.xr@renesas.com>
+Date: Tue, 27 May 2025 19:54:31 +0700
+Subject: [PATCH 50/52] configs: ironhide: Store environment in MMC
+
+Store U-Boot environment variable in the MMC device.
+
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ configs/r8a78000_ironhide_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/configs/r8a78000_ironhide_defconfig b/configs/r8a78000_ironhide_defconfig
+index 111128d7f1b..f2c5c5dfa1c 100644
+--- a/configs/r8a78000_ironhide_defconfig
++++ b/configs/r8a78000_ironhide_defconfig
+@@ -8,6 +8,9 @@ CONFIG_ARM_SMCCC=y
+ CONFIG_ARMV8_PSCI=y
+ CONFIG_ENV_SIZE=0x20000
+ CONFIG_ENV_OFFSET=0xFFFE0000
++CONFIG_ENV_IS_IN_MMC=y
++CONFIG_SYS_MMC_ENV_DEV=0
++CONFIG_SYS_MMC_ENV_PART=2
+ # CONFIG_OF_UPSTREAM is not set
+ CONFIG_DEFAULT_DEVICE_TREE="r8a78000-ironhide"
+ CONFIG_TARGET_IRONHIDE=y
+@@ -15,7 +18,6 @@ CONFIG_SYS_CLK_FREQ=1066666667
+ CONFIG_SYS_BOOT_GET_CMDLINE=y
+ CONFIG_SYS_BARGSIZE=2048
+ CONFIG_BOOTCOMMAND="tftp 0x61080000 Image && tftp 0x61000000 r8a78000-ironhide.dtb && booti 0x61080000 - 0x61000000"
+-CONFIG_ENV_IS_NOWHERE=y
+ CONFIG_SYS_CBSIZE=2048
+ CONFIG_CMD_MEMTEST=y
+ CONFIG_SYS_ALT_MEMTEST=y
+-- 
+2.34.1
+

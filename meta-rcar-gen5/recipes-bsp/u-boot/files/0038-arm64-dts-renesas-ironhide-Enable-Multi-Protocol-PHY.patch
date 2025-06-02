@@ -1,0 +1,31 @@
+From 919c7731454073d4438b8991d48daec0bfe86e0c Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Mon, 26 May 2025 20:43:14 +0700
+Subject: [PATCH 38/52] arm64: dts: renesas: ironhide: Enable Multi-Protocol
+ PHY
+
+Enable support for the Multi-Protocol PHY controller
+
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ arch/arm/dts/r8a78000-ironhide.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/dts/r8a78000-ironhide.dts b/arch/arm/dts/r8a78000-ironhide.dts
+index f17a93085cf..17f38f255fb 100644
+--- a/arch/arm/dts/r8a78000-ironhide.dts
++++ b/arch/arm/dts/r8a78000-ironhide.dts
+@@ -114,6 +114,10 @@
+ 	clock-frequency = <400000>;
+ };
+ 
++&mp_phy {
++	status = "okay";
++};
++
+ &pfc {
+ 	pinctrl-0 = <&scif_clk_pins>;
+ 	pinctrl-names = "default";
+-- 
+2.34.1
+

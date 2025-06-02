@@ -1,0 +1,31 @@
+From ccdee0406cfd093423a998e9d86aad888da86aee Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Wed, 7 May 2025 10:34:27 +0700
+Subject: [PATCH 03/52] pinctrl: renesas: Show bit position in config write
+
+Show bit position in config write debug log, which is helpful for cases
+where the p port setting is applied at the exact p bit position
+
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ drivers/pinctrl/renesas/pfc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pinctrl/renesas/pfc.c b/drivers/pinctrl/renesas/pfc.c
+index 5a9272326e6..694f4ae7c96 100644
+--- a/drivers/pinctrl/renesas/pfc.c
++++ b/drivers/pinctrl/renesas/pfc.c
+@@ -189,8 +189,8 @@ static void sh_pfc_write_config_reg(struct sh_pfc *pfc,
+ 	sh_pfc_config_reg_helper(pfc, crp, field, &mapped_reg, &mask, &pos);
+ 
+ 	dev_dbg(pfc->dev, "write_reg addr = %x, value = 0x%x, field = %u, "
+-		"r_width = %u, f_width = %u\n",
+-		crp->reg, value, field, crp->reg_width, crp->field_width);
++		"pos = %u, r_width = %u, f_width = %u\n",
++		crp->reg, value, field, pos, crp->reg_width, crp->field_width);
+ 
+ 	mask = ~(mask << pos);
+ 	value = value << pos;
+-- 
+2.34.1
+

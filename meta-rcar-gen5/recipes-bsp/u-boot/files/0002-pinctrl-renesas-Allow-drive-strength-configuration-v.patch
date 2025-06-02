@@ -1,0 +1,48 @@
+From 357bce83b6fd9565234c26c33135895f7d65f4f4 Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Tue, 6 May 2025 12:53:50 +0700
+Subject: [PATCH 02/52] pinctrl: renesas: Allow drive strength configuration
+ via SoC driver
+
+Allow drive strength configuration via SoC driver, which is needed for
+R-Car Gen5 family drive strength configuration.
+
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ drivers/pinctrl/renesas/pfc.c    | 6 +++++-
+ drivers/pinctrl/renesas/sh_pfc.h | 2 ++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/renesas/pfc.c b/drivers/pinctrl/renesas/pfc.c
+index db6be39a528..5a9272326e6 100644
+--- a/drivers/pinctrl/renesas/pfc.c
++++ b/drivers/pinctrl/renesas/pfc.c
+@@ -831,7 +831,11 @@ static int sh_pfc_pinconf_set(struct sh_pfc_pinctrl *pmx, unsigned _pin,
+ 		break;
+ 
+ 	case PIN_CONFIG_DRIVE_STRENGTH:
+-		ret = sh_pfc_pinconf_set_drive_strength(pfc, _pin, arg);
++		if (!pfc->info->ops || !pfc->info->ops->set_drive_strength)
++			ret = sh_pfc_pinconf_set_drive_strength(pfc, _pin, arg);
++		else
++			ret = pfc->info->ops->set_drive_strength(pfc, _pin, arg);
++
+ 		if (ret < 0)
+ 			return ret;
+ 
+diff --git a/drivers/pinctrl/renesas/sh_pfc.h b/drivers/pinctrl/renesas/sh_pfc.h
+index 79c6125a0d7..e81b6086c45 100644
+--- a/drivers/pinctrl/renesas/sh_pfc.h
++++ b/drivers/pinctrl/renesas/sh_pfc.h
+@@ -245,6 +245,8 @@ struct sh_pfc_soc_operations {
+ 			 unsigned int bias);
+ 	int (*pin_to_pocctrl)(unsigned int pin, u32 *pocctrl);
+ 	int (*pin_to_portcr)(unsigned int pin);
++	int (*set_drive_strength)(struct sh_pfc *pfc, unsigned int pin,
++				  u16 strength);
+ };
+ 
+ struct sh_pfc_soc_info {
+-- 
+2.34.1
+

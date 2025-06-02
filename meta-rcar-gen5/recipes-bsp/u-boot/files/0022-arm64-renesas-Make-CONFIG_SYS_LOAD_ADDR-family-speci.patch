@@ -1,0 +1,53 @@
+From 8b2f43ad6c3d811410322517deceab31f17bc518 Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Mon, 28 Apr 2025 09:16:05 +0700
+Subject: [PATCH 22/52] arm64: renesas: Make CONFIG_SYS_LOAD_ADDR
+ family-specific
+
+Make CONFIG_SYS_LOAD_ADDR family-specific to prepare for R-Car Gen5
+support. No functional changes.
+
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ configs/renesas_rcar3.config  | 1 +
+ configs/renesas_rcar4.config  | 1 +
+ configs/renesas_rcar64.config | 1 -
+ 3 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configs/renesas_rcar3.config b/configs/renesas_rcar3.config
+index 9f2413ae928..f4713898bc6 100644
+--- a/configs/renesas_rcar3.config
++++ b/configs/renesas_rcar3.config
+@@ -1,4 +1,5 @@
+ #include <configs/renesas_rcar64.config>
+ 
+ CONFIG_BITBANGMII=y
++CONFIG_SYS_LOAD_ADDR=0x58000000
+ CONFIG_SYS_PBSIZE=2068
+diff --git a/configs/renesas_rcar4.config b/configs/renesas_rcar4.config
+index 87d6a60e56e..547ea975a98 100644
+--- a/configs/renesas_rcar4.config
++++ b/configs/renesas_rcar4.config
+@@ -12,6 +12,7 @@ CONFIG_MMC_UHS_SUPPORT=y
+ CONFIG_RENESAS_SDHI=y
+ CONFIG_SPI_FLASH_SPANSION=y
+ CONFIG_SYS_I2C_RCAR_I2C=y
++CONFIG_SYS_LOAD_ADDR=0x58000000
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+ CONFIG_USE_BOOTARGS=y
+ CONFIG_USE_BOOTCOMMAND=y
+diff --git a/configs/renesas_rcar64.config b/configs/renesas_rcar64.config
+index 1b2f0fe6fc1..924a85c1190 100644
+--- a/configs/renesas_rcar64.config
++++ b/configs/renesas_rcar64.config
+@@ -8,7 +8,6 @@ CONFIG_REMAKE_ELF=y
+ CONFIG_RENESAS_RPC_SPI=y
+ CONFIG_SUPPORT_RAW_INITRD=y
+ CONFIG_SYSCON=y
+-CONFIG_SYS_LOAD_ADDR=0x58000000
+ CONFIG_SYS_MALLOC_BOOTPARAMS=y
+ CONFIG_SYS_MALLOC_LEN=0x4000000
+ CONFIG_SYS_MONITOR_LEN=1048576
+-- 
+2.34.1
+

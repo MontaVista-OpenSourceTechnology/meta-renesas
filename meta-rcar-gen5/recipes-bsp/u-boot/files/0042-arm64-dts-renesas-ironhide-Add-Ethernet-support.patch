@@ -1,0 +1,122 @@
+From 2dcdba94e5c990da59a70700829285e5bc589289 Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Mon, 26 May 2025 20:57:31 +0700
+Subject: [PATCH 42/52] arm64: dts: renesas: ironhide: Add Ethernet support
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add initial Ethernet port@4 configuration for the RSwitch3
+controller on the R-Car X5H (R8A78000) board.
+
+This setup connects port 4 via XPCS to a TI DP83869 PHY in SGMII mode,
+with a board-specific MAC address and MDIO configuration. Other ports
+(0–3, 5–12) are currently unused and left unconfigured.
+
+Signed-off-by: Tam Nguyen <tam.nguyen.xa@renesas.com>
+Signed-off-by: Phong Hoang <phong.hoang.wz@renesas.com>
+Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ arch/arm/dts/r8a78000-ironhide.dts | 58 ++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+
+diff --git a/arch/arm/dts/r8a78000-ironhide.dts b/arch/arm/dts/r8a78000-ironhide.dts
+index 7a554f83adb..6b8a2e8ee76 100644
+--- a/arch/arm/dts/r8a78000-ironhide.dts
++++ b/arch/arm/dts/r8a78000-ironhide.dts
+@@ -7,6 +7,7 @@
+ 
+ /dts-v1/;
+ #include "r8a78000.dtsi"
++#include <dt-bindings/net/ti-dp83869.h>
+ 
+ / {
+ 	model = "Renesas Ironhide board based on r8a78000";
+@@ -22,6 +23,7 @@
+ 		i2c6 = &i2c6;
+ 		i2c7 = &i2c7;
+ 		i2c8 = &i2c8;
++		ethernet0 = &rswitch3;
+ 		serial0 = &hscif0;
+ 	};
+ 
+@@ -127,6 +129,18 @@
+ 	pinctrl-0 = <&scif_clk_pins>;
+ 	pinctrl-names = "default";
+ 
++	eth25g2_pins: eth25g2 {
++		groups = "eth25g2_mdio", "eth25g2_link", "eth25g2_phyint";
++		function = "eth25g2";
++		drive-strength = <24>;
++	};
++
++	ethes0_pins: ethes0 {
++		groups = "ethes0_match", "ethes0_capture", "ethes0_pps";
++		function = "ethes0";
++		drive-strength = <24>;
++	};
++
+ 	hscif0_pins: hscif0 {
+ 		groups = "hscif0_data", "hscif0_ctrl";
+ 		function = "hscif0";
+@@ -142,12 +156,56 @@
+ 		function = "i2c1";
+ 	};
+ 
++	rsw3_pins: rsw3 {
++		groups = "rsw3_match", "rsw3_capture", "rsw3_pps";
++		function = "rsw3";
++		drive-strength = <24>;
++	};
++
+ 	scif_clk_pins: scif-clk {
+ 		groups = "scif_clk";
+ 		function = "scif_clk";
+ 	};
+ };
+ 
++&rswitch3 {
++	pinctrl-0 = <&rsw3_pins>, <&eth25g2_pins>, <&ethes0_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++
++	ethernet-ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		/*
++		 * NOTE: Only port@4 is configured for R-Car X5H board.
++		 * Other ports (0–3, 5–12) are currently unused or not connected.
++		 * TODO: Add support as needed.
++		 */
++		port@4 {
++			reg = <4>;
++			renesas,connect_to_xpcs;
++			phy-handle = <&dp83869_phy>;
++			phy-mode = "sgmii";
++			/* Config for board X5H with MAC below */
++			local-mac-address = [2E 09 0A 12 F7 4C];
++			phys = <&eth_pcs 5>;
++
++			mdio {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				dp83869_phy: ethernet-phy@2 {
++					reg = <2>;
++					ti,sgmii-interface;
++					ti,max-output-impedance;
++					ti,refclk-output-enable;
++					ti,clk-output-sel = <DP83869_CLK_O_SEL_REF_CLK>;
++				};
++			};
++		};
++	};
++};
++
+ &scif_clk {
+ 	clock-frequency = <26000000>;
+ };
+-- 
+2.34.1
+

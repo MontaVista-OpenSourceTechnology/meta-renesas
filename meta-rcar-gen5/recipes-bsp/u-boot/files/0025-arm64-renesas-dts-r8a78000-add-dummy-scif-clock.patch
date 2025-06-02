@@ -1,0 +1,43 @@
+From a7a0eade7d97bcc0eaa8be010623ee595b8cf2b2 Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Mon, 5 May 2025 17:10:29 +0700
+Subject: [PATCH 25/52] arm64: renesas: dts: r8a78000: add dummy scif clock
+
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ arch/arm/dts/r8a78000.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm/dts/r8a78000.dtsi b/arch/arm/dts/r8a78000.dtsi
+index 96b47790fe8..6fd12ce37af 100644
+--- a/arch/arm/dts/r8a78000.dtsi
++++ b/arch/arm/dts/r8a78000.dtsi
+@@ -78,6 +78,16 @@
+ 		method = "smc";
+ 	};
+ 
++	/* In the early phase, there is no clock control support,
++	 * so assume that the clocks are enabled by default.
++	 * Therefore, dummy clocks are used.
++	 */
++	dummy_clk_sgasyncd4: dummy_clk_sgasyncd4 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <266666666>;
++	};
++
+ 	/* External SCIF clock - to be overridden by boards that provide it */
+ 	scif_clk: scif {
+ 		compatible = "fixed-clock";
+@@ -130,6 +140,8 @@
+ 			compatible = "renesas,rcar-gen5-hscif", "renesas,hscif";
+ 			reg = <0 0xc0710000 0 0x60>;
+ 			interrupts = <GIC_SPI 4078 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&dummy_clk_sgasyncd4>, <&dummy_clk_sgasyncd4>, <&scif_clk>;
++			clock-names = "fck", "brg_int", "scif_clk";
+ 			status = "disabled";
+ 		};
+ 
+-- 
+2.34.1
+

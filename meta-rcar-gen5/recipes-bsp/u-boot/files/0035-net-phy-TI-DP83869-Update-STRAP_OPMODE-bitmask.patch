@@ -1,0 +1,40 @@
+From 05fbeac8d809320db82673ff2004728b8d3b8b99 Mon Sep 17 00:00:00 2001
+From: Thanh Quan <thanh.quan.xn@renesas.com>
+Date: Fri, 16 May 2025 10:27:13 +0700
+Subject: [PATCH 35/52] net: phy: TI DP83869: Update STRAP_OPMODE bitmask
+
+According to the TI DP83869HM datasheet Revision C (April 2024), section
+7.6.1.41 STRAP_STS Register, the STRAP_OPMODE bitmask is bit [11:9].
+Fix this.
+
+Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ drivers/net/phy/dp83869.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/phy/dp83869.c b/drivers/net/phy/dp83869.c
+index b6fb5adae1f..9670a4ca750 100644
+--- a/drivers/net/phy/dp83869.c
++++ b/drivers/net/phy/dp83869.c
+@@ -64,7 +64,7 @@
+ #define DP83869_RGMII_RX_CLK_DELAY_EN		BIT(0)
+ 
+ /* STRAP_STS1 bits */
+-#define DP83869_STRAP_OP_MODE_MASK		GENMASK(2, 0)
++#define DP83869_STRAP_OP_MODE_MASK		GENMASK(11, 9)
+ #define DP83869_STRAP_STS1_RESERVED		BIT(11)
+ #define DP83869_STRAP_MIRROR_ENABLED		BIT(12)
+ 
+@@ -168,7 +168,7 @@ static int dp83869_set_strapped_mode(struct phy_device *phydev)
+ 	if (val < 0)
+ 		return val;
+ 
+-	dp83869->mode = val & DP83869_STRAP_OP_MODE_MASK;
++	dp83869->mode = (val & DP83869_STRAP_OP_MODE_MASK) >> 9;
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
+

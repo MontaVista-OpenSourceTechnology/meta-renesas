@@ -1,0 +1,202 @@
+From 6fce4772b71bafcb28273f6f61d831f703b92092 Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Fri, 28 Mar 2025 12:29:21 +0700
+Subject: [PATCH 13/52] arm64: renesas: Add R8A78000 X5H Kconfig entry and PRR
+ ID
+
+Add Kconfig entry and PRR ID to support R8A78000 X5H SoC.
+
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ arch/arm/mach-renesas/Kconfig                 |  5 ++
+ arch/arm/mach-renesas/Kconfig.64              |  4 +-
+ arch/arm/mach-renesas/Kconfig.rcar5           | 11 +++++
+ arch/arm/mach-renesas/Makefile                |  1 +
+ arch/arm/mach-renesas/cpu_info-rcar.c         |  3 ++
+ arch/arm/mach-renesas/cpu_info.c              |  1 +
+ .../include/mach/rcar-gen5-base.h             | 48 +++++++++++++++++++
+ arch/arm/mach-renesas/include/mach/renesas.h  |  3 ++
+ drivers/clk/renesas/Kconfig                   |  2 +-
+ 9 files changed, 76 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm/mach-renesas/Kconfig.rcar5
+ create mode 100644 arch/arm/mach-renesas/include/mach/rcar-gen5-base.h
+
+diff --git a/arch/arm/mach-renesas/Kconfig b/arch/arm/mach-renesas/Kconfig
+index 7ca82495baa..82212d69a20 100644
+--- a/arch/arm/mach-renesas/Kconfig
++++ b/arch/arm/mach-renesas/Kconfig
+@@ -35,6 +35,11 @@ config RCAR_GEN4
+ 	select RCAR_64
+ 	select PINCTRL_PFC
+ 
++config RCAR_GEN5
++	bool "Renesas ARM SoCs R-Car Gen4 (64bit)"
++	select RCAR_64
++	select PINCTRL_PFC
++
+ config RZA1
+ 	prompt "Renesas ARM SoCs RZ/A1 (32bit)"
+ 	select CPU_V7A
+diff --git a/arch/arm/mach-renesas/Kconfig.64 b/arch/arm/mach-renesas/Kconfig.64
+index 93401bedceb..122805f5452 100644
+--- a/arch/arm/mach-renesas/Kconfig.64
++++ b/arch/arm/mach-renesas/Kconfig.64
+@@ -7,9 +7,11 @@ config OF_LIBFDT_OVERLAY
+ 	default y if RCAR_64
+ 
+ config TEXT_BASE
+-	default 0x50000000 if RCAR_64
++	default 0x50000000 if RCAR_64 && !RCAR_GEN5
++	default 0x60600000 if RCAR_GEN5
+ 
+ source "arch/arm/mach-renesas/Kconfig.rcar3"
+ source "arch/arm/mach-renesas/Kconfig.rcar4"
++source "arch/arm/mach-renesas/Kconfig.rcar5"
+ 
+ endif
+diff --git a/arch/arm/mach-renesas/Kconfig.rcar5 b/arch/arm/mach-renesas/Kconfig.rcar5
+new file mode 100644
+index 00000000000..d0f519859f7
+--- /dev/null
++++ b/arch/arm/mach-renesas/Kconfig.rcar5
+@@ -0,0 +1,11 @@
++if RCAR_GEN5
++
++menu "Select Target SoC"
++
++config R8A78000
++	bool "Renesas SoC R8A78000"
++	select GICV3
++
++endmenu
++
++endif
+diff --git a/arch/arm/mach-renesas/Makefile b/arch/arm/mach-renesas/Makefile
+index 317fce02d2b..ad9c6a1d891 100644
+--- a/arch/arm/mach-renesas/Makefile
++++ b/arch/arm/mach-renesas/Makefile
+@@ -12,6 +12,7 @@ obj-$(CONFIG_RCAR_GEN2) += lowlevel_init_ca15.o cpu_info-rcar.o
+ obj-$(CONFIG_RCAR_64) += lowlevel_init_gen3.o
+ obj-$(CONFIG_RCAR_GEN3) += cpu_info-rcar.o memmap-gen3.o
+ obj-$(CONFIG_RCAR_GEN4) += cpu_info-rcar.o memmap-gen3.o
++obj-$(CONFIG_RCAR_GEN5) += cpu_info-rcar.o memmap-gen3.o
+ obj-$(CONFIG_RZ_G2) += cpu_info-rzg.o
+ obj-$(CONFIG_RZG2L) += cpu_info-rzg2l.o memmap-rzg2l.o
+ 
+diff --git a/arch/arm/mach-renesas/cpu_info-rcar.c b/arch/arm/mach-renesas/cpu_info-rcar.c
+index 74140fd38ab..20bfb8d24b2 100644
+--- a/arch/arm/mach-renesas/cpu_info-rcar.c
++++ b/arch/arm/mach-renesas/cpu_info-rcar.c
+@@ -15,6 +15,9 @@
+ 
+ static u32 renesas_get_prr(void)
+ {
++	if (IS_ENABLED(CONFIG_RCAR_GEN5))
++		return readl(0x189E0044);
++
+ 	if (IS_ENABLED(CONFIG_RCAR_64))
+ 		return readl(0xFFF00044);
+ 
+diff --git a/arch/arm/mach-renesas/cpu_info.c b/arch/arm/mach-renesas/cpu_info.c
+index 2f9a4374a96..f040d732a51 100644
+--- a/arch/arm/mach-renesas/cpu_info.c
++++ b/arch/arm/mach-renesas/cpu_info.c
+@@ -72,6 +72,7 @@ static const struct {
+ 	{ RENESAS_CPU_TYPE_R8A779F0, "R8A779F0" },
+ 	{ RENESAS_CPU_TYPE_R8A779G0, "R8A779G0" },
+ 	{ RENESAS_CPU_TYPE_R8A779H0, "R8A779H0" },
++	{ RMOBILE_CPU_TYPE_R8A78000, "R8A78000" },
+ 	{ 0x0, "CPU" },
+ };
+ 
+diff --git a/arch/arm/mach-renesas/include/mach/rcar-gen5-base.h b/arch/arm/mach-renesas/include/mach/rcar-gen5-base.h
+new file mode 100644
+index 00000000000..edb2624d0fc
+--- /dev/null
++++ b/arch/arm/mach-renesas/include/mach/rcar-gen5-base.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * ./arch/arm/mach-renesas/include/mach/rcar-gen5-base.h
++ *
++ * Copyright (C) 2025 Renesas Electronics Corp.
++ */
++
++#ifndef __ASM_ARCH_RCAR_GEN5_BASE_H
++#define __ASM_ARCH_RCAR_GEN5_BASE_H
++
++#define TMU_BASE	0x1C030000
++
++/* Arm Generic Timer */
++#define CNTCR_BASE	0x1C000FFF /* Region 0 */
++#define CNTFID0		(CNTCR_BASE + 0x020)
++#define CNTCR_EN	BIT(0)
++
++/* Reset */
++#define RST_BASE	0xC1320000 /* Domain0 */
++#define RST_SWSRES1A	(RST_BASE + 0x410)
++#define RST_WDTRSTCR	(RST_BASE + 0x420)
++#define RST_RWDT_RSTMSK	BIT(0)
++#define RST_WWDT_RSTMSK	BIT(2)
++#define RST_RESKCPROT0	(RST_BASE + 0x4F0)
++#define RST_KCPROT_DIS	0xA5A5A501
++
++/* GICv4 */
++/* Distributor Registers */
++#define GICD_BASE	0x38000000
++#define GICR_BASE	(GICR_LPI_BASE)
++
++/* ReDistributor Registers for Control and Physical LPIs */
++#define GICR_LPI_BASE	0x38080000
++#define GICR_WAKER	0x0014
++#define GICR_PWRR	0x0024
++#define GICR_LPI_WAKER	(GICR_LPI_BASE + GICR_WAKER)
++#define GICR_LPI_PWRR	(GICR_LPI_BASE + GICR_PWRR)
++
++/* ReDistributor Registers for SGIs and PPIs */
++#define GICR_SGI_BASE	0x38090000
++#define GICR_IGROUPR0	0x0080
++
++#ifndef __ASSEMBLY__
++#include <asm/types.h>
++#include <linux/bitops.h>
++#endif
++
++#endif /* __ASM_ARCH_RCAR_GEN5_BASE_H */
+diff --git a/arch/arm/mach-renesas/include/mach/renesas.h b/arch/arm/mach-renesas/include/mach/renesas.h
+index c69c764adb8..deaeffedef9 100644
+--- a/arch/arm/mach-renesas/include/mach/renesas.h
++++ b/arch/arm/mach-renesas/include/mach/renesas.h
+@@ -16,6 +16,8 @@
+ #include <asm/arch/rcar-gen3-base.h>
+ #elif defined(CONFIG_RCAR_GEN4)
+ #include <asm/arch/rcar-gen4-base.h>
++#elif defined(CONFIG_RCAR_GEN5)
++#include <asm/arch/rcar-gen5-base.h>
+ #elif defined(CONFIG_R7S72100)
+ #elif defined(CONFIG_RZG2L)
+ #include <asm/arch/rzg2l.h>
+@@ -42,6 +44,7 @@
+ #define RENESAS_CPU_TYPE_R8A779F0	0x5A
+ #define RENESAS_CPU_TYPE_R8A779G0	0x5C
+ #define RENESAS_CPU_TYPE_R8A779H0	0x5D
++#define RMOBILE_CPU_TYPE_R8A78000	0x60
+ #define RENESAS_CPU_TYPE_R9A07G044L	0x9A070440
+ 
+ #ifndef __ASSEMBLY__
+diff --git a/drivers/clk/renesas/Kconfig b/drivers/clk/renesas/Kconfig
+index 12966d02a22..0de83cc38ba 100644
+--- a/drivers/clk/renesas/Kconfig
++++ b/drivers/clk/renesas/Kconfig
+@@ -52,7 +52,7 @@ config CLK_R8A7794
+ 
+ config CLK_RCAR_GEN3
+ 	bool "Renesas R-Car Gen3 and Gen4 clock driver"
+-	def_bool y if RCAR_64
++	def_bool y if RCAR_64 && !RCAR_GEN5
+ 	depends on CLK_RENESAS
+ 	select CLK_RCAR
+ 	select CLK_RCAR_CPG_LIB
+-- 
+2.34.1
+

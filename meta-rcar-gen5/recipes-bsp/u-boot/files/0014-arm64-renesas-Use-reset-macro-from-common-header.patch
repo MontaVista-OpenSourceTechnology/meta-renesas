@@ -1,0 +1,79 @@
+From 0488f2af53165c5bf7f03df37cfbbd82c82af67d Mon Sep 17 00:00:00 2001
+From: Hai Pham <hai.pham.ud@renesas.com>
+Date: Sat, 26 Apr 2025 14:14:02 +0700
+Subject: [PATCH 14/52] arm64: renesas: Use reset macro from common header
+
+Clean up to avoid more reset macro duplication.
+
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+---
+ arch/arm/mach-renesas/include/mach/rcar-gen4-base.h | 2 ++
+ arch/arm/mach-renesas/psci-rcar64.c                 | 5 +----
+ board/renesas/common/gen4-common.c                  | 8 --------
+ 3 files changed, 3 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm/mach-renesas/include/mach/rcar-gen4-base.h b/arch/arm/mach-renesas/include/mach/rcar-gen4-base.h
+index f34473db35a..1018096e7a6 100644
+--- a/arch/arm/mach-renesas/include/mach/rcar-gen4-base.h
++++ b/arch/arm/mach-renesas/include/mach/rcar-gen4-base.h
+@@ -31,6 +31,8 @@
+ #define RST_BASE		0xE6160000 /* Domain0 */
+ #define RST_SRESCR0		(RST_BASE + 0x18)
+ #define RST_SPRES		0x5AA58000
++#define RST_WDTRSTCR		(RST_BASE + 0x10)
++#define RST_RWDT		0xA55A8002
+ 
+ /* Arm Generic Timer */
+ #define CNTCR_BASE		0xE6080000
+diff --git a/arch/arm/mach-renesas/psci-rcar64.c b/arch/arm/mach-renesas/psci-rcar64.c
+index a230692c9e0..459dd55ff45 100644
+--- a/arch/arm/mach-renesas/psci-rcar64.c
++++ b/arch/arm/mach-renesas/psci-rcar64.c
+@@ -8,6 +8,7 @@
+ #include <asm/io.h>
+ #include <asm/psci.h>
+ #include <asm/secure.h>
++#include <asm/arch/renesas.h>
+ 
+ int __secure psci_features(u32 function_id, u32 psci_fid)
+ {
+@@ -29,10 +30,6 @@ u32 __secure psci_version(void)
+ 	return ARM_PSCI_VER_0_2;
+ }
+ 
+-#define RST_BASE	0xE6160000 /* Domain0 */
+-#define RST_SRESCR0	(RST_BASE + 0x18)
+-#define RST_SPRES	0x5AA58000
+-
+ void __secure __noreturn psci_system_reset(void)
+ {
+ 	writel(RST_SPRES, RST_SRESCR0);
+diff --git a/board/renesas/common/gen4-common.c b/board/renesas/common/gen4-common.c
+index f7d129be4c8..38fba7a5ea7 100644
+--- a/board/renesas/common/gen4-common.c
++++ b/board/renesas/common/gen4-common.c
+@@ -16,10 +16,6 @@
+ #include <image.h>
+ #include <linux/errno.h>
+ 
+-#define RST_BASE	0xE6160000 /* Domain0 */
+-#define RST_WDTRSTCR	(RST_BASE + 0x10)
+-#define RST_RWDT	0xA55A8002
+-
+ DECLARE_GLOBAL_DATA_PTR;
+ 
+ static void init_generic_timer(void)
+@@ -77,10 +73,6 @@ int board_init(void)
+ 	return 0;
+ }
+ 
+-#define RST_BASE	0xE6160000 /* Domain0 */
+-#define RST_SRESCR0	(RST_BASE + 0x18)
+-#define RST_SPRES	0x5AA58000
+-
+ void __weak reset_cpu(void)
+ {
+ 	writel(RST_SPRES, RST_SRESCR0);
+-- 
+2.34.1
+

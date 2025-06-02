@@ -1,0 +1,49 @@
+From c101ffa9eddfeb179375d60337a767dd9bc824e3 Mon Sep 17 00:00:00 2001
+From: Minh Le <minh.le.aj@renesas.com>
+Date: Thu, 8 May 2025 13:35:58 +0700
+Subject: [PATCH 23/46] arm64: dts: renesas: r8a78000: add RCLK Watchdog node
+
+Add RCLK watchdog node for R-Car X5H.
+
+Signed-off-by: Minh Le <minh.le.aj@renesas.com>
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a78000.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a78000.dtsi b/arch/arm64/boot/dts/renesas/r8a78000.dtsi
+index 4f23dbb92c7a..375e6a7e4d1f 100644
+--- a/arch/arm64/boot/dts/renesas/r8a78000.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a78000.dtsi
+@@ -497,6 +497,13 @@ dummy_clk_sgasyncd4: dummy_clk_sgasyncd4 {
+ 		clock-frequency = <266660000>;
+ 	};
+ 
++	dummy_clk_wdt: dummy_clk_wdt {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <32800>;
++		clock-output-names = "watchdog";
++	};
++
+ 	/* External SCIF clock - to be overridden by boards that provide it */
+ 	scif_clk: scif {
+ 		compatible = "fixed-clock";
+@@ -684,6 +691,14 @@ i2c8: i2c@c06f8000 {
+ 			status = "disabled";
+ 		};
+ 
++		rwdt: watchdog@1c040000 {
++			compatible = "renesas,r8a78000-wdt",
++				     "renesas,rcar-gen5-wdt";
++			reg = <0 0x1c040000 0 0x0c>;
++			clock = <&dummy_clk_wdt>;
++			status = "disabled";
++		};
++
+ 		gpio0: gpio@c1080110 {
+ 			compatible = "renesas,gpio-r8a78000",
+ 				     "renesas,rcar-gen5-gpio";
+-- 
+2.34.1
+

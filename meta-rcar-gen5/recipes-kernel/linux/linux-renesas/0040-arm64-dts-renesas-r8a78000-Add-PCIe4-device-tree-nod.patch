@@ -1,0 +1,80 @@
+From c3fb803566e182699f62660bfd87718877eb2e90 Mon Sep 17 00:00:00 2001
+From: Phong Hoang <phong.hoang.wz@renesas.com>
+Date: Fri, 30 May 2025 15:27:56 +0700
+Subject: [PATCH 40/46] arm64: dts: renesas: r8a78000: Add PCIe4 device tree
+ node
+
+Add PCIe4 node to support on R-Car X5H (r8a78000) SoC.
+
+Signed-off-by: Phong Hoang <phong.hoang.wz@renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a78000.dtsi | 46 +++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a78000.dtsi b/arch/arm64/boot/dts/renesas/r8a78000.dtsi
+index a8633ef436ba..336d13453a6a 100644
+--- a/arch/arm64/boot/dts/renesas/r8a78000.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a78000.dtsi
+@@ -517,6 +517,13 @@ scif_clk: scif {
+ 		clock-frequency = <0>;
+ 	};
+ 
++	/* External PCIe clock - can be overridden by the board */
++	pcie4_bus_clk: pcie4_bus {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <100000000>;
++	};
++
+ 	soc: soc {
+ 		compatible = "simple-bus";
+ 		interrupt-parent = <&gic>;
+@@ -1091,6 +1098,45 @@ eth_pcs: phy@c9c50000 {
+ 			#phy-cells = <1>;
+ 			status = "disabled";
+ 		};
++
++		pciec40: pcie@C9000000 {
++			compatible = "renesas,rcar-gen5-pcie";
++			reg = <0 0xC9000000 0 0x3000>,
++				<0 0xC9003000 0 0x2000>,
++				<0 0xC9C8E000 0	0x1000>,
++				<0x1 0x00000000 0 0x10000000>;
++			reg-names = "dbi",
++				    "atu",
++				    "apb",
++				    "config";
++			#address-cells = <3>;
++			#size-cells = <2>;
++			bus-range = <0x00 0xff>;
++			device_type = "pci";
++			ranges =  <0x03000000 0 0x3000000 0x1 0x10000000 0 0x10000000>;
++			interrupts = <GIC_SPI 4300 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4291 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4299 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4297 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4298 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4292 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4293 IRQ_TYPE_LEVEL_HIGH>;
++			#interrupt-cells = <1>;
++			interrupt-map-mask = <0 0 0 7>;
++			interrupt-map = <0 0 0 1 &gic GIC_SPI 4300 IRQ_TYPE_LEVEL_HIGH
++					 0 0 0 2 &gic GIC_SPI 4291 IRQ_TYPE_LEVEL_HIGH
++					 0 0 0 3 &gic GIC_SPI 4299 IRQ_TYPE_LEVEL_HIGH
++					 0 0 0 4 &gic GIC_SPI 4297 IRQ_TYPE_LEVEL_HIGH
++					 0 0 0 4 &gic GIC_SPI 4298 IRQ_TYPE_LEVEL_HIGH
++					 0 0 0 4 &gic GIC_SPI 4292 IRQ_TYPE_LEVEL_HIGH
++					 0 0 0 4 &gic GIC_SPI 4293 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&pcie4_bus_clk>;
++			clock-names = "pcie4_bus";
++			num-lanes = <2>;
++			max-link-speed = <4>;
++			status = "disabled";
++		};
++
+ 	};
+ 
+ 	timer {
+-- 
+2.34.1
+

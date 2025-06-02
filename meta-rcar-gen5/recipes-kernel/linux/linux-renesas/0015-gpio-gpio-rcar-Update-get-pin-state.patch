@@ -1,0 +1,36 @@
+From e80223d5c023d1277a6eac4f11fb5fce8b4cb75e Mon Sep 17 00:00:00 2001
+From: Huy Bui <huy.bui.wm@renesas.com>
+Date: Sat, 24 May 2025 23:05:34 +0700
+Subject: [PATCH 15/46] gpio: gpio-rcar: Update get pin state
+
+R-Car Gen1 to Gen5 get pin state:
+- Input:  read INDT.
+- Output: read OUTDT.
+
+Signed-off-by: Huy Bui <huy.bui.wm@renesas.com>
+---
+ drivers/gpio/gpio-rcar.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpio/gpio-rcar.c b/drivers/gpio/gpio-rcar.c
+index 0fec64fef610..6dc0e068c244 100644
+--- a/drivers/gpio/gpio-rcar.c
++++ b/drivers/gpio/gpio-rcar.c
+@@ -328,10 +328,11 @@ static int gpio_rcar_get(struct gpio_chip *chip, unsigned offset)
+ 	u32 bit = BIT(offset);
+ 
+ 	/*
+-	 * Before R-Car Gen3, INDT does not show correct pin state when
+-	 * configured as output, so use OUTDT in case of output pins
++	 * Get pin state:
++	 * - Input:  read INDT.
++	 * - Output: read OUTDT.
+ 	 */
+-	if (!p->info.has_always_in && (gpio_rcar_read(p, INOUTSEL) & bit))
++	if (gpio_rcar_read(p, INOUTSEL) & bit)
+ 		return !!(gpio_rcar_read(p, OUTDT) & bit);
+ 	else
+ 		return !!(gpio_rcar_read(p, INDT) & bit);
+-- 
+2.34.1
+

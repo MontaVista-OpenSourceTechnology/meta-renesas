@@ -92,5 +92,5 @@ FILES:${PN} = " \
 FILES:${PN}-dbg = ""
 ALLOW_EMPTY:${PN}-dbg = "1"
 
-# Autoload VSPM
-KERNEL_MODULE_AUTOLOAD:append = " vspm"
+# Machine specific autoload configuration
+KERNEL_MODULE_AUTOLOAD:x5h += "vspm"

@@ -22,6 +22,7 @@ do_install:append () {
     install -m 644 ${S}/cmemdrv.h ${D}${includedir}/linux/
 }
 
-KERNEL_MODULE_AUTOLOAD += "cmemdrv"
-KERNEL_MODULE_PROBECONF += "cmemdrv"
+# Machine specific autoload configuration
+KERNEL_MODULE_AUTOLOAD:x5h += "cmemdrv"
+KERNEL_MODULE_PROBECONF:x5h += "cmemdrv"
 module_conf_cmemdrv = "options cmemdrv bsize=0x20000000"

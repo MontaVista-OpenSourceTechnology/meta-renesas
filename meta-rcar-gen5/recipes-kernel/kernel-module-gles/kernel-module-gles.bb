@@ -76,4 +76,3 @@ FILES:${PN} = " \
 RPROVIDES:${PN} += "kernel-module-pvrsrvkm"
 
 INSANE_SKIP:append = " buildpaths"
-

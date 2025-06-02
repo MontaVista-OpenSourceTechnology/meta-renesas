@@ -80,6 +80,7 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
     whetstone \
     fio \
     mtd-utils-jffs2 \
+    rt-tests \
 "
 
 # Python3 packages requested by Renesas

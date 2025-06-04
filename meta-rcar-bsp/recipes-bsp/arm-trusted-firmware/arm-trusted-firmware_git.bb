@@ -18,8 +18,8 @@ SRC_URI:append:rcar-v4x = " file://0001-Makefile-Disable-linker-warning.patch"
 BRANCH:rcar-v3x = "rcar_gen3_v1.5_v3x"
 SRCREV:rcar-v3x = "8995b18869fed71e4a9332d9273704774f98ec41"
 
-BRANCH:rcar-v4x = "rcar_gen4_v2.7_v4x"
-SRCREV:rcar-v4x = "b88b3f5a81b57669e6b0444fd7eaf19f4a039762"
+BRANCH:rcar-v4x = "rcar_gen4_v2.7_v4x_optee"
+SRCREV:rcar-v4x = "0eccfb583f8fe3288d51c04df9d56e49617826e4"
 
 PV:rcar-v3x = "v1.5+renesas+git${SRCPV}"
 PV:rcar-v4x = "v2.7+renesas+git${SRCPV}"

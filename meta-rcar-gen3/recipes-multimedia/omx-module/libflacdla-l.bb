@@ -4,7 +4,7 @@ LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING.Xiph;md5=a2c4b71c0198682376d483eb5bcc9197"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|geist)"
 
 SRC_URI = "git://github.com/renesas-rcar/flac_decoder.git;branch=master;protocol=https"
 SRCREV = "70c0a7ae7dc8cac2056adf5eb175e3c54f892c27"

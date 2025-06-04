@@ -1,7 +1,7 @@
 SUMMARY = "Multimedia user libraries modules package groups"
 LICENSE = "MIT"
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|geist)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 DEPENDS = "mmngr-user-module mmngrbuf-user-module \

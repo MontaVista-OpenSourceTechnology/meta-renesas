@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 
 require include/multimedia-control.inc
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak|geist)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy
@@ -14,7 +14,7 @@ PV = "v2.11+renesas+git${SRCPV}"
 
 BRANCH = "rcar_gen3_v2.11"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
-SRCREV = "9fe5902c2f18ca0716506b0e5d77fac4e58883d4"
+SRCREV = "cb96325e085ca1c1b35a0563fa94e1dc14860f44"
 
 
 S = "${WORKDIR}/git"
@@ -24,7 +24,7 @@ PLATFORM = "rcar"
 ATFW_OPT ?= ""
 ATFW_CONF ?= ""
 
-# IPL build options for H3/E3/M3/M3N/D3
+# IPL build options for H3/E3/M3/M3N/M3Le/D3
 ATFW_OPT_LOSSY = "${@oe.utils.conditional("USE_MULTIMEDIA", "1", "RCAR_LOSSY_ENABLE=1", "", d)}"
 ATFW_OPT_BOOTMODE = "${@oe.utils.conditional("USE_EMMC_BOOTMODE", "1", "RCAR_SA6_TYPE=1", "", d)}"
 
@@ -47,6 +47,7 @@ salvator_x_r8a7795[4x2g]     = "LSI=H3 RCAR_DRAM_SPLIT=1 ${ATFW_OPT_LOSSY} ${ATF
 salvator_x_r8a7796[default]  = "LSI=M3 RCAR_DRAM_SPLIT=2 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
 
 salvator_x_r8a77965[default] = "LSI=M3N ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
+geist_r8a779md[default] = "LSI=M3N ${ATFW_OPT_LOSSY} RCAR_DRAM_LPDDR4_MEMCONF=0 PSCI_DISABLE_BIGLITTLE_IN_CA57BOOT=0 RCAR_SYSTEM_SUSPEND=0 ${ATFW_OPT_BOOTMODE}"
 
 
 # requires CROSS_COMPILE set by hand as there is no configure script

@@ -5,7 +5,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 require include/gles-control.inc
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak|geist)"
 
 PACKAGES = " \
     packagegroup-wayland-community \

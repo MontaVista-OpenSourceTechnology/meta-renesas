@@ -11,6 +11,7 @@ S = "${WORKDIR}/git"
 B = "${WORKDIR}/git/mmngr_drv/mmngr/mmngr-module/files/mmngr/drv"
 
 MMNGR_CFG:salvator-x = "MMNGR_SALVATORX"
+MMNGR_CFG:geist = "MMNGR_SALVATORX"
 MMNGR_CFG:h3ulcb = "MMNGR_SALVATORX"
 MMNGR_CFG:m3ulcb = "MMNGR_SALVATORX"
 MMNGR_CFG:m3nulcb = "MMNGR_SALVATORX"
@@ -73,7 +74,7 @@ FILES:${PN} = " \
     ${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/mmngr.ko \
 "
 
-FILES:${PN}-dbg = "" 
-ALLOW_EMPTY:${PN}-dbg = "1" 
+FILES:${PN}-dbg = ""
+ALLOW_EMPTY:${PN}-dbg = "1"
 
 RPROVIDES:${PN} += "kernel-module-mmngr"

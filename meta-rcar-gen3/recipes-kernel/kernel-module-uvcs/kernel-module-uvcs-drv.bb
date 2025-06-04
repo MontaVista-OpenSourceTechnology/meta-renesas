@@ -16,7 +16,7 @@ require include/rcar-gen3-path-common.inc
 inherit module
 PR = "r0"
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|geist)"
 
 SRC_URI = "${@oe.utils.conditional('USE_VIDEO_OMX', '1', 'file://RTM8RC0000ZMX0DQ00JFL3E.tar.bz2', '', d)}"
 

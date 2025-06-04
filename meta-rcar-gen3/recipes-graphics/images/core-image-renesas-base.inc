@@ -1,6 +1,6 @@
 require include/iccom-control.inc
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak|geist)"
 
 # Basic packages
 IMAGE_INSTALL:append = " \
@@ -8,6 +8,9 @@ IMAGE_INSTALL:append = " \
     v4l-utils \
     i2c-tools \
     coreutils \
+    media-ctl \
+    kernel-image \
+    kernel-devicetree \
 "
 
 # Support secure environment

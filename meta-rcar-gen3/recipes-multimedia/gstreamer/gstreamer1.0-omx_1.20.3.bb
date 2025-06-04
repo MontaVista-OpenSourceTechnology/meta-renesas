@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c \
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}/:"
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|geist)"
 
 SRC_URI = " \
     ${RENESAS_GST_URL} \

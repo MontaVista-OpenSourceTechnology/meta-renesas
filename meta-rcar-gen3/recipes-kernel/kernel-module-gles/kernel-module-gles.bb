@@ -8,12 +8,13 @@ inherit module
 PN = "kernel-module-gles"
 PR = "r0"
 
-COMPATIBLE_MACHINE = "(r8a7795|r8a7796|r8a77965|r8a77990)"
+COMPATIBLE_MACHINE = "(r8a7795|r8a7796|r8a77965|r8a779md|r8a77990)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI:r8a7795 = 'file://GSX_KM_H3.tar.bz2'
 SRC_URI:r8a7796 = 'file://GSX_KM_M3.tar.bz2'
 SRC_URI:r8a77965 = 'file://GSX_KM_M3N.tar.bz2'
+SRC_URI:r8a779md = 'file://GSX_KM_M3N.tar.bz2'
 SRC_URI:r8a77990 = 'file://GSX_KM_E3.tar.bz2'
 SRC_URI:append = " file://blacklist.conf"
 
@@ -22,10 +23,12 @@ S = "${WORKDIR}/rogue_km"
 KBUILD_DIR:r8a7795 = "${S}/build/linux/r8a7795_linux"
 KBUILD_DIR:r8a7796 = "${S}/build/linux/r8a7796_linux"
 KBUILD_DIR:r8a77965 = "${S}/build/linux/r8a77965_linux"
+KBUILD_DIR:r8a779md = "${S}/build/linux/r8a77965_linux"
 KBUILD_DIR:r8a77990 = "${S}/build/linux/r8a7799_linux"
 KBUILD_OUTDIR:r8a7795 = "binary_r8a7795_linux_nullws_drm_release/target_aarch64/kbuild"
 KBUILD_OUTDIR:r8a7796 = "binary_r8a7796_linux_nullws_drm_release/target_aarch64/kbuild"
 KBUILD_OUTDIR:r8a77965 = "binary_r8a77965_linux_nullws_drm_release/target_aarch64/kbuild"
+KBUILD_OUTDIR:r8a779md = "binary_r8a77965_linux_nullws_drm_release/target_aarch64/kbuild"
 KBUILD_OUTDIR:r8a77990 = "binary_r8a7799_linux_nullws_drm_release/target_aarch64/kbuild"
 
 B = "${KBUILD_DIR}"

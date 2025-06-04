@@ -10,7 +10,7 @@ SRC_URI = "git://github.com/renesas-rcar/libgbm;branch=match-mesa-20.0.1;protoco
 
 S = "${WORKDIR}/git"
 
-COMPATIBLE_MACHINE = "(r8a7795|r8a7796|r8a77965|r8a77990)"
+COMPATIBLE_MACHINE = "(r8a7795|r8a7796|r8a77965|r8a779md|r8a77990)"
 DEPENDS = "wayland-kms udev"
 
 inherit autotools pkgconfig

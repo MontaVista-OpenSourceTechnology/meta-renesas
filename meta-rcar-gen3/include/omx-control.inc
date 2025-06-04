@@ -84,11 +84,11 @@ python () {
     soc = soc.split(':')[1]
     use_vp9d = d.getVar('USE_VP9D_OMX')
     if use_vp9d == "1":
-        if soc != 'r8a77965' and soc != 'r8a77990':
+        if soc != 'r8a77965' and soc != 'r8a77990' and soc != 'r8a779md':
             if soc == 'r8a7796':
                 bb.warn("vp9dec_lib supports M3 v3.0 only, it does not work on other M3 versions.")
             else:
-                bb.warn("vp9dec_lib only supports M3N (SoC: r8a77965), E3 (SoC: r8a77990), M3 v3.0 (SoC: r8a7796). Disabling.")
+                bb.warn("vp9dec_lib only supports M3N (SoC: r8a77965), M3Le (SoC: r8a779md) E3 (SoC: r8a77990), M3 v3.0 (SoC: r8a7796). Disabling.")
                 d.setVar('USE_VP9D_OMX', '0')
 }
 

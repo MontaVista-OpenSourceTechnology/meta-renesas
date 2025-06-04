@@ -8,14 +8,14 @@ require recipes-kernel/linux/linux-yocto.inc
 require include/cas-control.inc
 require include/adsp-control.inc
 
-COMPATIBLE_MACHINE = "salvator-x|h3ulcb|m3ulcb|m3nulcb|ebisu|draak"
+COMPATIBLE_MACHINE = "salvator-x|h3ulcb|m3ulcb|m3nulcb|ebisu|draak|geist"
 
 RENESAS_BSP_URL = " \
-    git://github.com/renesas-rcar/linux-bsp.git"
-BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v5.10.218/rcar-5.3.5", d)}"
+    git://rcar-env.dgn.renesas.com/gitlab/linuxbsp_yocto/linux-bsp.git"
+BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v5.10.218/rcar-5.3.5.m3le.rc1", d)}"
 SRCREV = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", \
     "e2037726e5f6c3d6de6bc7d78b50ea9e2248a00d", \
-    "e2fcf9336e9a7aa8dac4cbf577235f53871a6fa5", d)}"
+    "88c3b87fd84b3f7662301411abd9d91df584d8e6", d)}"
 
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${BRANCH};protocol=https"
 

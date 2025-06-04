@@ -16,7 +16,7 @@ DEPENDS += "util-linux"
 inherit python3native systemd pkgconfig
 SYSTEMD_SERVICE:${PN} = "optee.service"
 
-COMPATIBLE_MACHINE = "salvator-x|ulcb|ebisu|draak"
+COMPATIBLE_MACHINE = "salvator-x|ulcb|ebisu|draak|geist"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

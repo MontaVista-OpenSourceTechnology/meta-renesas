@@ -16,7 +16,7 @@ SRC_URI = " \
 S = "${WORKDIR}/cms"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|geist)"
 
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"

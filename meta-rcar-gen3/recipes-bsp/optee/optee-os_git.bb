@@ -12,7 +12,7 @@ inherit deploy python3native
 PV = "4.3.0+renesas+git${SRCPV}"
 
 BRANCH = "rcar-gen3_4.3.0"
-SRCREV = "4204bdae8764704d9343dc7314d25c56f5cebd3e"
+SRCREV = "ded036b6f7f44b75c7d0a7213fb377256e56f80c"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
@@ -22,7 +22,7 @@ SRC_URI:append = " \
     file://0001-mk-gcc.mk-Change-the-path-to-the-library.patch \
 "
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak|geist)"
 PLATFORM = "rcar"
 
 DEPENDS = "python3-pycryptodome-native python3-pyelftools-native python3-cryptography-native"

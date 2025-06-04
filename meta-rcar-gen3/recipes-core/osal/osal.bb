@@ -13,7 +13,7 @@ SRC_URI = " \
 "
 S = "${WORKDIR}/os"
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|draak|geist)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_configure[noexec] = "1"

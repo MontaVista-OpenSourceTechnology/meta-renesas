@@ -3,7 +3,7 @@ LICENSE = "GPL-2.0-only & MIT"
 
 require include/omx-control.inc
 
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|geist)"
 
 DEPENDS = "kernel-module-mmngr kernel-module-mmngrbuf \
     kernel-module-vspm kernel-module-vspm-if \

@@ -7,7 +7,7 @@ inherit features_check
 REQUIRED_DISTRO_FEATURES = "dvd_encryption_library"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu)"
+COMPATIBLE_MACHINE = "(salvator-x|ulcb|ebisu|geist)"
 
 SRC_URI = " \
     file://Software.tar.gz \

@@ -13,7 +13,7 @@ SERIAL_CONSOLES = "115200;ttySC0"
 PREFERRED_PROVIDER_virtual/kernel = "linux-renesas"
 
 # u-boot
-EXTRA_IMAGEDEPENDS += " u-boot arm-trusted-firmware"
+EXTRA_IMAGEDEPENDS += " u-boot"
 
 # Add variable to Build Configuration in build log
 BUILDCFG_VARS:append = " SOC_FAMILY"

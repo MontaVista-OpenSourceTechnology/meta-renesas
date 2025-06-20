@@ -81,6 +81,7 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
     fio \
     mtd-utils-jffs2 \
     rt-tests \
+    ufs-utils \
 "
 
 # Python3 packages requested by Renesas

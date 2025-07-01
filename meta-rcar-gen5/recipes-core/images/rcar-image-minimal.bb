@@ -15,4 +15,4 @@ IMAGE_INSTALL:append = " \
     coreutils \
     media-ctl \
 "
-
+IMAGE_INSTALL:append:r8a78000 = " optee-client"

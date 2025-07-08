@@ -25,4 +25,4 @@ do_install:append () {
 # Machine specific autoload configuration
 KERNEL_MODULE_AUTOLOAD += "cmemdrv"
 KERNEL_MODULE_PROBECONF += "cmemdrv"
-module_conf_cmemdrv = "${@oe.utils.conditional("MACHINE", "x5h", "options cmemdrv bsize=0x20000000", "", d )}"
+module_conf_cmemdrv = "${@oe.utils.conditional("MACHINE", "x5h", "options cmemdrv bsize=0x20000000", "options cmemdrv bsize=0x18000000", d )}"

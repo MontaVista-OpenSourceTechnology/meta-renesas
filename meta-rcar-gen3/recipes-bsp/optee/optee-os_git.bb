@@ -29,7 +29,7 @@ S = "${WORKDIR}/git"
 
 PLATFORM = "rcar"
 
-export CROSS_COMPILE64="${TARGET_PREFIX}"
+export CROSS_COMPILE64 = "${TARGET_PREFIX}"
 
 # Let the Makefile handle setting up the flags as it is a standalone application
 #LD[unexport] = "1"

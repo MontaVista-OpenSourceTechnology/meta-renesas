@@ -10,7 +10,7 @@ DEPENDS = " \
     ${@oe.utils.conditional('USE_MULTIMEDIA', '1', 'mmngr-user-module', '', d )} \
 "
 
-export USE_MMNGR="${USE_MULTIMEDIA}"
+export USE_MMNGR = "${USE_MULTIMEDIA}"
 
 PN = "iccom-tp-user-module"
 PR = "r0"

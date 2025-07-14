@@ -12,7 +12,7 @@ PR = "r0"
 
 # log output level : INFO=0 LOW=1 MED=2 HIGH=3 ERROR=4 FATAL=5 NONE=255
 # (the setting of 4 means that ERROR and FATAL log are output)
-export MEG_LEV="4"
+export MEG_LEV = "4"
 
 S = "${WORKDIR}/libiccom"
 B = "${S}/source"

@@ -24,7 +24,7 @@ PLATFORM = "rcar_gen4"
 
 DEPENDS = "python3-pycryptodome-native python3-pyelftools-native"
 
-export CROSS_COMPILE64="${TARGET_PREFIX}"
+export CROSS_COMPILE64 = "${TARGET_PREFIX}"
 
 # Let the Makefile handle setting up the flags as it is a standalone application
 #LD[unexport] = "1"

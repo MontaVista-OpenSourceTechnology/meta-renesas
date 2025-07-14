@@ -49,7 +49,7 @@ salvator_x_r8a77965[default] = "LSI=M3N ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
 
 
 # requires CROSS_COMPILE set by hand as there is no configure script
-export CROSS_COMPILE="${TARGET_PREFIX}"
+export CROSS_COMPILE = "${TARGET_PREFIX}"
 
 # Let the Makefile handle setting up the CFLAGS and LDFLAGS as it is a standalone application
 CFLAGS[unexport] = "1"

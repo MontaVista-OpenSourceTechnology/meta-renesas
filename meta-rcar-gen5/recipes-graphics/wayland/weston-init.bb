@@ -43,6 +43,11 @@ do_install() {
     install -Dm755 ${WORKDIR}/weston-start ${D}${bindir}/weston-start
     sed -i 's,@DATADIR@,${datadir},g' ${D}${bindir}/weston-start
     sed -i 's,@LOCALSTATEDIR@,${localstatedir},g' ${D}${bindir}/weston-start
+    if [ "${USE_WESTON_BACKEND_HEADLESS}" = "1" ]; then
+        sed -e "/^After=/s/$/ dbus.service multi-user.target/" \
+            -e "s/\$OPTARGS/--backend=headless-backend.so --use-pixman --debug \$OPTARGS/" \
+            -i ${D}/${systemd_system_unitdir}/weston@.service
+    fi
     if [ "X${USE_GLES}" = "X1" ]; then
         sed -e "/^After=/s/$/ dbus.service multi-user.target/" \
             -e "s/\$OPTARGS/--idle-time=0 \$OPTARGS/" \

@@ -34,6 +34,7 @@ PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'kms fbdev
                    ${@bb.utils.contains('DISTRO_FEATURES', 'x11 wayland', 'xwayland', '', d)} \
                    ${@bb.utils.filter('DISTRO_FEATURES', 'pam systemd x11', d)} \
                    ${@bb.utils.contains_any('DISTRO_FEATURES', 'wayland x11', '', 'headless', d)} \
+                   ${@oe.utils.conditional('USE_WESTON_BACKEND_HEADLESS', '1', ' headless', '', d)} \
                    launch \
                    image-jpeg \
                    screenshare \

@@ -11,12 +11,11 @@ inherit deploy python3native
 
 PV = "4.4+renesas+git${SRCPV}"
 
-BRANCH = "master"
-SRCREV = "8f645256efc0dc66bd5c118778b0b50c44469ae1"
+BRANCH = "rcar-gen5_4.4.0"
+SRCREV = "5e57cbd27aed3acfd29425a408293f3877d9ee2c"
 
 SRC_URI = " \
-    git://github.com/OP-TEE/optee_os.git;branch=${BRANCH};protocol=https \
-    file://0001-rcar_gen5-Make-the-baseline-for-gen5-on-HIL-X5H.patch \
+    git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
 "
 S = "${WORKDIR}/git"
 

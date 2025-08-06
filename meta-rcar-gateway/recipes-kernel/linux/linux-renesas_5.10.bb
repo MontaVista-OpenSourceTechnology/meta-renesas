@@ -26,8 +26,20 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 PR = "r1"
 
 # For generating defconfig
-KCONFIG_MODE = "--alldefconfig"
-KBUILD_DEFCONFIG = "defconfig"
+# Use custom defconfig (r8a779f0_defconfig) when USE_OPTIMIZE_KCONFIG is set
+# Falls back to default 'defconfig' otherwise
+KCONFIG_MODE = "${@oe.utils.conditional('USE_OPTIMIZE_KCONFIG', '1', 'alldefconfig', '--alldefconfig', d)}"
+KBUILD_DEFCONFIG = "${@oe.utils.conditional('USE_OPTIMIZE_KCONFIG', '1', '', 'defconfig', d)}"
+KBUILD_DEFCONFIG_KMACHINE ?= "${@oe.utils.conditional('USE_OPTIMIZE_KCONFIG', '1', 'r8a779f0_defconfig', 'defconfig', d)}"
+
+SUPPORT_OPTIMIZE_KCONFIG = " \
+    file://r8a779f0_defconfig \
+    file://0005-soc-renesas-rcar-sysc-Add-r8a779f0-support.patch \
+"
+
+SRC_URI:append = " \
+    ${@oe.utils.conditional('USE_OPTIMIZE_KCONFIG', '1', '${SUPPORT_OPTIMIZE_KCONFIG}', '', d)} \
+"
 
 # uio_pdrv_genirq configuration
 KERNEL_MODULE_AUTOLOAD:append = " uio_pdrv_genirq"
@@ -35,6 +47,14 @@ KERNEL_MODULE_PROBECONF:append = " uio_pdrv_genirq"
 module_conf_uio_pdrv_genirq:append = ' options uio_pdrv_genirq of_id="generic-uio"'
 
 PACKAGES += "${PN}-uapi"
+
+do_copy_defconfig() {
+    if [ "${USE_OPTIMIZE_KCONFIG}" = "1" ] && [ -f "${WORKDIR}/r8a779f0_defconfig" ]; then
+        install -d ${S}/arch/arm64/configs
+        cp ${WORKDIR}/r8a779f0_defconfig ${S}/arch/arm64/configs/r8a779f0_defconfig
+    fi
+}
+addtask do_copy_defconfig after do_validate_branches before do_kernel_metadata
 
 do_download_firmware () {
     install -d ${STAGING_KERNEL_DIR}/firmware
@@ -47,7 +67,6 @@ do_src_package_preprocess () {
         # Trim build paths from comments in generated sources to ensure reproducibility
         sed -i -e "s,${S}/,,g" \
                -e "s,${B}/,,g" \
-            ${B}/drivers/video/logo/logo_linux_clut224.c \
             ${B}/drivers/tty/vt/consolemap_deftbl.c \
             ${B}/lib/oid_registry_data.c
 }

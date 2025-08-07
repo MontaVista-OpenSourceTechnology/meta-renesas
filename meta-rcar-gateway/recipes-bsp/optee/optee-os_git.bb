@@ -9,20 +9,19 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy python3native
 
-PV = "3.13+renesas+git${SRCPV}"
+PV = "4.3.0+renesas+git${SRCPV}"
 
-BRANCH = "rcar-gen4_3.13"
-SRCREV = "6f9792db6411d6c172077eb28e584ab5f46a174e"
+BRANCH = "rcar-gen4_4.3.0_s4+v4x"
+SRCREV = "abe604ae369c7cb1892e7f57acbbafa7044f5b0c"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
-    file://0001-Makefile-Disable-linker-warning.patch \
 "
 
 COMPATIBLE_MACHINE = "(spider|s4sk)"
 PLATFORM = "rcar_gen4"
 
-DEPENDS = "python3-pycryptodome-native python3-pyelftools-native"
+DEPENDS = "python3-pycryptodome-native python3-cryptography-native python3-pyelftools-native"
 
 export CROSS_COMPILE64="${TARGET_PREFIX}"
 
@@ -35,7 +34,8 @@ S = "${WORKDIR}/git"
 EXTRA_OEMAKE = "-e MAKEFLAGS="
 
 do_compile() {
-    oe_runmake PLATFORM=${PLATFORM}
+    export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
+    oe_runmake PLATFORM=${PLATFORM} CFG_ARM64_core=y
 }
 
 # do_install() nothing

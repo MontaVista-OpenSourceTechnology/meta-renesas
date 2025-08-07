@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://src/waylandws.h;beginline=1;endline=22;md5=ebf7ec97b8
 
 SRC_URI = "git://github.com/renesas-rcar/wayland-wsegl.git;branch=rcar_gen5;protocol=https"
 
-SRCREV = "a68cd8599eabc2467e56e88558964df2c0068e2e"
+SRCREV = "ef1e31db2b99bc3fe53d37e1dc8159d478505972"
 
 COMPATIBLE_MACHINE = "x5h|ironhide"
 

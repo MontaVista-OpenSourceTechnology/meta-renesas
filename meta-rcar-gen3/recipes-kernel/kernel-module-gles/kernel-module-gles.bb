@@ -20,7 +20,7 @@ SRC_URI:append = " file://blacklist.conf"
 SRC_URI:append = " file://0001-fixing-implicit-conversion-in-GCC-11.2.patch"
 SRC_URI:append = " file://0002-disable-Werror.patch"
 
-S = "${WORKDIR}/rogue_km"
+S = "${UNPACKDIR}/rogue_km"
 B = "${KBUILD_DIR}"
 
 KBUILD_DIR:r8a7795 = "${S}/build/linux/r8a7795_linux"

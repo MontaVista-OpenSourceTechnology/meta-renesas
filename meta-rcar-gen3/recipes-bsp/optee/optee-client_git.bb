@@ -21,8 +21,6 @@ SRC_URI += " \
     file://0001-tee-supplicant-Delete-the-sleep-time-when-writing-da.patch \
 "
 
-S = "${WORKDIR}/git"
-
 SYSTEMD_SERVICE:${PN} = "optee.service"
 
 # Recipe which fail to compile when enabling _FORTIFY_SOURCE=2 option

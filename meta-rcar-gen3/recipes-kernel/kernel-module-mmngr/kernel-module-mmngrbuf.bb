@@ -6,8 +6,7 @@ DEPENDS = "linux-renesas"
 PN = "kernel-module-mmngrbuf"
 PR = "r0"
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git/mmngr_drv/mmngrbuf/mmngrbuf-module/files/mmngrbuf/drv"
+B = "${S}/mmngr_drv/mmngrbuf/mmngrbuf-module/files/mmngrbuf/drv"
 
 # Support HW overlay mode
 SRC_URI:append = "\

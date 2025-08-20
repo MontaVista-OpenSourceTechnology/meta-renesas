@@ -13,8 +13,7 @@ VSPFILTER_CONF:r8a77990 = "gstvspfilter-${MACHINE}_r8a77990.conf"
 
 SRC_URI = " file://${VSPFILTER_CONF} "
 
-S = "${WORKDIR}/${BPN}-${PV}"
-UNPACKDIR = "${S}"
+S = "${UNPACKDIR}"
 
 do_configure[noexec] = "1"
 

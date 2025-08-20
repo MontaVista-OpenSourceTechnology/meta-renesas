@@ -14,8 +14,6 @@ SRC_URI = "git://github.com/renesas-rcar/libgbm;branch=match-mesa-20.0.1;protoco
            file://Add-gbm_bo_get_fd_for_plane.patch \
 "
 
-S = "${WORKDIR}/git"
-
 PACKAGES = " \
     ${PN} \
     ${PN}-dev \

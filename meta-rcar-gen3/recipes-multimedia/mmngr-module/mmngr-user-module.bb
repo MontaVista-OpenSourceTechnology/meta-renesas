@@ -6,7 +6,7 @@ DEPENDS = "kernel-module-mmngr"
 PN = "mmngr-user-module"
 PR = "r0"
 
-S = "${WORKDIR}/git/libmmngr/mmngr"
+S = "${UNPACKDIR}/${BPN}-${PV}/libmmngr/mmngr"
 
 EXTRA_OECONF =  "${@bb.utils.contains("DISTRO_FEATURES", "mm-test", \
     " --enable-mmngr-test", "", d)}"

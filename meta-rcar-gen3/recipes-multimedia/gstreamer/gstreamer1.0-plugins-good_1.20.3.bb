@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=a6f89e2100d9b6cdffcea4f398e37343 \
 
 SRC_URI = "${RENESAS_GST_URL}"
 
-S = "${WORKDIR}/git/subprojects/gst-plugins-good"
+S = "${UNPACKDIR}/${BPN}-${PV}/subprojects/gst-plugins-good"
 
 DEPENDS:append:rcar-gen3 = " gstreamer1.0-plugins-base libcap zlib mmngrbuf-user-module"
 

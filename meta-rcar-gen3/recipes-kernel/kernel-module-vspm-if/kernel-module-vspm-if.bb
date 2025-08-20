@@ -17,15 +17,14 @@ PR = "r0"
 
 VSPMIF_DRV_URL = "git://github.com/renesas-rcar/vspmif_drv.git"
 BRANCH = "rcar_gen3"
-SRC_URI = "${VSPMIF_DRV_URL};branch=${BRANCH};protocol=https"
+SRC_URI = "${VSPMIF_DRV_URL};branch=${BRANCH};protocol=https;subdir=${BPN}-${PV}"
 SRCREV = "2fdb2838a5625e4231f1cff5d10079acc4954952"
 
 SRC_URI:append = "\
     file://0001-Change-vspm-symvers-location-in-Makefile.patch \
 "
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git/vspm_if-module/files/vspm_if/drv"
+B = "${S}/vspm_if-module/files/vspm_if/drv"
 
 includedir = "${RENESAS_DATADIR}/include"
 

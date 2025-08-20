@@ -27,7 +27,7 @@ SRC_URI:append = "\
     file://0001-Change-mmngr-symvers-location-in-Makefile.patch \
 "
 
-S = "${WORKDIR}/RTM8RC0000ZMX0DQ00JFL3E"
+S = "${UNPACKDIR}/RTM8RC0000ZMX0DQ00JFL3E"
 B = "${S}/src/makefile"
 
 EXTRA_OEMAKE = "KERNELDIR=${STAGING_KERNEL_BUILDDIR}"

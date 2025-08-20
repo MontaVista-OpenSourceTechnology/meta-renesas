@@ -25,8 +25,6 @@ SRC_URI:append = " \
     file://0002-plat-rcar-add-no-warn-rwx-segments.patch \
 "
 
-S = "${WORKDIR}/git"
-
 PLATFORM = "rcar"
 
 export CROSS_COMPILE64 = "${TARGET_PREFIX}"

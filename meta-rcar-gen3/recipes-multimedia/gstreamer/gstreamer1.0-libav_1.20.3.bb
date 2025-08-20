@@ -17,7 +17,7 @@ SRC_URI = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${PV}.tar.x
            "
 SRC_URI[sha256sum] = "3fedd10560fcdfaa1b6462cbf79a38c4e7b57d7f390359393fc0cef6dbf27dfe"
 
-S = "${WORKDIR}/gst-libav-${PV}"
+S = "${UNPACKDIR}/gst-libav-${PV}"
 
 DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base ffmpeg"
 

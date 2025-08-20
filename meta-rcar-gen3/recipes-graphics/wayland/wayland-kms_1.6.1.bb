@@ -13,8 +13,6 @@ PV:append = "+git${SRCREV}"
 SRCREV = "a588cecb78acf176ee94d7dfa50a553a1f901efa"
 SRC_URI = "git://github.com/renesas-rcar/wayland-kms.git;branch=master;protocol=https"
 
-S = "${WORKDIR}/git"
-
 FILES:${PN} = "${libdir}/libwayland-kms.so.*"
 FILES:${PN}-dev = " \
     ${libdir}/libwayland-kms.la \

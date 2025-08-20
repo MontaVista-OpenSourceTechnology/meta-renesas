@@ -6,8 +6,7 @@ inherit update-rc.d
 
 SRC_URI = "file://set_default_governor.sh"
 
-S = "${WORKDIR}/${BPN}-${PV}"
-UNPACKDIR = "${S}"
+S = "${UNPACKDIR}"
 
 INITSCRIPT_NAME = "set_default_governor.sh"
 

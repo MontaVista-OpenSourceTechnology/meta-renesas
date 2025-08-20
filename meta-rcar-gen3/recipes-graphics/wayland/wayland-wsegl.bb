@@ -13,8 +13,6 @@ DEPENDS = "libgbm wayland-kms libdrm wayland wayland-native wayland-protocols"
 SRC_URI = "git://github.com/renesas-rcar/wayland-wsegl.git;branch=rcar_gen3_maintenance;protocol=https"
 SRCREV = "04893c0cf1104a800d65d0bd46bb9e98437389bf"
 
-S = "${WORKDIR}/git"
-
 PACKAGES = " \
     ${PN} \
     ${PN}-dbg \

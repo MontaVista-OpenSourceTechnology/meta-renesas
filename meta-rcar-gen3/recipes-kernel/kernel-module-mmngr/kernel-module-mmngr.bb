@@ -7,8 +7,7 @@ DEPENDS = "linux-renesas"
 PN = "kernel-module-mmngr"
 PR = "r0"
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git/mmngr_drv/mmngr/mmngr-module/files/mmngr/drv"
+B = "${S}/mmngr_drv/mmngr/mmngr-module/files/mmngr/drv"
 
 MMNGR_CFG:salvator-x = "MMNGR_SALVATORX"
 MMNGR_CFG:h3ulcb = "MMNGR_SALVATORX"

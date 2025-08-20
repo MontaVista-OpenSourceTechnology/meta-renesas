@@ -18,8 +18,6 @@ REQUIRED_DISTRO_FEATURES = "avb"
 SRC_URI = "git://github.com/renesas-rcar/avb-streaming.git;branch=rcar-gen3;protocol=https"
 SRCREV = "671bf9c3249551cb182ff23fa67da4844098bd24"
 
-S = "${WORKDIR}/git"
-
 includedir = "${RENESAS_DATADIR}/include"
 
 # Build AVB Streaming kernel module without suffix

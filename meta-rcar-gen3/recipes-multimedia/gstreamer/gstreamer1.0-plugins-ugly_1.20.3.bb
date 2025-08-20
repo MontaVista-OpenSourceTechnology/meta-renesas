@@ -16,7 +16,7 @@ SRC_URI = " \
             "
 SRC_URI[sha256sum] = "8caa20789a09c304b49cf563d33cca9421b1875b84fcc187e4a385fa01d6aefd"
 
-S = "${WORKDIR}/gst-plugins-ugly-${PV}"
+S = "${UNPACKDIR}/gst-plugins-ugly-${PV}"
 
 DEPENDS += "gstreamer1.0-plugins-base"
 

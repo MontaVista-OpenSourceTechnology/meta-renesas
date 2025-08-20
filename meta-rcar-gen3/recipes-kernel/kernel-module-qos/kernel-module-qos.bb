@@ -20,8 +20,7 @@ BRANCH = "rcar-gen3"
 SRC_URI = "${QOS_DRV_URL};branch=${BRANCH};protocol=https"
 SRCREV = "90981d2aa1730589fa87b50f07d9feec09396b9b"
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git/qos-module/files/qos/drv"
+B = "${S}/qos-module/files/qos/drv"
 
 includedir = "${RENESAS_DATADIR}/include"
 

@@ -9,7 +9,7 @@ inherit module
 
 MMNGR_DRV_URI = "git://github.com/renesas-rcar/mmngr_drv.git"
 
-SRC_URI = "${MMNGR_DRV_URI};branch=rcar_gen3_maintenance_2023;protocol=https"
+SRC_URI = "${MMNGR_DRV_URI};branch=rcar_gen3_maintenance_2023;protocol=https;subdir=${BPN}-${PV}"
 SRCREV = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", \
     "bd1c9b76cbddf80d5d47255031d6049a6fee21d8", \
     "842dad49d1ff82e284bb1aea5edb1de747fa3c7e", d)}"

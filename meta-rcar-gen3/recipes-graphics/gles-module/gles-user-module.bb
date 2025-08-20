@@ -22,7 +22,7 @@ SRC_URI:append = " \
     file://rc.pvr.service \
 "
 
-S = "${WORKDIR}/rogue"
+S = "${UNPACKDIR}/rogue"
 GLES = "gsx"
 
 INITSCRIPT_NAME = "pvrinit"

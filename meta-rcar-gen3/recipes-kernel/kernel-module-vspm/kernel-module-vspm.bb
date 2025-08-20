@@ -20,8 +20,7 @@ BRANCH = "rcar_gen3"
 SRC_URI = "${VSPM_DRV_URL};branch=${BRANCH};protocol=https"
 SRCREV = "07787fc1168e7fe37c305aca151a6f756f35874f"
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git/vspm-module/files/vspm/drv"
+B = "${S}/vspm-module/files/vspm/drv"
 
 includedir = "${RENESAS_DATADIR}/include"
 

@@ -21,8 +21,6 @@ SRCREV = "ff076e83234d2207f33447b9bd6d1646d9245566"
 
 SRC_URI:append = " file://0000-allow-to-append-application-cflags.patch"
 
-S = "${WORKDIR}/git"
-
 EXTRA_OEMAKE = "'CC=${CC}' 'CXX=${CXX}'"
 
 # Let the application set CFLAGS itself

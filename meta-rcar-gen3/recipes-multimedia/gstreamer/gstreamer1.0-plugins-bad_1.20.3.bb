@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c"
 
 SRC_URI = "${RENESAS_GST_URL}"
 
-S = "${WORKDIR}/git/subprojects/gst-plugins-bad"
+S = "${UNPACKDIR}/${BPN}-${PV}/subprojects/gst-plugins-bad"
 
 DEPENDS:append:rcar-gen3 = " gstreamer1.0-plugins-base weston libdrm"
 

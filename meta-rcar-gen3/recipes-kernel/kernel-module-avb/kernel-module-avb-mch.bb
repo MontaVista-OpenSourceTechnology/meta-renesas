@@ -18,8 +18,6 @@ REQUIRED_DISTRO_FEATURES = "avb"
 SRC_URI = "git://github.com/renesas-rcar/avb-mch.git;branch=rcar-gen3;protocol=https"
 SRCREV = "3f3db75e88085e567b6be9c4fa2551ee1137f5e7"
 
-S = "${WORKDIR}/git"
-
 includedir = "${RENESAS_DATADIR}/include"
 
 # Build AVB MCH kernel module without suffix

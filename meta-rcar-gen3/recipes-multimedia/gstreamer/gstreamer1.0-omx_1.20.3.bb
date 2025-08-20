@@ -21,7 +21,7 @@ SRC_URI = " \
     file://gstomx.conf \
 "
 
-S = "${WORKDIR}/git/subprojects/gst-omx"
+S = "${UNPACKDIR}/${BPN}-${PV}/subprojects/gst-omx"
 
 DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-bad"
 DEPENDS:append = " omx-user-module mmngrbuf-user-module"

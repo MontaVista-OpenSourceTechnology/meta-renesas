@@ -13,9 +13,6 @@ SRC_URI = " \
 
 SRCREV = "5984661366b7b0bdc79fb34b6dfbaaf9dba24623"
 
-S = "${WORKDIR}/git"
-
-
 inherit meson pkgconfig
 
 DEPENDS += "gstreamer1.0 gstreamer1.0-plugins-base pkgconfig"

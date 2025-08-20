@@ -24,8 +24,7 @@ SRC_URI:append = "\
     file://0001-Change-vspm-symvers-location-in-Makefile.patch \
 "
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git/vsp2driver"
+B = "${S}/vsp2driver"
 
 # Build VSP2 driver kernel module without suffix
 KERNEL_MODULE_PACKAGE_SUFFIX = ""

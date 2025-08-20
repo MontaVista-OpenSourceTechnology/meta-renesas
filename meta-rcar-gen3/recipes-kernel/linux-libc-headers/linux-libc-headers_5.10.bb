@@ -13,6 +13,6 @@ SRC_URI:append = " \
     file://0001-scripts-Add-module.lds-to-fix-out-of-tree-modules-bu.patch \
 "
 
-LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
+LIC_FILES_CHKSUM = "file://${UNPACKDIR}/${BPN}-${PV}/COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/${BPN}-${PV}"

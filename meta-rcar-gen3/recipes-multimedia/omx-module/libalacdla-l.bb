@@ -21,7 +21,6 @@ RDEPENDS:${PN} += "mmngr-user-module vspmif-user-module"
 SRC_URI = "git://github.com/renesas-rcar/alac_decoder.git;branch=master;protocol=https"
 SRCREV = "5d7e5c91a932bedb36284591612bfbb3342cd672"
 
-S = "${WORKDIR}/git"
 B = "${S}/build/linux_armyocto/lib"
 
 EXTRA_OEMAKE = "ARCH=${ARCH}"

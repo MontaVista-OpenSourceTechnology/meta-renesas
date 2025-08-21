@@ -22,8 +22,7 @@ SRCREV = "f4c60b4ad0e96e0de3222dc42179bcade931bd76"
 
 SRC_URI = "${QOS_DRV_URL};branch=${BRANCH}"
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git/qos-module/files/qos/drv"
+B = "${UNPACKDIR}/${BPN}-${PV}/qos-module/files/qos/drv"
 
 # Build Qos kernel module without suffix
 KERNEL_MODULE_PACKAGE_SUFFIX = ""

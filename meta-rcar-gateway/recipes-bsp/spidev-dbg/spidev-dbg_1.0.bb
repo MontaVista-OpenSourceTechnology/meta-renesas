@@ -2,7 +2,7 @@ SUMMARY = "SPI device debug utility"
 LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=26cdfe4d6a85afebc7ccd5623f195fa2"
 
-S = "${WORKDIR}/spidev-dbg"
+S = "${UNPACKDIR}/spidev-dbg"
 
 SRC_URI = " \
     file://spidev-dbg.tar.gz \

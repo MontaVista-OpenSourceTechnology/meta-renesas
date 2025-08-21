@@ -7,8 +7,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy
 
-S = "${WORKDIR}/git"
-
 BRANCH = "rcar-s4_v2.5"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
 SRC_URI += " file://0001-Makefile-Disable-linker-warning.patch"

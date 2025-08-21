@@ -7,6 +7,6 @@ SRCREV = "1cff967a65247a6ff21b879331cf330ec35572fc"
 
 SRC_URI = "${RENESAS_BSP_URL};branch=${BRANCH};protocol=https"
 
-LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
+LIC_FILES_CHKSUM = "file://${UNPACKDIR}/${BPN}-${PV}/COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/${BPN}-${PV}"

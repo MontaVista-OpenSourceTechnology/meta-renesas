@@ -17,7 +17,6 @@ SRCREV = "050acee119b3757fee3bd128f55d720fdd9bb890"
 SRC_URI = "git://git.denx.de/u-boot.git \
           "
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 do_configure[cleandirs] = "${B}"
 

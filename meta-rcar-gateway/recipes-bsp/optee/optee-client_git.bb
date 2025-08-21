@@ -20,8 +20,6 @@ COMPATIBLE_MACHINE = "(spider|s4sk)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-S = "${WORKDIR}/git"
-
 EXTRA_OEMAKE = "RPMB_EMU=0"
 
 do_install () {

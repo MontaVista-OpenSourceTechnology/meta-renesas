@@ -31,7 +31,6 @@ export CROSS_COMPILE64 = "${TARGET_PREFIX}"
 LDFLAGS[unexport] = "1"
 libdir[unexport] = "1"
 
-S = "${WORKDIR}/git"
 EXTRA_OEMAKE = "-e MAKEFLAGS="
 
 do_compile() {

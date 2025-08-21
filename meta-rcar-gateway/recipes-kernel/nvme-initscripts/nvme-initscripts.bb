@@ -4,8 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "file://set_nvme_rq_affinity.sh"
 
-S = "${WORKDIR}/${BPN}-${PV}"
-UNPACKDIR = "${S}"
+S = "${UNPACKDIR}"
 
 INITSCRIPT_NAME = "set_nvme_rq_affinity.sh"
 

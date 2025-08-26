@@ -14,7 +14,7 @@ PV = "v2.11+renesas+git${SRCPV}"
 
 BRANCH = "rcar_gen3_v2.11"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
-SRCREV = "7ca8ca69324e7bde4c9f3ec02600136bc7e3f9a7"
+SRCREV = "14a2c689adc2652272eb1bb42642bca2454b606c"
 
 
 S = "${WORKDIR}/git"
@@ -47,7 +47,7 @@ salvator_x_r8a7795[4x2g]     = "LSI=H3 RCAR_DRAM_SPLIT=1 ${ATFW_OPT_LOSSY} ${ATF
 salvator_x_r8a7796[default]  = "LSI=M3 RCAR_DRAM_SPLIT=2 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
 
 salvator_x_r8a77965[default] = "LSI=M3N ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
-geist_r8a779md[default] = "LSI=M3N ${ATFW_OPT_LOSSY} RCAR_DRAM_LPDDR4_MEMCONF=0 PSCI_DISABLE_BIGLITTLE_IN_CA57BOOT=0 RCAR_SYSTEM_SUSPEND=0 ${ATFW_OPT_BOOTMODE}"
+geist_r8a779md[default] = "LSI=M3L ${ATFW_OPT_LOSSY} RCAR_DRAM_LPDDR4_MEMCONF=0 RCAR_BL2_DCACHE=1 DEBUG=0 RCAR_SYSTEM_SUSPEND=1 ${ATFW_OPT_BOOTMODE}"
 
 
 # requires CROSS_COMPILE set by hand as there is no configure script

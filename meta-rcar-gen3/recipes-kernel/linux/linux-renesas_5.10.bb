@@ -12,10 +12,10 @@ COMPATIBLE_MACHINE = "salvator-x|h3ulcb|m3ulcb|m3nulcb|ebisu|draak|geist"
 
 RENESAS_BSP_URL = " \
     git://github.com/renesas-rcar/linux-bsp.git"
-BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v5.10.235/rcar-5.3.7.rc1", d)}"
+BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v5.10.235/rcar-5.3.8.rc1", d)}"
 SRCREV = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", \
     "e2037726e5f6c3d6de6bc7d78b50ea9e2248a00d", \
-    "293088ab20c671c8e59aa18956d9506e3a16be8d", d)}"
+    "4cf264797ea1872baba7cec392eb4d98c97a6828", d)}"
 
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${BRANCH};protocol=https"
 

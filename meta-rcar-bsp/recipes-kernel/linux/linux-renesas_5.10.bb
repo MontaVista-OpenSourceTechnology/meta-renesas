@@ -18,6 +18,14 @@ SRC_URI:append:rcar-v4x = "${@oe.utils.conditional("RGID_ON", "1", " file://rcar
 # Work-around to fix perf build error
 SRC_URI:append = " file://init_disassemble_info-signature-changes-causes-compile-failures.patch"
 
+SUPPORT_LPM = " \
+    file://0001-arm64-dts-r8a779h0-Fix-CPU-cache-hierarchy-to-enable.patch \
+    file://0002-arm64-dts-renesas-gray-hawk-Add-reserved-area-for-Li.patch \
+    file://0003-arm64-dts-renesas-gray-hawk-Disable-TMU-to-avoid-ear.patch \
+"
+
+SRC_URI:append:r8a779h0 = " ${@oe.utils.conditional("LPM_ON", "1", "${SUPPORT_LPM}", "", d )}"
+
 LINUX_VERSION ?= "5.10.235"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 PR = "r1"

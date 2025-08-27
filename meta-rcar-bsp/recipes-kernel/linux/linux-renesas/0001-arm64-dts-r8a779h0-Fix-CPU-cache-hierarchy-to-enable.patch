@@ -1,0 +1,130 @@
+From 412d4a7e5d1b3d2553605b7759f80f5f24a3ce8f Mon Sep 17 00:00:00 2001
+From: Khanh Le <khanh.le.xr@renesas.com>
+Date: Mon, 14 Jul 2025 17:54:36 +0700
+Subject: [PATCH 1/2] arm64: dts: r8a779h0: Fix CPU cache hierarchy to enable
+ cacheinfo detection
+
+The kernel was previously unable to detect CPU cache hierarchy, showing log
+"cacheinfo: Unable to detect cache hierarchy for CPU 0" during boot.
+This was due to incorrectly structured cache nodes in the device tree.
+
+Redefine the CPU cache nodes with correct structure to fix the issue.
+
+According to V4M HWUM rev.0.80, chapter 5.1.1.1, the AP-System has:
+- 64KB I-Cache + 64KB D-Cache (L1 Cache) per core
+- 256KB L2 Cache per core
+- 512KB L3 Cache per cluster
+
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a779h0.dtsi | 50 ++++++++++++++++++++---
+ 1 file changed, 45 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a779h0.dtsi b/arch/arm64/boot/dts/renesas/r8a779h0.dtsi
+index a9070bdae979..16c3a865f551 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779h0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779h0.dtsi
+@@ -69,11 +69,21 @@ a76_0: cpu@0 {
+ 			reg = <0>;
+ 			device_type = "cpu";
+ 			power-domains = <&sysc R8A779H0_PD_A1E0D0C0>;
+-			next-level-cache = <&L3_CA76_0>;
++			next-level-cache = <&L1_CA76_0>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&cpg CPG_CORE R8A779H0_CLK_ZC0>;
+ 			operating-points-v2 = <&cluster0_opp>;
++
++			L1_CA76_0: l1-cache-controller-0 {
++				compatible = "cache";
++				next-level-cache = <&L2_CA76_0>;
++			};
++
++			L2_CA76_0: l2-cache-controller-0 {
++				compatible = "cache";
++				next-level-cache = <&L3_CA76_0>;
++			};
+ 		};
+ 
+ 		a76_1: cpu@100 {
+@@ -81,11 +91,21 @@ a76_1: cpu@100 {
+ 			reg = <0x100>;
+ 			device_type = "cpu";
+ 			power-domains = <&sysc R8A779H0_PD_A1E0D0C1>;
+-			next-level-cache = <&L3_CA76_0>;
++			next-level-cache = <&L1_CA76_1>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&cpg CPG_CORE R8A779H0_CLK_ZC1>;
+ 			operating-points-v2 = <&cluster0_opp>;
++
++			L1_CA76_1: l1-cache-controller-1 {
++				compatible = "cache";
++				next-level-cache = <&L2_CA76_1>;
++			};
++
++			L2_CA76_1: l2-cache-controller-1 {
++				compatible = "cache";
++				next-level-cache = <&L3_CA76_0>;
++			};
+ 		};
+ 
+ 		a76_2: cpu@200 {
+@@ -93,11 +113,21 @@ a76_2: cpu@200 {
+ 			reg = <0x200>;
+ 			device_type = "cpu";
+ 			power-domains = <&sysc R8A779H0_PD_A1E0D0C2>;
+-			next-level-cache = <&L3_CA76_0>;
++			next-level-cache = <&L1_CA76_2>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&cpg CPG_CORE R8A779H0_CLK_ZC2>;
+ 			operating-points-v2 = <&cluster0_opp>;
++
++			L1_CA76_2: l1-cache-controller-2 {
++				compatible = "cache";
++				next-level-cache = <&L2_CA76_2>;
++			};
++
++			L2_CA76_2: l2-cache-controller-2 {
++				compatible = "cache";
++				next-level-cache = <&L3_CA76_0>;
++			};
+ 		};
+ 
+ 		a76_3: cpu@300 {
+@@ -105,11 +135,21 @@ a76_3: cpu@300 {
+ 			reg = <0x300>;
+ 			device_type = "cpu";
+ 			power-domains = <&sysc R8A779H0_PD_A1E0D0C3>;
+-			next-level-cache = <&L3_CA76_0>;
++			next-level-cache = <&L1_CA76_3>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&cpg CPG_CORE R8A779H0_CLK_ZC3>;
+ 			operating-points-v2 = <&cluster0_opp>;
++
++			L1_CA76_3: l1-cache-controller-3 {
++				compatible = "cache";
++				next-level-cache = <&L2_CA76_3>;
++			};
++
++			L2_CA76_3: l2-cache-controller-3 {
++				compatible = "cache";
++				next-level-cache = <&L3_CA76_0>;
++			};
+ 		};
+ 
+ 		idle-states {
+@@ -125,7 +165,7 @@ CPU_SLEEP_0: cpu-sleep-0 {
+ 			};
+ 		};
+ 
+-		L3_CA76_0: cache-controller-0 {
++		L3_CA76_0: l3-cache-controller-0 {
+ 			compatible = "cache";
+ 			power-domains = <&sysc R8A779H0_PD_A2E0D0>;
+ 			cache-unified;
+-- 
+2.34.1
+

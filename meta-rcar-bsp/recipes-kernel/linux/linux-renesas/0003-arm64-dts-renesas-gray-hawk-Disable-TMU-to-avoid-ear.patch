@@ -1,0 +1,52 @@
+From 2751bffd9ac124c83cc3a519a65742e4ac0574b4 Mon Sep 17 00:00:00 2001
+From: Khanh Le <khanh.le.xr@renesas.com>
+Date: Thu, 28 Aug 2025 00:20:12 +0700
+Subject: [PATCH 3/3] arm64: dts: renesas: gray-hawk: Disable TMU to avoid
+ early IRQ conflicts
+
+On R-Car V4M board, after waking up from Low Power Mode (LPM), there is
+interrupts conflict between application on Cortex-R and Linux kernel on
+Cortex-A while the TMU driver is probing, leading to kernel panics in
+early phase.
+
+Disable TMU to avoid these conflicts.
+
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+---
+ .../renesas/r8a779h0-gray-hawk-common.dtsi    | 20 -------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-common.dtsi b/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-common.dtsi
+index b2b2a272ad37..6d108a7b1c38 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-common.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-common.dtsi
+@@ -916,26 +916,6 @@ &scif0 {
+ 	status = "disabled";
+ };
+ 
+-&tmu0 {
+-	status = "okay";
+-};
+-
+-&tmu1 {
+-	status = "okay";
+-};
+-
+-&tmu2 {
+-	status = "okay";
+-};
+-
+-&tmu3 {
+-	status = "okay";
+-};
+-
+-&tmu4 {
+-	 status = "okay";
+-};
+-
+ &vin00 {
+ 	status = "okay";
+ };
+-- 
+2.34.1
+

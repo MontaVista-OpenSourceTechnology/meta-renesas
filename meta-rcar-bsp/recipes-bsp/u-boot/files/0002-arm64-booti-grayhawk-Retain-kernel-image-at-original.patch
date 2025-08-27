@@ -1,0 +1,43 @@
+From 0ef3fa8de59ebd4e62781a3359b133226bd39eaa Mon Sep 17 00:00:00 2001
+From: Khanh Le <khanh.le.xr@renesas.com>
+Date: Mon, 14 Jul 2025 18:35:05 +0700
+Subject: [PATCH 2/2] arm64: booti: grayhawk: Retain kernel image at original
+ load address in LPM
+
+In Low Power Mode (LPM):
+- Use 'memcpy' instead of 'memmove'
+- Utilize the 'bootm_low' variable as relocated address for the kernel image,
+  ensuring the original image at the source address remains intact.
+
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+---
+ cmd/booti.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/cmd/booti.c b/cmd/booti.c
+index 397d4b83236..68107e1ce44 100644
+--- a/cmd/booti.c
++++ b/cmd/booti.c
+@@ -78,11 +78,17 @@ static int booti_start(struct cmd_tbl *cmdtp, int flag, int argc,
+ 	if (ret != 0)
+ 		return 1;
+ 
++	if (env_get("lpm"))
++		relocated_addr = env_get_bootm_low();
++
+ 	/* Handle BOOTM_STATE_LOADOS */
+-	if (relocated_addr != ld) {
++	if (relocated_addr != ld || env_get("lpm")) {
+ 		printf("Moving Image from 0x%lx to 0x%lx, end=%lx\n", ld,
+ 		       relocated_addr, relocated_addr + image_size);
+-		memmove((void *)relocated_addr, (void *)ld, image_size);
++		if (!env_get("lpm"))
++			memmove((void *)relocated_addr, (void *)ld, image_size);
++		else
++			memcpy((void *)relocated_addr, (void *)ld, image_size);
+ 	}
+ 
+ 	images->ep = relocated_addr;
+-- 
+2.34.1
+

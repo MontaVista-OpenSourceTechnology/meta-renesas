@@ -18,7 +18,12 @@ SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
 SRCREV = "${@oe.utils.conditional("RGID_ON", "1", "07c148d9c261ee8d8b636246ddfa1e3130d5879c", "eab4939f2c0eb9c6ac6bc6743fd073c27c316c21", d )}"
 PV = "v2022.01+git${SRCPV}"
 
-SRC_URI:append:r8a779h0 = " ${@oe.utils.conditional("UBOOT_LPM", "1", "file://0001-Revert-ARM-renesas-Disable-relocation-on-R-Car-Gen3.patch", "", d )}"
+SUPPORT_LPM = " \
+    file://0001-Revert-ARM-renesas-Disable-relocation-on-R-Car-Gen3.patch \
+    file://0002-arm64-booti-grayhawk-Retain-kernel-image-at-original.patch \
+"
+
+SRC_URI:append:r8a779h0 = " ${@oe.utils.conditional("LPM_ON", "1", "${SUPPORT_LPM}", "", d )}"
 
 UBOOT_SREC_SUFFIX = "srec"
 UBOOT_SREC ?= "u-boot-elf.${UBOOT_SREC_SUFFIX}"

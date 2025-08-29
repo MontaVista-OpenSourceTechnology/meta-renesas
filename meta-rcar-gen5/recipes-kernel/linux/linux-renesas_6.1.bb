@@ -10,6 +10,9 @@ COMPATIBLE_MACHINE = "x5h|ironhide"
 SRCREV = "${RENESAS_BSP_SRCREV}"
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
     file://mvq32xx.ko \
+    file://ar0820.ko \
+    file://imx728.ko \
+    file://max96712.ko \
 "
 
 LINUX_VERSION ?= "6.1.102"
@@ -36,6 +39,9 @@ do_install:append:rcar-gen5() {
 do_install:append:r8a78000() {
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     install -m 644 ${WORKDIR}/mvq32xx.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${WORKDIR}/ar0820.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${WORKDIR}/imx728.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${WORKDIR}/max96712.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
 
 # Deploy vmlinux to deploy directory

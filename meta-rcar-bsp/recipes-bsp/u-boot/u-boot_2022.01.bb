@@ -15,7 +15,7 @@ UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
 BRANCH = "${@oe.utils.conditional("RGID_ON", "1", "rcar-6.0.0.rc13/rgid.rc3", "v2022.01/rcar-6.0.0.rc13", d )}"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
-SRCREV = "${@oe.utils.conditional("RGID_ON", "1", "07c148d9c261ee8d8b636246ddfa1e3130d5879c", "eab4939f2c0eb9c6ac6bc6743fd073c27c316c21", d )}"
+SRCREV = "${@oe.utils.conditional("RGID_ON", "1", "07c148d9c261ee8d8b636246ddfa1e3130d5879c", "1686d07b96be256889b14cbca8e696e2c1d9b590", d )}"
 PV = "v2022.01+git${SRCPV}"
 
 SUPPORT_LPM = " \

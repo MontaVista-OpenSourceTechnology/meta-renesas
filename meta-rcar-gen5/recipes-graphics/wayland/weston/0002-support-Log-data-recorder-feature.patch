@@ -1,0 +1,182 @@
+From b442874aa86e2b6bbde8852304b3189ba9a84a65 Mon Sep 17 00:00:00 2001
+From: Phuong Nguyen Dinh <phuong.nguyen.vx@renesas.com>
+Date: Fri, 26 Sep 2025 10:46:34 +0700
+Subject: [PATCH] support Log data recorder feature
+
+Signed-off-by: Phuong Nguyen Dinh <phuong.nguyen.vx@renesas.com>
+---
+ compositor/main.c             | 17 ++++++++++++++++-
+ compositor/meson.build        | 11 +++++++++++
+ include/libweston/libweston.h |  6 +++++-
+ libweston/log.c               | 23 ++++++++++++++++++++++-
+ libweston/meson.build         | 11 +++++++++++
+ meson_options.txt             |  6 ++++++
+ 6 files changed, 71 insertions(+), 3 deletions(-)
+
+diff --git a/compositor/main.c b/compositor/main.c
+index 8eb8a470..0623761e 100644
+--- a/compositor/main.c
++++ b/compositor/main.c
+@@ -69,6 +69,9 @@
+ #define WINDOW_TITLE "Weston Compositor"
+ /* flight recorder size (in bytes) */
+ #define DEFAULT_FLIGHT_REC_SIZE (5 * 1024 * 1024)
++#ifdef HAVE_LDR
++LDR_LOG_DEFINE_CONTEXT(weston_ctx);
++#endif
+ 
+ struct wet_output_config {
+ 	int width;
+@@ -3174,6 +3177,13 @@ wet_main(int argc, char *argv[])
+ 	weston_log_subscribe_to_scopes(log_ctx, logger, flight_rec,
+ 				       log_scopes, flight_rec_scopes);
+ 
++#ifdef HAVE_LDR
++	// Registers a DLT application
++	LDR_LOG_REGISTER_APP("WEST", "Weston Compositor");
++	// Initializes DLT logging context.
++	LDR_LOG_INIT_CONTEXT(weston_ctx, "MAIN", "Main Weston Logging");
++	weston_log_set_ldr_context(weston_ctx);
++#endif
+ 	weston_log("%s\n"
+ 		   STAMP_SPACE "%s\n"
+ 		   STAMP_SPACE "Bug reports to: %s\n"
+@@ -3396,7 +3406,12 @@ out_signals:
+ 
+ out_display:
+ 	weston_log_file_close();
+-
++#ifdef HAVE_LDR
++	// Frees a logging contexts.
++	LDR_LOG_FREE_CONTEXT(weston_ctx);
++	// Unregisters the DLT application.
++	LDR_LOG_UNREGISTER_APP();
++#endif
+ 	if (config)
+ 		weston_config_destroy(config);
+ 	free(config_file);
+diff --git a/compositor/meson.build b/compositor/meson.build
+index e1334d6a..7c6b74ca 100644
+--- a/compositor/meson.build
++++ b/compositor/meson.build
+@@ -26,6 +26,17 @@ if get_option('xwayland')
+ 	config_h.set_quoted('XSERVER_PATH', get_option('xwayland-path'))
+ endif
+ 
++if get_option('ldr')
++	dep_ldr = cc.find_library('ldr')
++	if not cc.has_function('ldr_log_write_ll', dependencies: dep_ldr)
++		error('ldr library not found for weston')
++	endif
++	if dep_ldr.found()
++		deps_weston += dep_ldr
++		config_h.set('HAVE_LDR', '1')
++	endif
++endif
++
+ libexec_weston = shared_library(
+ 	'exec_weston',
+ 	sources: srcs_weston,
+diff --git a/include/libweston/libweston.h b/include/libweston/libweston.h
+index dc54b170..e4b8c3cb 100644
+--- a/include/libweston/libweston.h
++++ b/include/libweston/libweston.h
+@@ -1826,7 +1826,11 @@ weston_log(const char *fmt, ...)
+ int
+ weston_log_continue(const char *fmt, ...)
+ 	__attribute__ ((format (printf, 1, 2)));
+-
++#ifdef HAVE_LDR
++#include "ldr/r_ldr.h"
++void
++weston_log_set_ldr_context(LdrContext *ctx);
++#endif
+ enum weston_screenshooter_outcome {
+ 	WESTON_SCREENSHOOTER_SUCCESS,
+ 	WESTON_SCREENSHOOTER_NO_MEMORY,
+diff --git a/libweston/log.c b/libweston/log.c
+index 6ce9454b..9b655737 100644
+--- a/libweston/log.c
++++ b/libweston/log.c
+@@ -36,6 +36,10 @@
+ 
+ #include <libweston/libweston.h>
+ 
++#ifdef HAVE_LDR
++static LdrContext *log_ctx;
++#endif
++
+ /**
+  * \defgroup wlog weston-logging
+  */
+@@ -122,9 +126,15 @@ weston_log(const char *fmt, ...)
+ 	va_list argp;
+ 
+ 	va_start(argp, fmt);
++#ifdef HAVE_LDR
++	char buffer[1024];
++	vsnprintf(buffer, sizeof(buffer), fmt, argp);
++#endif
+ 	l = weston_vlog(fmt, argp);
+ 	va_end(argp);
+-
++#ifdef HAVE_LDR
++	LDR_LOG_VARIADIC(log_ctx, LL_INFO, "%s", buffer);
++#endif
+ 	return l;
+ }
+ 
+@@ -154,3 +164,14 @@ weston_log_continue(const char *fmt, ...)
+ 
+ 	return l;
+ }
++
++/** weston_log_set_ldr_context
++ *
++ * \ingroup wlog
++ */
++#ifdef HAVE_LDR
++WL_EXPORT void weston_log_set_ldr_context(LdrContext *ctx)
++{
++    log_ctx = ctx;
++}
++#endif
+diff --git a/libweston/meson.build b/libweston/meson.build
+index 08d23ecd..573ec735 100644
+--- a/libweston/meson.build
++++ b/libweston/meson.build
+@@ -75,6 +75,17 @@ if get_option('renderer-gl')
+ 	deps_libweston += dep_egl
+ endif
+ 
++if get_option('ldr')
++	dep_ldr = cc.find_library('ldr')
++	if not cc.has_function('ldr_log_write_ll', dependencies: dep_ldr)
++		error('ldr library not found for weston')
++	endif
++	if dep_ldr.found()
++		deps_libweston += dep_ldr
++		config_h.set('HAVE_LDR', '1')
++	endif
++endif
++
+ lib_weston = shared_library(
+ 	'weston-@0@'.format(libweston_major),
+ 	srcs_libweston,
+diff --git a/meson_options.txt b/meson_options.txt
+index c862ecc4..c6dc34c2 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -210,3 +210,9 @@ option(
+ 	value: false,
+ 	description: 'Generate documentation'
+ )
++option(
++	'ldr',
++	type: 'boolean',
++	value: true,
++	description: 'Define if Log Data Recorder is available'
++)
+-- 
+2.34.1
+

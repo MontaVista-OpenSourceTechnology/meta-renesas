@@ -12,7 +12,7 @@ inherit deploy python3native
 PV = "4.3.0+renesas+git${SRCPV}"
 
 BRANCH = "rcar-gen4_4.3.0_s4+v4x"
-SRCREV = "614597d21052e20c9efa448813a6ec96d5467b1c"
+SRCREV = "85d3fdcfbe770087b3cc31f946927545c43e5ece"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
@@ -40,7 +40,7 @@ do_compile() {
     export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
 
     if [ "${RGID_ON}" = "1" ]; then
-        oe_runmake PLATFORM=${PLATFORM} LSI=${SOC} CFG_ARM64_core=y CFG_RCAR_RGID=2
+        oe_runmake PLATFORM=${PLATFORM} LSI=${SOC} CFG_ARM64_core=y CFG_RCAR_RGID_ENABLE=y
     else
         oe_runmake PLATFORM=${PLATFORM} LSI=${SOC} CFG_ARM64_core=y
     fi

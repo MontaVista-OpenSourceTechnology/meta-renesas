@@ -36,13 +36,29 @@ do_install () {
     install -d ${D}/${bindir}
     install -d ${D}/${includedir}
 
-    # Install library
-    install -m 0755 ${S}/out/export/usr/lib/libteec.so.2.0.0 ${D}/${libdir}
-    # Create symbolic link
-    cd ${D}/${libdir}
-    ln -sf libteec.so.2.0.0 libteec.so.2.0
-    ln -sf libteec.so.2.0 libteec.so.2
-    ln -sf libteec.so.2 libteec.so
+    # Install shared and static libraries
+    install -m 0644 ${S}/out/export/usr/lib/libteec.a ${D}/${libdir}/libteec.a
+    install -m 0644 ${S}/out/export/usr/lib/libckteec.a ${D}/${libdir}/libckteec.a
+    install -m 0644 ${S}/out/export/usr/lib/libseteec.a ${D}/${libdir}/libseteec.a
+    install -m 0644 ${S}/out/export/usr/lib/libteeacl.a ${D}/${libdir}/libteeacl.a
+    install -m 0755 ${S}/out/export/usr/lib/libteec.so.2.0.0 ${D}/${libdir}/libteec.so.2.0.0
+    install -m 0755 ${S}/out/export/usr/lib/libckteec.so.0.1.0 ${D}/${libdir}/libckteec.so.0.1.0
+    install -m 0755 ${S}/out/export/usr/lib/libseteec.so.0.1.0 ${D}/${libdir}/libseteec.so.0.1.0
+    install -m 0755 ${S}/out/export/usr/lib/libteeacl.so.0.1.0 ${D}/${libdir}/libteeacl.so.0.1.0
+
+    # Create symbolic links for shared libraries
+    ln -sf libteec.so.2.0.0 ${D}/${libdir}/libteec.so.2.0
+    ln -sf libteec.so.2.0 ${D}/${libdir}/libteec.so.2
+    ln -sf libteec.so.2 ${D}/${libdir}/libteec.so
+    ln -sf libckteec.so.0.1.0 ${D}/${libdir}/libckteec.so.0.1
+    ln -sf libckteec.so.0.1 ${D}/${libdir}/libckteec.so.0
+    ln -sf libckteec.so.0 ${D}/${libdir}/libckteec.so
+    ln -sf libseteec.so.0.1.0 ${D}/${libdir}/libseteec.so.0.1
+    ln -sf libseteec.so.0.1 ${D}/${libdir}/libseteec.so.0
+    ln -sf libseteec.so.0 ${D}/${libdir}/libseteec.so
+    ln -sf libteeacl.so.0.1.0 ${D}/${libdir}/libteeacl.so.0.1
+    ln -sf libteeacl.so.0.1 ${D}/${libdir}/libteeacl.so.0
+    ln -sf libteeacl.so.0 ${D}/${libdir}/libteeacl.so
 
     # Install header files
     install -m 0644 ${S}/out/export/usr/include/* ${D}/${includedir}

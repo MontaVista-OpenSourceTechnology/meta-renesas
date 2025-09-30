@@ -15,7 +15,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 require include/rcar-gfx-common.inc
 
 SRC_URI = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
-sha256sum=e41ccc937edcb2136abc4329c955d772dd61b7054e3b646f767e40cafdede9c2"
+sha256sum=ec9405d479e2b5b3ded1a110276ada46bdab7c0d77162b0f3996103201baa8cb"
 
 SRC_URI:append = " file://blacklist.conf"
 

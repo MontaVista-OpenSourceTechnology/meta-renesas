@@ -20,7 +20,7 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=5b6c27a9774a1636a7732822c324097c64ad8b11c83f9a54e9fd1fda0285698b"
+sha256sum=12d1d59d1250d94bf7052cf35ebc1f0ded40a463843912885aad91b8a6cb2eaa"
 
 SRC_URI:append = " file://rc.pvr.service"
 
@@ -40,6 +40,8 @@ do_install() {
     # Install header files
     install -d ${D}${includedir}/EGL
     install -m 644 ${S}/usr/include/EGL/*.h ${D}${includedir}/EGL/
+    install -d ${D}${includedir}/GLES
+    install -m 644 ${S}/usr/include/GLES/*.h ${D}${includedir}/GLES/
     install -d ${D}${includedir}/GLES2
     install -m 644 ${S}/usr/include/GLES2/*.h ${D}${includedir}/GLES2/
     install -d ${D}${includedir}/GLES3
@@ -76,6 +78,7 @@ do_install() {
     # Install pkgconfig
     install -d ${D}${libdir}/pkgconfig
     install -m 644 ${S}/usr/lib/pkgconfig/*.pc ${D}${libdir}/pkgconfig/
+    install -m 644 ${S}/usr/local/lib/pkgconfig/*.pc ${D}${libdir}/pkgconfig/
 
     # Create symbolic link
     cd ${D}${libdir}
@@ -97,6 +100,7 @@ PACKAGES = "\
     libgles2-${PN} \
     ${PN}-dev \
     libegl-${PN}-dev \
+    libgles-${PN}-dev \
     libgles2-${PN}-dev \
 "
 
@@ -132,6 +136,9 @@ FILES:libegl-${PN}-dev = " \
     ${includedir}/EGL \
     ${includedir}/KHR/khrplatform.h \
     ${libdir}/pkgconfig/egl.pc \
+"
+FILES:libgles-${PN}-dev = " \
+    ${includedir}/GLES \
 "
 FILES:libgles2-${PN}-dev = " \
     ${libdir}/libGLESv2.* \

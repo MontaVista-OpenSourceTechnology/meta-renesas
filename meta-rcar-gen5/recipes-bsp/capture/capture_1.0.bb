@@ -11,7 +11,7 @@ S = "${WORKDIR}/git"
 SRC_URI = "git://github.com/renesas-rcar/capture.git;protocol=https;nobranch=1"
 
 SRCREV:x5h = "1271dfe4c4d1acb2a13b3bd1461aaf2ff8c2bf6f"
-SRCREV:r8a78000 = "4000d08e702a61ea7a37854f775d3cf021b43b8c"
+SRCREV:r8a78000 = "7a2476fc20f4232636e706c98ea61e1f777c330d"
 
 do_compile() {
     cd ${S}

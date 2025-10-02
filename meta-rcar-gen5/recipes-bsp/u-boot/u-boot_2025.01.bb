@@ -13,11 +13,11 @@ DEPENDS += "flex-native bison-native bc-native dtc-native lzop-native srecord-na
 
 UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
 BRANCH:x5h = "v2025.01/rcar-7.0.0.rc2"
-BRANCH:r8a78000 = "v2025.01/rcar-7.0.0.rc5"
+BRANCH:r8a78000 = "v2025.01/rcar-7.0.0.rc6"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
 SRCREV:x5h = "ad4e16cb4a9cc88b469bef8ff3e80f9657031786"
-SRCREV:r8a78000 = "f14717b69051fcbdec545f779199f93513ef45aa"
+SRCREV:r8a78000 = "fef53edc9b2dc6ef54b8c25e3658fc1428284aea"
 
 PV = "v2025.01+git${SRCPV}"
 

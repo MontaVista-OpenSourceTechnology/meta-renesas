@@ -9,4 +9,7 @@ RENESAS_BSP_SRCREV = "${@oe.utils.conditional("MACHINE", "x5h", \
     "0dacd9702e2943d47f90befebe4c121dfc3c6fec", d)}"
 
 # Renesas Yocto BSP version
-BSP_RENESAS_VERSION = "Renesas-Yocto-v7.18.0"
+BSP_RENESAS_VERSION = "Renesas-Yocto-v7.19.0"
+
+# Renesas SDK version
+SDK_VERSION = "v4.29.0"

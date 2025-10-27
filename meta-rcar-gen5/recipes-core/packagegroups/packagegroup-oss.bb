@@ -83,6 +83,7 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
     rt-tests \
     ufs-utils \
     inetutils \
+    stress-ng \
 "
 
 # Python3 packages requested by Renesas

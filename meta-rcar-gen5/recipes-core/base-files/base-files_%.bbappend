@@ -5,10 +5,14 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}/:"
 
 SRC_URI:append:rcar-gen5 = " \
     file://fstab \
+    file://motd \
 "
 
 do_install:append:rcar-gen5 () {
     echo "export LD_LIBRARY_PATH=\"\${LD_LIBRARY_PATH}:${RENESAS_DATADIR}/lib\"" >> ${D}${sysconfdir}/profile
+
+    # Replace motd with custom content
+    printf "\nRenesas SDK version: ${SDK_VERSION}\n\n" > ${D}${sysconfdir}/motd
 }
 
 inherit module-base
@@ -29,6 +33,10 @@ do_install_basefilesissue:append:rcar-gen5 () {
 
     # YBSP version
     printf "BSP Renesas version: ${BSP_RENESAS_VERSION}" >> ${D}${sysconfdir}/issue.e2
+    echo >> ${D}${sysconfdir}/issue.e2
+
+    # SDK version
+    printf "Renesas SDK version: ${SDK_VERSION}" >> ${D}${sysconfdir}/issue.e2
     echo >> ${D}${sysconfdir}/issue.e2
 }
 

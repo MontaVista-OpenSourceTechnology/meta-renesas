@@ -15,6 +15,11 @@ SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
     file://max96712.ko \
 "
 
+# Add MP-PHY firmware conditionally for R-Car X5H board
+SRC_URI:append:r8a78000 = " \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'mp-phy', 'file://rcar_gen5_mp_phy.bin file://mp-phy.cfg', '', d)} \
+"
+
 LINUX_VERSION ?= "6.1.102"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 PR = "r1"
@@ -43,6 +48,16 @@ do_install:append:r8a78000() {
     install -m 644 ${WORKDIR}/imx728.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     install -m 644 ${WORKDIR}/max96712.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
+
+# Install MP-PHY firmware to staging directory if enabled for R-Car X5H board
+do_install_mp_phy_firmware () {
+    if [ "${MACHINE}" = "ironhide" ] && [ -f ${WORKDIR}/rcar_gen5_mp_phy.bin ]; then
+        install -d ${STAGING_KERNEL_DIR}/firmware
+        install -m 644 ${WORKDIR}/rcar_gen5_mp_phy.bin ${STAGING_KERNEL_DIR}/firmware/
+    fi
+}
+
+addtask do_install_mp_phy_firmware after do_configure before do_compile
 
 # Deploy vmlinux to deploy directory
 do_deploy:append:rcar-gen5() {

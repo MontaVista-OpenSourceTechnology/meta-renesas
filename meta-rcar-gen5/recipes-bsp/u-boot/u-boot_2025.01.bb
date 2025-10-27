@@ -8,6 +8,7 @@ PE = "1"
 S = "${WORKDIR}/git"
 
 require u-boot.inc
+require include/rcar-kernel-info-common.inc
 
 DEPENDS += "flex-native bison-native bc-native dtc-native lzop-native srecord-native gnutls-native"
 
@@ -25,6 +26,8 @@ UBOOT_SREC_SUFFIX = "srec"
 UBOOT_SREC ?= "u-boot-elf.${UBOOT_SREC_SUFFIX}"
 UBOOT_SREC_IMAGE ?= "u-boot-elf-${MACHINE}-${PV}-${PR}.${UBOOT_SREC_SUFFIX}"
 UBOOT_SREC_SYMLINK ?= "u-boot-elf-${MACHINE}.${UBOOT_SREC_SUFFIX}"
+
+EXTRA_OEMAKE += "LOCALVERSION='-SDK${SDK_VERSION}'"
 
 do_deploy:append() {
     if [ -n "${UBOOT_CONFIG}" ]

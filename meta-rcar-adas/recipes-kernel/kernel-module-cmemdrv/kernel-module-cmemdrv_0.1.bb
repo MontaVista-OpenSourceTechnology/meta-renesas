@@ -13,7 +13,7 @@ PV = "0.1"
 RENESAS_CMEM_URL ?= "git://github.com/renesas-rcar/cmem.git;protocol=https"
 SRC_URI = "${RENESAS_CMEM_URL};nobranch=1"
 SRCREV:rcar-v3x = "abe21c26b5ad06909017966c7208c454e7f02b92"
-SRCREV:rcar-v4x = "${@oe.utils.conditional("RGID_ON", "1", "27cffd2a3b3fb866e5bab877ce817804de047330", "e67f473cddb089f71abead8bf18f618d42f515da", d )}"
+SRCREV:rcar-v4x = "e67f473cddb089f71abead8bf18f618d42f515da"
 
 S = "${WORKDIR}/git"
 

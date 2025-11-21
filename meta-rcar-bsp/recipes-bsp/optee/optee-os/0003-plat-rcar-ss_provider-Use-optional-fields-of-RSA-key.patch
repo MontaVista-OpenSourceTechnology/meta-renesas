@@ -1,0 +1,29 @@
+From 9154a18384fd06be1a16c0d6b7490f14eba80478 Mon Sep 17 00:00:00 2001
+From: Dien Pham <dien.pham.ry@renesas.com>
+Date: Tue, 30 Sep 2025 10:12:31 +0700
+Subject: [PATCH 03/12] plat-rcar: ss_provider: Use optional fields of RSA key
+ when all of them is provided
+
+Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
+---
+ core/lib/libcryptoengine/tee_ss_provider.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/core/lib/libcryptoengine/tee_ss_provider.c b/core/lib/libcryptoengine/tee_ss_provider.c
+index e9db1924f..b65a05cb9 100644
+--- a/core/lib/libcryptoengine/tee_ss_provider.c
++++ b/core/lib/libcryptoengine/tee_ss_provider.c
+@@ -1999,6 +1999,10 @@ static SSError_t ss_build_priv_key(CRYS_RSAUserPrivKey_t **userPrivKey,
+ 	}
+ 	if (res == SS_SUCCESS) {
+ 		if ((bn_num_bytes(key->p) == 0U)
++		    || (bn_num_bytes(key->q) == 0U)
++		    || (bn_num_bytes(key->dp) == 0U)
++		    || (bn_num_bytes(key->dq) == 0U)
++		    || (bn_num_bytes(key->qp) == 0U)
+ 				|| ((bn_num_bytes(key->n) >= MAX_RSA_KEY_SIZE))) {
+ 			PROV_DMSG("key->e=%p\n", key->e);
+ 			res = ss_copy_bn2bin_uint16(key->e, &e_ptr, &eSize);
+-- 
+2.34.1
+

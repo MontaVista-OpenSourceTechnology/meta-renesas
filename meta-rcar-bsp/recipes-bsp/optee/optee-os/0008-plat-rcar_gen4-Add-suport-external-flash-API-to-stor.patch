@@ -1,0 +1,183 @@
+From 4aecb96a7e4e0dded7753251961912115ebe2604 Mon Sep 17 00:00:00 2001
+From: Tu Tran <tu.tran.wz@renesas.com>
+Date: Mon, 22 Sep 2025 20:22:58 +0700
+Subject: [PATCH 08/12] plat-rcar_gen4: Add suport external flash API to
+ storage ICUM secure data
+
+Signed-off-by: Tu Tran <tu.tran.wz@renesas.com>
+---
+ .../arch/arm/plat-rcar_gen4/platform_config.h |  1 +
+ .../arm/plat-rcar_gen4/rcar_storage_key.c     | 56 ++++++++++++++++++-
+ .../arm/plat-rcar_gen4/rcar_storage_key.h     |  2 +
+ core/include/tee/tee_svc_cryp.h               |  2 +
+ core/kernel/scall.c                           |  1 +
+ core/tee/tee_svc_cryp.c                       | 11 ++++
+ 6 files changed, 72 insertions(+), 1 deletion(-)
+
+diff --git a/core/arch/arm/plat-rcar_gen4/platform_config.h b/core/arch/arm/plat-rcar_gen4/platform_config.h
+index 6efc591b4..ddf7e4136 100644
+--- a/core/arch/arm/plat-rcar_gen4/platform_config.h
++++ b/core/arch/arm/plat-rcar_gen4/platform_config.h
+@@ -101,6 +101,7 @@
+ #define MFIS_BASE		ADDR_ASSIGN_RGID(0xE6260000U,CFG_RCAR_RGID) 	/* MFIS address */
+ #define RPC_ADDR_MAP_BASE	ADDR_ASSIGN_RGID(0x08000000U,CFG_RCAR_RGID)	/* RPC Internal address	*/
+ #define RPC_ADDR_MAP_SIZE	(0x04000000U)	/* RPC Address Map size */
++#define EXTERNAL_FLASH_ADDR	(0x00340000u)	/* ICU FW external flash memory address */
+ 
+ /* for HSCIF Register mapping function */
+ #define HSCIF_BASE        ADDR_ASSIGN_RGID(0xE6540000, CFG_RCAR_RGID)
+diff --git a/core/arch/arm/plat-rcar_gen4/rcar_storage_key.c b/core/arch/arm/plat-rcar_gen4/rcar_storage_key.c
+index 6fad58be2..e088e62b6 100644
+--- a/core/arch/arm/plat-rcar_gen4/rcar_storage_key.c
++++ b/core/arch/arm/plat-rcar_gen4/rcar_storage_key.c
+@@ -2,11 +2,13 @@
+ #include <tee_api_defines.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <platform_config.h>
+ 
+ #include "r_icumif_api.h"
+ #include "r_icumif_pub.h"
+ #include "rcar_storage_key.h"
+-
++#include "pe_target_device.h"
++#include "drivers/qspi_hyper_flash.h"
+ static uint8_t *p_auth_key;
+ 
+ uint8_t she_get_key_id(uint8_t she_key_index);
+@@ -225,6 +227,52 @@ out:
+ 	return ret;
+ }
+ 
++TEE_Result icum_clear_secure_data(void)
++{
++	TEE_Result ret = TEE_SUCCESS;
++	uint32_t res;
++
++	res = qspi_hyper_flash_init();
++	if (res != FL_DRV_OK) {
++		ret = TEE_ERROR_TARGET_DEAD;
++	}
++
++	res = qspi_hyper_flash_erase(EXTERNAL_FLASH_ADDR);
++	if (res == FL_DRV_OK) {
++		ret = TEE_SUCCESS;
++	} else if (res == FL_DRV_ERR_OUT_OF_MEMORY) {
++		ret = TEE_ERROR_OUT_OF_MEMORY;
++	} else {
++		ret = TEE_ERROR_TARGET_DEAD;
++	}
++
++	return ret;
++}
++
++TEE_Result icum_write_secure_data(void)
++{
++	TEE_Result ret = TEE_SUCCESS;
++	uint32_t res;
++	uint8_t *p_export_area = (uint8_t *)MEM_INFO_EXPORT_DATA_ADDR;
++	uint32_t export_size = (MEM_INFO_EXPORT_DATA_SIZE + (MEM_INFO_EXPORT_DATA_SIZE % sizeof(uint32_t)));
++
++	res = qspi_hyper_flash_init();
++	if (res != FL_DRV_OK) {
++		ret = TEE_ERROR_TARGET_DEAD;
++	}
++
++	res = qspi_hyper_flash_write(EXTERNAL_FLASH_ADDR, p_export_area, export_size);
++	if (res == FL_DRV_OK) {
++		ret = TEE_SUCCESS;
++	} else if (res == FL_DRV_ERR_OUT_OF_MEMORY) {
++		ret = TEE_ERROR_OUT_OF_MEMORY;
++	} else {
++		ret = TEE_ERROR_TARGET_DEAD;
++	}
++
++	return ret;
++}
++
+ TEE_Result rcar_install_user_key(void *key_buf,size_t key_len)
+ {
+ 	uint32_t res;
+@@ -325,6 +373,12 @@ TEE_Result rcar_install_user_key(void *key_buf,size_t key_len)
+ 
+ 	/* Exports secure data to export area */
+ 	ret = fwss_ext_flash_write();
++
++	/* Write ICUM secure data to external flash memory */
++	ret = icum_write_secure_data();
++	if (ret != TEE_SUCCESS) {
++		goto out;
++	}
+ out:
+ 	free(p_auth_key);
+ 	free(p_uid);
+diff --git a/core/arch/arm/plat-rcar_gen4/rcar_storage_key.h b/core/arch/arm/plat-rcar_gen4/rcar_storage_key.h
+index f84ba75fa..ab329deb5 100644
+--- a/core/arch/arm/plat-rcar_gen4/rcar_storage_key.h
++++ b/core/arch/arm/plat-rcar_gen4/rcar_storage_key.h
+@@ -18,6 +18,8 @@
+  *  * Function & variable prototypes
+  *   ******************************************************************************/
+ TEE_Result rcar_install_user_key(void *key_buf,size_t key_len);
++TEE_Result icum_write_secure_data(void);
++TEE_Result icum_clear_secure_data(void);
+ 
+ static const uint8_t key_update_enc_c[NUM_OF_CONSTANT][SIZE_OF_CONSTANT] =
+ {
+diff --git a/core/include/tee/tee_svc_cryp.h b/core/include/tee/tee_svc_cryp.h
+index d1dbbc197..4dbf348d9 100644
+--- a/core/include/tee/tee_svc_cryp.h
++++ b/core/include/tee/tee_svc_cryp.h
+@@ -62,6 +62,8 @@ TEE_Result syscall_icum_trng_generate(void *buf, size_t buf_len);
+ 
+ TEE_Result syscall_icum_install_key(void *buf, size_t buf_len);
+ 
++TEE_Result syscall_icum_clear_data(void);
++
+ TEE_Result syscall_authenc_init(unsigned long state, const void *nonce,
+ 			size_t nonce_len, size_t tag_len,
+ 			size_t aad_len, size_t payload_len);
+diff --git a/core/kernel/scall.c b/core/kernel/scall.c
+index 8ced3a6b8..713d53eed 100644
+--- a/core/kernel/scall.c
++++ b/core/kernel/scall.c
+@@ -119,6 +119,7 @@ static const struct syscall_entry tee_syscall_table[] = {
+ 	SYSCALL_ENTRY(syscall_cache_operation),
+ 	SYSCALL_ENTRY(syscall_icum_trng_generate),
+ 	SYSCALL_ENTRY(syscall_icum_install_key),
++	SYSCALL_ENTRY(syscall_icum_clear_data),
+ #ifdef PLATFORM_rcar_gen4
+ 	SYSCALL_ENTRY(syscall_rcar_asset_unpack),
+ #endif
+diff --git a/core/tee/tee_svc_cryp.c b/core/tee/tee_svc_cryp.c
+index 6d86c055d..31d89c9d2 100644
+--- a/core/tee/tee_svc_cryp.c
++++ b/core/tee/tee_svc_cryp.c
+@@ -4119,6 +4119,11 @@ TEE_Result syscall_icum_install_key(void *buf, size_t buf_len)
+ 
+ 	return rcar_install_user_key(buf, buf_len);
+ }
++
++TEE_Result syscall_icum_clear_data(void)
++{
++	return icum_clear_secure_data();
++}
+ #else
+ TEE_Result syscall_icum_install_key(void *buf, size_t buf_len)
+ {
+@@ -4127,6 +4132,12 @@ TEE_Result syscall_icum_install_key(void *buf, size_t buf_len)
+ 	/* Always returns success */
+ 	return TEE_SUCCESS;
+ }
++
++TEE_Result syscall_icum_clear_data(void)
++{
++	/* Always returns success */
++	return TEE_SUCCESS;
++}
+ #endif
+ 
+ TEE_Result syscall_authenc_init(unsigned long state, const void *nonce,
+-- 
+2.34.1
+

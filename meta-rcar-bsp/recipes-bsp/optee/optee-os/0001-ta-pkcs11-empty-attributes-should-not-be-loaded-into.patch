@@ -1,0 +1,38 @@
+From c968071ef8e5e7dd8c64f8839e4e561452727264 Mon Sep 17 00:00:00 2001
+From: Etienne Carriere <etienne.carriere@st.com>
+Date: Mon, 29 Sep 2025 21:15:40 +0700
+Subject: [PATCH 01/12] ta: pkcs11: empty attributes should not be loaded into
+ TEE objects
+
+Consider that when a PKCS#11 attribute if referred to with a null
+pointer of a size of 0, their should not be a GP TEE attribute loaded
+in the target object. This prevents to have empty attributes be
+referenced in through the GP TEE API.
+
+Fixes: 3dc4089 ("ta: pkcs11: correct RSA keys extended attributes
+sanitation")
+Fixes: OP-TEE#5418
+Fixes: OP-TEE#7520
+Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
+Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
+---
+ ta/pkcs11/src/pkcs11_helpers.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/ta/pkcs11/src/pkcs11_helpers.c b/ta/pkcs11/src/pkcs11_helpers.c
+index 364c7e630..96fc42736 100644
+--- a/ta/pkcs11/src/pkcs11_helpers.c
++++ b/ta/pkcs11/src/pkcs11_helpers.c
+@@ -647,7 +647,8 @@ bool pkcs2tee_load_attr(TEE_Attribute *tee_ref, uint32_t tee_id,
+ 		break;
+ 	}
+ 
+-	if (get_attribute_ptr(obj->attributes, pkcs11_id, &a_ptr, &a_size))
++	if (get_attribute_ptr(obj->attributes, pkcs11_id, &a_ptr, &a_size) ||
++	    !a_ptr || !a_size)
+ 		return false;
+ 
+ 	TEE_InitRefAttribute(tee_ref, tee_id, a_ptr, a_size);
+-- 
+2.34.1
+

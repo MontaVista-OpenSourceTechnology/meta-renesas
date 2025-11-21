@@ -1,0 +1,48 @@
+From 72daaf07947943d17fd752cdb4eebff5a1b031e2 Mon Sep 17 00:00:00 2001
+From: Dien Pham <dien.pham.ry@renesas.com>
+Date: Wed, 1 Oct 2025 22:03:32 +0700
+Subject: [PATCH 04/12] plat-rcar: ss_provider: <temp> Skip checking condition
+ the outputSize with private key size
+
+In current source code, the outputSize is comparing with private key
+modulas. But the outputSize should be impacted by input data only.
+So, this patch disables this checking as tentative.
+
+Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
+---
+ core/lib/libcryptoengine/tee_ss_provider.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/core/lib/libcryptoengine/tee_ss_provider.c b/core/lib/libcryptoengine/tee_ss_provider.c
+index b65a05cb9..8b2d75b3b 100644
+--- a/core/lib/libcryptoengine/tee_ss_provider.c
++++ b/core/lib/libcryptoengine/tee_ss_provider.c
+@@ -2747,7 +2747,7 @@ TEE_Result crypto_hw_acipher_rsaes_decrypt(uint32_t algo, struct rsa_keypair *ke
+ 				PROV_EMSG("SHORT_BUFFER(PKCS)\n");
+ 			}
+ 		} else {
+-			if (outputSize >= (modulas_size - (2U * hashSize) - 2U)) {
++	//		if (outputSize >= (modulas_size - (2U * hashSize) - 2U)) {
+ 				CONV_HASHMODE_TO_OAEP(rsa_hashMode);
+ 				PROV_DMSG("CALL: CRYS_RSA_OAEP_Decrypt()\n");
+ 				crys_res = CRYS_RSA_OAEP_Decrypt(
+@@ -2755,11 +2755,11 @@ TEE_Result crypto_hw_acipher_rsaes_decrypt(uint32_t algo, struct rsa_keypair *ke
+ 						rsa_hashMode, l, llen, mgf,
+ 						dataIn_ptr, dataInSize,
+ 						output_ptr, &outputSize);
+-			} else {
+-				*dst_len = modulas_size;
+-				res = SS_ERROR_SHORT_BUFFER;
+-				PROV_EMSG("SHORT_BUFFER(OAEP)\n");
+-			}
++	//		} else {
++	//			*dst_len = modulas_size;
++	//			res = SS_ERROR_SHORT_BUFFER;
++	//			PROV_EMSG("SHORT_BUFFER(OAEP)\n");
++	//		}
+ 		}
+ 		if (res != SS_ERROR_SHORT_BUFFER){
+ 			if (crys_res == (CRYSError_t)CRYS_OK) {
+-- 
+2.34.1
+

@@ -1,0 +1,98 @@
+From 6f6cb1eb4c06293672a8bf2242637b05f7b0a93a Mon Sep 17 00:00:00 2001
+From: Tu Tran <tu.tran.wz@renesas.com>
+Date: Thu, 11 Sep 2025 00:04:05 +0700
+Subject: [PATCH 09/12] Implement new TEE internal API and system call to
+ invoke icum_clear_secure_data()
+
+Signed-off-by: Tu Tran <tu.tran.wz@renesas.com>
+---
+ lib/libutee/include/tee_internal_api.h    | 2 ++
+ lib/libutee/include/tee_syscall_numbers.h | 7 ++++---
+ lib/libutee/include/utee_syscalls.h       | 2 ++
+ lib/libutee/include/utee_syscalls_asm.S   | 2 ++
+ lib/libutee/tee_api_operations.c          | 9 +++++++++
+ 5 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/lib/libutee/include/tee_internal_api.h b/lib/libutee/include/tee_internal_api.h
+index 4a81333b6..2dbbc9eec 100644
+--- a/lib/libutee/include/tee_internal_api.h
++++ b/lib/libutee/include/tee_internal_api.h
+@@ -493,6 +493,8 @@ void TEE_ICUM_TRNG(void *randomBuffer, size_t randomBufferLen);
+ 
+ void TEE_ICUM_INSTALL_KEY(uint8_t *keyBuffer, size_t keyBufferLen);
+ 
++void TEE_ICUM_CLEAR_DATA(void);
++
+ void __GP11_TEE_GenerateRandom(void *randomBuffer, uint32_t randomBufferLen);
+ 
+ /* Date & Time API */
+diff --git a/lib/libutee/include/tee_syscall_numbers.h b/lib/libutee/include/tee_syscall_numbers.h
+index a61389cad..8ee6657c0 100644
+--- a/lib/libutee/include/tee_syscall_numbers.h
++++ b/lib/libutee/include/tee_syscall_numbers.h
+@@ -81,12 +81,13 @@
+ #define TEE_SCN_CACHE_OPERATION                        70
+ #define TEE_ICUMFW_TRNG                         71
+ #define TEE_ICUMFW_INSTALL_KEY			72
++#define TEE_ICUMFW_CLEAR_DATA			73
+ 
+ #ifdef PLATFORM_rcar_gen4
+-#define RCAR_SCN_ASSET_UNPACK			73
+-#define TEE_SCN_MAX				73
++#define RCAR_SCN_ASSET_UNPACK			74
++#define TEE_SCN_MAX				74
+ #else
+-#define TEE_SCN_MAX				72
++#define TEE_SCN_MAX				73
+ #endif
+ 
+ /* Maximum number of allowed arguments for a syscall */
+diff --git a/lib/libutee/include/utee_syscalls.h b/lib/libutee/include/utee_syscalls.h
+index 244cfb8a6..35c71f202 100644
+--- a/lib/libutee/include/utee_syscalls.h
++++ b/lib/libutee/include/utee_syscalls.h
+@@ -136,6 +136,8 @@ TEE_Result _utee_icum_trng(void *buf, size_t buf_len);
+ 
+ TEE_Result _utee_icum_install_key(void *buf, size_t buf_len);
+ 
++TEE_Result _utee_icum_clear_data(void);
++
+ TEE_Result _utee_authenc_init(unsigned long state, const void *nonce,
+ 			      size_t nonce_len, size_t tag_len, size_t aad_len,
+ 			      size_t payload_len);
+diff --git a/lib/libutee/include/utee_syscalls_asm.S b/lib/libutee/include/utee_syscalls_asm.S
+index 7216d0cd4..8d2c3d80a 100644
+--- a/lib/libutee/include/utee_syscalls_asm.S
++++ b/lib/libutee/include/utee_syscalls_asm.S
+@@ -126,6 +126,8 @@
+ 	UTEE_SYSCALL _utee_icum_trng, TEE_ICUMFW_TRNG, 2
+ 
+ 	UTEE_SYSCALL _utee_icum_install_key, TEE_ICUMFW_INSTALL_KEY, 2
++
++	UTEE_SYSCALL _utee_icum_clear_data, TEE_ICUMFW_CLEAR_DATA, 0
+ #ifdef PLATFORM_rcar_gen4
+         UTEE_SYSCALL urcar_gen_asset_unpack, RCAR_SCN_ASSET_UNPACK, 6
+ #endif
+diff --git a/lib/libutee/tee_api_operations.c b/lib/libutee/tee_api_operations.c
+index 45658f15b..66066ab9b 100644
+--- a/lib/libutee/tee_api_operations.c
++++ b/lib/libutee/tee_api_operations.c
+@@ -2432,6 +2432,15 @@ void TEE_ICUM_INSTALL_KEY(uint8_t *keyBuffer, size_t keyBufferLen)
+ 		TEE_Panic(res);
+ }
+ 
++void TEE_ICUM_CLEAR_DATA(void)
++{
++	TEE_Result res;
++
++	res = _utee_icum_clear_data();
++	if (res != TEE_SUCCESS)
++		TEE_Panic(res);
++}
++
+ int rand(void)
+ {
+ 	int rc;
+-- 
+2.34.1
+

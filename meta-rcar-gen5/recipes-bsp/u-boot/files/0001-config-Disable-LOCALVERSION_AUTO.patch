@@ -1,0 +1,22 @@
+From cc1333a5cd12daa925c90bdda64f71adf76ca395 Mon Sep 17 00:00:00 2001
+From: Hau Vo <hau.vo.ra@renesas.com>
+Date: Fri, 21 Nov 2025 22:24:44 +0700
+Subject: [PATCH] config: Disable LOCALVERSION_AUTO
+
+Signed-off-by: Hau Vo <hau.vo.ra@renesas.com>
+---
+ configs/r8a78000_ironhide_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/r8a78000_ironhide_defconfig b/configs/r8a78000_ironhide_defconfig
+index 5a1e7e6df58..073090eed3b 100644
+--- a/configs/r8a78000_ironhide_defconfig
++++ b/configs/r8a78000_ironhide_defconfig
+@@ -39,3 +39,4 @@ CONFIG_SCMI_AGENT_MAILBOX=y
+ CONFIG_RCAR_SCP_FIXUP=y
+ CONFIG_DM_RESET=y
+ CONFIG_CMD_NFS=y
++# CONFIG_LOCALVERSION_AUTO is not set
+-- 
+2.34.1
+

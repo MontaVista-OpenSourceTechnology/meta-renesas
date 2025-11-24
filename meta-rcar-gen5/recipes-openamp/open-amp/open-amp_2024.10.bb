@@ -22,7 +22,6 @@ EXTRA_OECMAKE = " \
     -DLIBMETAL_LIB=${STAGING_LIBDIR}/libmetal.so \
     -DCMAKE_C_FLAGS='-I${S}/lib/include' \
 "
-EXTRA_OECMAKE:append:x5h = " -DVDK_ENV=ON"
 
 FILES:${PN} = " \
     ${libdir}/*.so* \

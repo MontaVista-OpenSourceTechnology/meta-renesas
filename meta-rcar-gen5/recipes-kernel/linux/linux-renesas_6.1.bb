@@ -13,6 +13,7 @@ SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
     file://ar0820.ko \
     file://imx728.ko \
     file://max96712.ko \
+    file://rcar_hwspinlock_test.ko \
 "
 
 # Add MP-PHY firmware conditionally for R-Car X5H board
@@ -39,6 +40,7 @@ do_install:append:rcar-gen5() {
     # Install dmatest module
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     mv ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/kernel/drivers/dma/dmatest.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${WORKDIR}/rcar_hwspinlock_test.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
 
 do_install:append:r8a78000() {

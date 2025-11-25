@@ -20,13 +20,14 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=9baca28addbbd9003458259cd0018869f09d2893128af40bc70c70aef2a38de4"
+sha256sum=c19c92b8ab8ab05eb4bca00bdd34346459e757c36cfcde18034aec3b5ea9dfe6"
 
 SRC_URI:append = " file://rc.pvr.service"
 
 inherit systemd
 
 SYSTEMD_SERVICE:${PN} = "rc.pvr.service"
+SYSTEMD_SERVICE:${PN}:x5h = ""
 
 do_populate_lic[noexec] = "1"
 do_compile[noexec] = "1"
@@ -167,7 +168,7 @@ INSANE_SKIP:${PN}-dev += "arch"
 INSANE_SKIP:${PN}-dbg = "arch"
 
 #To avoid already-stripped errors and not stripped libs from packages
-INSANE_SKIP:${PN} += "already-stripped"
+INSANE_SKIP:${PN} += "already-stripped installed-vs-shipped"
 
 # Skip debug split and strip of do_package()
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"

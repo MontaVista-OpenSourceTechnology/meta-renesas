@@ -1,0 +1,30 @@
+From 8e8c6aa04a76b411a7028306ee0536ebab3a2fb6 Mon Sep 17 00:00:00 2001
+From: Nguyen Tran <nguyen.tran.pz@bp.renesas.com>
+Date: Mon, 1 Dec 2025 10:26:19 +0700
+Subject: [PATCH] configs: whitehawk: rgid: Increase LMB_MAX_REGIONS on V4H to
+ 14
+
+Enabling ECC feature on V4H requires extra reserved-memory regions,
+which surpasses the current upper limit.
+Update LMB_MAX_REGIONS value to accommodate it.
+
+Signed-off-by: Nguyen Tran <nguyen.tran.pz@bp.renesas.com>
+---
+ configs/r8a779g0_whitehawk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/r8a779g0_whitehawk_defconfig b/configs/r8a779g0_whitehawk_defconfig
+index 07decb249b0..c5dedc89880 100644
+--- a/configs/r8a779g0_whitehawk_defconfig
++++ b/configs/r8a779g0_whitehawk_defconfig
+@@ -68,6 +68,6 @@ CONFIG_SPI=y
+ CONFIG_DM_SPI=y
+ # CONFIG_RENESAS_RPC_SPI is not set
+ CONFIG_OF_LIBFDT_OVERLAY=y
+-CONFIG_LMB_MAX_REGIONS=10
++CONFIG_LMB_MAX_REGIONS=14
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_RCAR_RGID_BUS_DOMAIN_PROTECTION_DOMAIN2=y
+-- 
+2.25.1
+

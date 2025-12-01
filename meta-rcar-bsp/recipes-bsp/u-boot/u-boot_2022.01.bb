@@ -18,6 +18,10 @@ SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
 SRCREV = "${@oe.utils.conditional("RGID_ON", "1", "10b459f63fff8666164c2941326881ecb499a1ad", "02594c3836a4e1bcfa73f1776d61ae01f77c5f04", d )}"
 PV = "v2022.01+git${SRCPV}"
 
+SRC_URI:append:r8a779g0 = " \
+    ${@oe.utils.conditional("RGID_ON", "1", "file://0001-configs-whitehawk-rgid-Increase-LMB_MAX_REGIONS-on-V.patch","", d )} \
+"
+
 SUPPORT_LPM = " \
     file://0001-Revert-ARM-renesas-Disable-relocation-on-R-Car-Gen3.patch \
     file://0002-arm64-booti-grayhawk-Retain-kernel-image-at-original.patch \

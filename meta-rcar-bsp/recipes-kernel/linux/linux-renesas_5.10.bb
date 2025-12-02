@@ -11,6 +11,7 @@ SRCREV = "${RENESAS_BSP_SRCREV}"
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
     file://0001-arm64-dts-renesas-r8a779g0-Add-Native-device-support.patch \
     file://0002-arm64-dts-renesas-r8a779g-0-3-4-5-du-native-Add-DU-N.patch \
+    file://0003-arm64-dts-renesas-r8a779g-0-3-4-5-native-rgid-Add-Na.patch \
     file://pid_in_contextidr.cfg \
 "
 SRC_URI:append:rcar-v4x = "${@oe.utils.conditional("RGID_ON", "1", " file://rcar_rgid.cfg", "", d )}"

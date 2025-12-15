@@ -6,6 +6,7 @@ S = "${WORKDIR}"
 SRC_URI = " \
     file://bsp-config_v4h.sh \
     file://x5h_enable_cpus.sh \
+    file://s2r-linux-script-removeSleep3s-increaseTaujValue.sh \
 "
 
 do_install() {

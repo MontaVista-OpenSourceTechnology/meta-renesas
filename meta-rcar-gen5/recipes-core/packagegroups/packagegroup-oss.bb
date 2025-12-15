@@ -84,6 +84,7 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
     ufs-utils \
     inetutils \
     stress-ng \
+    htop \ 
 "
 
 # Python3 packages requested by Renesas

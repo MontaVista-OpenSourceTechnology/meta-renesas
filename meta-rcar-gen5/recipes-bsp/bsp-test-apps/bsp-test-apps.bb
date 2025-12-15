@@ -9,6 +9,7 @@ SRC_URI = " \
 
 do_install() {
     install -d ${D}${ROOT_HOME}
+     install -d ${D}${bindir}
 
     # Install watchdog tp
     install -m 755 ${S}/watchdog-test ${D}${ROOT_HOME}/
@@ -25,7 +26,7 @@ do_install() {
     install -m 755 ${S}/sample_wcrc_e2e_data_through ${D}${ROOT_HOME}/
     install -m 755 ${S}/sample_wcrc_independent_crc ${D}${ROOT_HOME}/        
     # Install I3C tp
-    install -m 755 ${S}/i3ctransfer ${D}${ROOT_HOME}/
+    install -m 755 ${S}/i3ctransfer ${D}${bindir}/
 
     # Install Audio test data
     install -d ${D}${ROOT_HOME}/test_wav
@@ -44,5 +45,6 @@ do_install() {
 }
 
 FILES:${PN} = "${ROOT_HOME}/*"
+FILES:${PN} += "${bindir}/i3ctransfer"
 
 RDEPENDS:${PN} = "bash"

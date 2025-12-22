@@ -30,7 +30,6 @@ SRC_URI:append = " file://rc.pvr.service"
 inherit systemd
 
 SYSTEMD_SERVICE:${PN} = "rc.pvr.service"
-SYSTEMD_SERVICE:${PN}:x5h = ""
 
 do_populate_lic[noexec] = "1"
 do_compile[noexec] = "1"

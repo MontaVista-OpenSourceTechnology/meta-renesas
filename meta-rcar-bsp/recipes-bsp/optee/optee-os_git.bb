@@ -12,22 +12,10 @@ inherit deploy python3native
 PV = "4.3.0+renesas+git${SRCPV}"
 
 BRANCH = "rcar-gen4_4.3.0_s4+v4x"
-SRCREV = "f5580809207828fbbe265859d153feab52243618"
+SRCREV = "e7026cda8e62505bd39fa5ba3e6ca84a84e32c94"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
-    file://0001-ta-pkcs11-empty-attributes-should-not-be-loaded-into.patch \
-    file://0002-ta-pkcs11-be-flexible-on-RSA-private-key-optional-at.patch \
-    file://0003-plat-rcar-ss_provider-Use-optional-fields-of-RSA-key.patch \
-    file://0004-plat-rcar-ss_provider-temp-Skip-checking-condition-t.patch \
-    file://0005-plat-rcar_gen4-Implement-additional-ICUMFW-security-.patch \
-    file://0006-plat-rcar_gen4-Implement-rcar_install_user_key-for-n.patch \
-    file://0007-Implement-new-TEE-internal-API-and-system-call-to-in.patch \
-    file://0008-plat-rcar_gen4-Add-suport-external-flash-API-to-stor.patch \
-    file://0009-Implement-new-TEE-internal-API-and-system-call-to-in.patch \
-    file://0010-plat-rcar_gen4-Implement-rcar_asset_unpack-for-the-n.patch \
-    file://0011-Update-RPMB-using-ICUM-security-services.patch \
-    file://0012-Fix-build-warnings.patch \
 "
 
 COMPATIBLE_MACHINE = "(whitehawk|grayhawk)"

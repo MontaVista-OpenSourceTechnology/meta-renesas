@@ -1,0 +1,28 @@
+From e346797fc7622c89b7f6c7ab285eaf1cb1b9af7c Mon Sep 17 00:00:00 2001
+From: Phuong Nguyen Dinh <phuong.nguyen.vx@renesas.com>
+Date: Thu, 16 Jan 2025 18:31:30 +0700
+Subject: [PATCH 2/2] change to use CLEAR macro
+
+Signed-off-by: Phuong Nguyen Dinh <phuong.nguyen.vx@renesas.com>
+(cherry picked from commit 2ee1a798aad965bbee87cf0e65bcf68f488341ec)
+Signed-off-by: Nguyen Tran <nguyen.tran.pz@bp.renesas.com>
+---
+ capture.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/capture.c b/capture.c
+index 98fa1e3..c87b9d5 100644
+--- a/capture.c
++++ b/capture.c
+@@ -883,7 +883,7 @@ static void init_dmabuf(int dev)
+ 	struct v4l2_requestbuffers rqbufs;
+ 
+ 	/* request buffers from v4l2 device */
+-	memset(&rqbufs, 0, sizeof(rqbufs));
++	CLEAR(rqbufs);
+ 	rqbufs.count = 7;
+ 	rqbufs.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+ 	rqbufs.memory = V4L2_MEMORY_DMABUF;
+-- 
+2.25.1
+

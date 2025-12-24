@@ -9,6 +9,10 @@ inherit pkgconfig
 S = "${WORKDIR}/git"
 
 SRC_URI = "git://github.com/renesas-rcar/capture.git;protocol=https;nobranch=1"
+SRC_URI:append:rcar-v4x = " \
+    file://0001-support-dmabuf.patch \
+    file://0002-change-to-use-CLEAR-macro.patch \
+"
 
 SRCREV:rcar-v3x = "361b1bb9fa0b009df72a3be1dbdfebf47757095e"
 SRCREV:rcar-v4x = "d64454c328a22101c2098d9e57daf50944b42750"

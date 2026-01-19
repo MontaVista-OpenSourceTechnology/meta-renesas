@@ -7,11 +7,22 @@ SRC_URI = " \
     file://bsp-config_v4h.sh \
     file://x5h_enable_cpus.sh \
     file://s2r-linux-script-removeSleep3s-increaseTaujValue.sh \
+    file://tsn4_steering.sh \
 "
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 755 ${S}/*.sh ${D}${bindir}/
+    install -m 755 ${S}/bsp-config_v4h.sh ${D}${bindir}/
+    install -m 755 ${S}/x5h_enable_cpus.sh ${D}${bindir}/
+    install -m 755 ${S}/s2r-linux-script-removeSleep3s-increaseTaujValue.sh ${D}${bindir}/
+
+    install -d ${D}${ROOT_HOME}
+    install -m 755 ${S}/tsn4_steering.sh ${D}${ROOT_HOME}/
 }
 
 RDEPENDS:${PN} += "bash"
+
+FILES:${PN} = "\
+    ${ROOT_HOME}/* \
+    ${bindir}/* \
+"

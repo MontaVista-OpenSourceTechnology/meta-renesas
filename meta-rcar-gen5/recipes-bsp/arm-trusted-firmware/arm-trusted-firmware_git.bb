@@ -14,14 +14,14 @@ BRANCH:r8a78000 = "rcar_gen5_2.12.0"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
 
 SRCREV:x5h = "d241e3cedf24854b43a9b212e5e203d84e406de9"
-SRCREV:r8a78000 = "6c3f0f07baeab7219436a84c58460ad2ebff8b85"
+SRCREV:r8a78000 = "6b2865ac95eb276c8016eae5d18befc777dc4ff9"
 
 PV = "v2.5+renesas+git${SRCPV}"
 
 COMPATIBLE_MACHINE = "x5h|ironhide"
 PLATFORM = "rcar_gen5"
-ATFW_OPT:x5h = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 SPD=none LOG_LEVEL=40 DEBUG=1 SET_SCMI_PARAM=1 VDK_ENV=1"
-ATFW_OPT:r8a78000 = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 LOG_LEVEL=40 DEBUG=1 SET_SCMI_PARAM=1"
+ATFW_OPT:x5h = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 SPD=none LOG_LEVEL=40 DEBUG=0 SET_SCMI_PARAM=1 VDK_ENV=1"
+ATFW_OPT:r8a78000 = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 LOG_LEVEL=20 DEBUG=0 SET_SCMI_PARAM=1"
 
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE="${TARGET_PREFIX}"
@@ -45,9 +45,9 @@ do_deploy() {
     # Create deploy folder
     install -d ${DEPLOYDIR}
 
-    install -m 0644 ${S}/build/${PLATFORM}/debug/bl31.bin ${DEPLOYDIR}/bl31-${MACHINE}.bin
-    install -m 0644 ${S}/build/${PLATFORM}/debug/bl31.srec ${DEPLOYDIR}/bl31-${MACHINE}.srec
-    install -m 0644 ${S}/build/${PLATFORM}/debug/bl31/bl31.elf ${DEPLOYDIR}/bl31-${MACHINE}.elf
+    install -m 0644 ${S}/build/${PLATFORM}/release/bl31.bin ${DEPLOYDIR}/bl31-${MACHINE}.bin
+    install -m 0644 ${S}/build/${PLATFORM}/release/bl31.srec ${DEPLOYDIR}/bl31-${MACHINE}.srec
+    install -m 0644 ${S}/build/${PLATFORM}/release/bl31/bl31.elf ${DEPLOYDIR}/bl31-${MACHINE}.elf
 }
 
 addtask deploy before do_build after do_compile

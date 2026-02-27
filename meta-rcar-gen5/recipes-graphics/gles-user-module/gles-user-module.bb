@@ -20,10 +20,10 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI:r8a78000 = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=5f510be0d57314b2c7ded7614531e19ecfd4725291444d2f276007c7864d5fcf"
+sha256sum=16cf9f158ba242e9c3bd5e48a5254452ab9cb40d432408e6030325f55acf55a4"
 
 SRC_URI:x5h = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=5f510be0d57314b2c7ded7614531e19ecfd4725291444d2f276007c7864d5fcf"
+sha256sum=16cf9f158ba242e9c3bd5e48a5254452ab9cb40d432408e6030325f55acf55a4"
 
 SRC_URI:append = " file://rc.pvr.service"
 
@@ -81,7 +81,7 @@ do_install() {
     # Install pkgconfig
     install -d ${D}${libdir}/pkgconfig
     install -m 644 ${S}/usr/lib/pkgconfig/*.pc ${D}${libdir}/pkgconfig/
-    install -m 644 ${S}/usr/local/lib/pkgconfig/*.pc ${D}${libdir}/pkgconfig/
+    install -m 644 ${S}/usr/lib/pkgconfig/*.pc ${D}${libdir}/pkgconfig/
 
     # Create symbolic link
     cd ${D}${libdir}

@@ -12,7 +12,7 @@ inherit deploy python3native
 PV = "4.4+renesas+git${SRCPV}"
 
 BRANCH = "rcar-gen5_4.4.0"
-SRCREV = "378c053dd55f750dac0a782a43a75cd9d2e7a4b4"
+SRCREV = "ff5f4077cd33b92b33f1f24bf2bd75f4905b4032"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \

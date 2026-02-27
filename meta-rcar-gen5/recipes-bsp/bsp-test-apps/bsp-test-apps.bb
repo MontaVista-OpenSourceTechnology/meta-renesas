@@ -38,10 +38,11 @@ do_install() {
     # Install MSIOF tp
     install -d ${D}${ROOT_HOME}/msiof_tp
     install -m 755 ${S}/msiof_tp/* ${D}${ROOT_HOME}/msiof_tp/
-
+    install -m 755 ${S}/spidev_test ${D}${ROOT_HOME}/
 
     # Install PTP tp
     install -m 755 ${S}/testptp ${D}${ROOT_HOME}/
+
 }
 
 FILES:${PN} = "${ROOT_HOME}/*"

@@ -9,6 +9,7 @@ SRC_URI = " \
     file://s2r-linux-script-removeSleep3s-increaseTaujValue.sh \
     file://tsn4_steering.sh \
     file://ufs-config-x5h.bin \
+    file://pcitest_dma_script.sh \
 "
 
 do_install() {
@@ -20,6 +21,7 @@ do_install() {
     install -d ${D}${ROOT_HOME}
     install -m 755 ${S}/tsn4_steering.sh ${D}${ROOT_HOME}/
     install -m 755 ${S}/ufs-config-x5h.bin ${D}${ROOT_HOME}/
+    install -m 755 ${S}/pcitest_dma_script.sh ${D}${ROOT_HOME}/
 }
 
 RDEPENDS:${PN} += "bash"

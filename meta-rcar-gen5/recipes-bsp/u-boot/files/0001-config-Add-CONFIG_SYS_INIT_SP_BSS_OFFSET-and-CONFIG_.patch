@@ -1,0 +1,24 @@
+From 7fcb538b95d30c5d2c468c9c211546d21680f9d3 Mon Sep 17 00:00:00 2001
+From: Hau Vo <hau.vo.ra@renesas.com>
+Date: Tue, 10 Mar 2026 15:25:19 +0700
+Subject: [PATCH] config: Add CONFIG_SYS_INIT_SP_BSS_OFFSET and
+ CONFIG_STACK_SIZE
+
+Signed-off-by: Hau Vo <hau.vo.ra@renesas.com>
+---
+ configs/r8a78000_ironhide_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configs/r8a78000_ironhide_defconfig b/configs/r8a78000_ironhide_defconfig
+index 073090eed3..5cab03efd2 100644
+--- a/configs/r8a78000_ironhide_defconfig
++++ b/configs/r8a78000_ironhide_defconfig
+@@ -40,3 +40,5 @@ CONFIG_RCAR_SCP_FIXUP=y
+ CONFIG_DM_RESET=y
+ CONFIG_CMD_NFS=y
+ # CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_SYS_INIT_SP_BSS_OFFSET=327680
++CONFIG_STACK_SIZE=0x50000
+-- 
+2.34.1
+

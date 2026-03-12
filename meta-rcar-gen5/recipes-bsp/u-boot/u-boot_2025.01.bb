@@ -17,7 +17,9 @@ BRANCH:x5h = "v2025.01/rcar-7.0.0.rc2"
 BRANCH:r8a78000 = "v2025.01/rcar-7.0.0.rc7"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
-SRC_URI:append:r8a78000 = " file://0001-config-Disable-LOCALVERSION_AUTO.patch"
+SRC_URI:append:r8a78000 = " \
+    file://0001-config-Disable-LOCALVERSION_AUTO.patch \
+    file://0001-config-Add-CONFIG_SYS_INIT_SP_BSS_OFFSET-and-CONFIG_.patch"
 
 SRCREV:x5h = "ad4e16cb4a9cc88b469bef8ff3e80f9657031786"
 SRCREV:r8a78000 = "cfc058b8c018b473ef10969f4126a83c5d9f6249"

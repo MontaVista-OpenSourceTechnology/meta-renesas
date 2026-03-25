@@ -20,10 +20,10 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI:r8a78000 = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=16cf9f158ba242e9c3bd5e48a5254452ab9cb40d432408e6030325f55acf55a4"
+sha256sum=37fad8530d67fef5098640c4007ed20fffca265b533c9a1aa538036fb777a960"
 
 SRC_URI:x5h = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=16cf9f158ba242e9c3bd5e48a5254452ab9cb40d432408e6030325f55acf55a4"
+sha256sum=37fad8530d67fef5098640c4007ed20fffca265b533c9a1aa538036fb777a960"
 
 SRC_URI:append = " file://rc.pvr.service"
 
@@ -37,8 +37,12 @@ do_compile[noexec] = "1"
 do_install() {
     # Install configuration files
     install -d ${D}${sysconfdir}/udev/rules.d
+    install -d ${D}${sysconfdir}/vulkan/icd.d
+    install -d ${D}${sysconfdir}/OpenCL/vendors
     install -m 644 ${S}/etc/udev/rules.d/72-pvr-seat.rules ${D}${sysconfdir}/udev/rules.d/
     install -m 644 ${S}/etc/powervr.ini ${D}${sysconfdir}
+    install -m 644 ${S}/etc/vulkan/icd.d/powervr_icd.json ${D}${sysconfdir}/vulkan/icd.d/
+    install -m 644 ${S}/etc/OpenCL/vendors/IMG.icd ${D}${sysconfdir}/OpenCL/vendors/
 
     # Install header files
     install -d ${D}${includedir}/EGL
@@ -72,11 +76,13 @@ do_install() {
 
     # Install pre-built binaries
     install -d ${D}${libdir}
+    install -d ${D}${libdir}/cmake/VulkanLoader
     install -m 755 ${S}/usr/lib/*.so ${D}${libdir}/
     install -d ${D}${RENESAS_DATADIR}/bin
     install -m 755 ${S}/usr/local/bin/dlcsrv_REL ${D}${RENESAS_DATADIR}/bin/dlcsrv_REL
     install -d ${D}${nonarch_base_libdir}/firmware
     install -m 644 ${S}/lib/firmware/* ${D}${nonarch_base_libdir}/firmware/
+    install -m 644 ${S}/usr/lib/cmake/VulkanLoader/* ${D}${libdir}/cmake/VulkanLoader/
 
     # Install pkgconfig
     install -d ${D}${libdir}/pkgconfig
@@ -126,6 +132,7 @@ FILES:${PN} = " \
     ${nonarch_base_libdir}/firmware/rgx.sh* \
     ${RENESAS_DATADIR}/bin/* \
     ${exec_prefix}/bin/* \
+    ${libdir}/cmake/VulkanLoader/* \
 "
 FILES:libegl-${PN} = "${libdir}/libEGL.so*"
 FILES:libgles2-${PN} = "${libdir}/libGLESv2.so*"
@@ -133,6 +140,7 @@ FILES:libgles2-${PN} = "${libdir}/libGLESv2.so*"
 FILES:${PN}-dev = " \
     ${includedir}/* \
     ${libdir}/pkgconfig/* \
+    ${libdir}/cmake/VulkanLoader/* \
 "
 FILES:libegl-${PN}-dev = " \
     ${libdir}/libEGL.* \

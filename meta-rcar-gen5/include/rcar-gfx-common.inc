@@ -1,5 +1,5 @@
 GFX_URL = "https://github.com/renesas-rcar/rcar-gfx"
-BRANCH:r8a78000 = "X5Hx/v1.6.0"
-BRANCH:x5h = "X5Hx/v1.6.0_rfs2x"
+BRANCH:r8a78000 = "X5Hx/v1.7.0"
+BRANCH:x5h = "X5Hx/v1.7.0_rfs2x"
 
-PV = "1.6.0"
+PV = "1.7.0"

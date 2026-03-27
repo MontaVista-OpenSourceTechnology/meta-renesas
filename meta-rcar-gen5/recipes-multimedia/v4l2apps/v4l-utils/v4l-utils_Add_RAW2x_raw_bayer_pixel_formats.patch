@@ -1,3 +1,5 @@
+Upstream-Status: Inappropriate [R-Car specific feature]
+
 diff --git a/include/linux/media-bus-format.h b/include/linux/media-bus-format.h
 index ff62056f..153f04b5 100644
 --- a/include/linux/media-bus-format.h

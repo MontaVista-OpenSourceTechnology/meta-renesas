@@ -7,6 +7,8 @@ Deleted sleep processing to shorten processing time.
 
 Signed-off-by: Tsukasa Kawaguchi <tsukasa.kawaguchi.aw@hitachi.com>
 Signed-off-by: Yoshifumi Hosoya <yoshifumi.hosoya.wj@renesas.com>
+
+Upstream-Status: Inappropriate [R-Car specific feature]
 ---
  tee-supplicant/src/rpmb.c | 8 --------
  1 file changed, 8 deletions(-)

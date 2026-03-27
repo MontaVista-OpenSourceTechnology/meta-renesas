@@ -3,6 +3,8 @@ From: Phuong Nguyen Dinh <phuong.nguyen.vx@renesas.com>
 Date: Fri, 26 Sep 2025 10:46:34 +0700
 Subject: [PATCH] support Log data recorder feature
 
+Upstream-Status: Inappropriate [R-Car specific feature]
+
 Signed-off-by: Phuong Nguyen Dinh <phuong.nguyen.vx@renesas.com>
 ---
  compositor/main.c             | 17 ++++++++++++++++-

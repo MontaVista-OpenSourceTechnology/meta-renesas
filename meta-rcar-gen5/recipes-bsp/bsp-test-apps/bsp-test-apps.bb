@@ -1,7 +1,7 @@
 SUMMARY = "BSP test applications"
 LICENSE = "CLOSED"
 
-S = "${WORKDIR}/bsp-test-apps"
+S = "${UNPACKDIR}/bsp-test-apps"
 
 SRC_URI = " \
     file://bsp-test-apps.tar.gz \

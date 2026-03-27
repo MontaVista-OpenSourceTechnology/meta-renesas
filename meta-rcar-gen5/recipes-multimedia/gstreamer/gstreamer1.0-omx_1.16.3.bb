@@ -19,7 +19,6 @@ SRC_URI = " \
 
 SRCREV = "e0752e688bd7445e0652288911430791b2988359"
 
-S = "${WORKDIR}/git"
 
 DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-bad virtual/libomxil"
 
@@ -33,7 +32,7 @@ EXTRA_OEMESON += "-Dtarget=${GSTREAMER_1_0_OMX_TARGET}"
 
 do_configure:prepend:rcar-gen5() {
     cd ${S}
-    install -m 0644 ${WORKDIR}/gstomx.conf ${S}/config/rcar/
+    install -m 0644 ${UNPACKDIR}/gstomx.conf ${S}/config/rcar/
     sed -i 's,@RENESAS_DATADIR@,${RENESAS_DATADIR},g' ${S}/config/rcar/gstomx.conf
     cd ${B}
 }

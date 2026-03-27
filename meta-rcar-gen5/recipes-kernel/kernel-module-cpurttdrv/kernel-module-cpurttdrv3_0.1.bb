@@ -12,7 +12,6 @@ SRCREV = "df25612bf6ff6f2f5fc78ef490362df211c32169"
 
 SRC_URI = "${RENESAS_CPURTTDRV_URL};nobranch=1"
 
-S = "${WORKDIR}/git"
 
 PR = "r0"
 PV = "0.1"

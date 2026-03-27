@@ -12,7 +12,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 DEPENDS = "kernel-module-gles"
 
-S = "${WORKDIR}/rogue"
+S = "${UNPACKDIR}/rogue"
 GLES = "gsx"
 
 PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
@@ -97,7 +97,7 @@ do_install() {
 
     # Install systemd service
     install -d ${D}${systemd_system_unitdir}/
-    install -m 644 ${WORKDIR}/rc.pvr.service ${D}${systemd_system_unitdir}/
+    install -m 644 ${UNPACKDIR}/rc.pvr.service ${D}${systemd_system_unitdir}/
     install -d ${D}${exec_prefix}/bin
     install -m 755 ${S}/etc/init.d/rc.pvr ${D}${exec_prefix}/bin/pvrinit
 }

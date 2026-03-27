@@ -1,7 +1,7 @@
 SUMMARY = "BSP configuration (default/ADAS) script"
 LICENSE = "CLOSED"
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 SRC_URI = " \
     file://bsp-config_v4h.sh \

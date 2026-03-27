@@ -24,23 +24,23 @@ SRC_URI = "file://init \
            file://71-weston-drm.rules \
            file://weston-start"
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 do_install() {
-    install -Dm755 ${WORKDIR}/init ${D}/${sysconfdir}/init.d/weston
-    install -D -p -m0644 ${WORKDIR}/weston.ini ${D}${sysconfdir}/xdg/weston/weston.ini
-    install -Dm644 ${WORKDIR}/weston.env ${D}${sysconfdir}/default/weston
+    install -Dm755 ${S}/init ${D}/${sysconfdir}/init.d/weston
+    install -D -p -m0644 ${S}/weston.ini ${D}${sysconfdir}/xdg/weston/weston.ini
+    install -Dm644 ${S}/weston.env ${D}${sysconfdir}/default/weston
 
     # Install Weston systemd service and accompanying udev rule
-    install -D -p -m0644 ${WORKDIR}/weston@.service ${D}${systemd_system_unitdir}/weston@.service
+    install -D -p -m0644 ${S}/weston@.service ${D}${systemd_system_unitdir}/weston@.service
     sed -i -e s:/etc:${sysconfdir}:g \
         -e s:/usr/bin:${bindir}:g \
         -e s:/var:${localstatedir}:g \
         ${D}${systemd_unitdir}/system/weston@.service
-    install -D -p -m0644 ${WORKDIR}/71-weston-drm.rules \
+    install -D -p -m0644 ${S}/71-weston-drm.rules \
         ${D}${sysconfdir}/udev/rules.d/71-weston-drm.rules
     # Install weston-start script
-    install -Dm755 ${WORKDIR}/weston-start ${D}${bindir}/weston-start
+    install -Dm755 ${S}/weston-start ${D}${bindir}/weston-start
     sed -i 's,@DATADIR@,${datadir},g' ${D}${bindir}/weston-start
     sed -i 's,@LOCALSTATEDIR@,${localstatedir},g' ${D}${bindir}/weston-start
     if [ "${USE_WESTON_BACKEND_HEADLESS}" = "1" ]; then
@@ -56,7 +56,7 @@ do_install() {
 
     install -d ${D}/${sysconfdir}/xdg/weston
     # install weston.ini as sample settings of gl-renderer
-    install -m 644 ${WORKDIR}/weston.ini ${D}/${sysconfdir}/xdg/weston/
+    install -m 644 ${S}/weston.ini ${D}/${sysconfdir}/xdg/weston/
 
     # Checking for ivi-shell configuration
     # If ivi-shell is enable, we will add its configs to weston.ini
@@ -74,7 +74,7 @@ do_install() {
 
     # Set XDG_RUNTIME_DIR to /run/user/$UID (e.g. run/user/0)
     install -d ${D}/${sysconfdir}/profile.d
-    install -m 0755 ${WORKDIR}/weston.sh ${D}/${sysconfdir}/profile.d/weston.sh
+    install -m 0755 ${S}/weston.sh ${D}/${sysconfdir}/profile.d/weston.sh
 
     # Add DP-1 output configuration for ironhide machine
     if [ "${MACHINE}" = "ironhide" ]; then

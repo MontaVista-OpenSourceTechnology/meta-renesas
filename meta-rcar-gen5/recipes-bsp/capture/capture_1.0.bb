@@ -6,7 +6,6 @@ DEPENDS:rcar-gen5 = "libdrm kernel-module-cmemdrv opencv"
 
 inherit pkgconfig
 
-S = "${WORKDIR}/git"
 
 SRC_URI = "git://github.com/renesas-rcar/capture.git;protocol=https;nobranch=1"
 
@@ -44,4 +43,5 @@ FILES:${PN} = " \
 "
 
 INSANE_SKIP:${PN} += "ldflags"
-
+INSANE_SKIP:${PN} += "buildpaths"
+INSANE_SKIP:${PN}-dbg += "buildpaths"

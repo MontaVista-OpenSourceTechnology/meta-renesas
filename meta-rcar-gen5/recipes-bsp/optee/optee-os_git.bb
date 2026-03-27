@@ -17,14 +17,13 @@ SRCREV = "03f315805131bed4d4282045464e04b504797099"
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
 "
-S = "${WORKDIR}/git"
 
 COMPATIBLE_MACHINE = "ironhide"
 PLATFORM = "rcar_gen5"
 
 DEPENDS = "python3-pycryptodome-native python3-pyelftools-native python3-cryptography-native libgcc"
 
-export CROSS_COMPILE64="${TARGET_PREFIX}"
+export CROSS_COMPILE64 = "${TARGET_PREFIX}"
 CFLAGS += "--sysroot=${RECIPE_SYSROOT}"
 
 # Let the Makefile handle setting up the flags as it is a standalone application

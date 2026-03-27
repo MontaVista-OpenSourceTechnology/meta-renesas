@@ -14,7 +14,6 @@ DEPENDS = "libgbm wayland-kms libdrm wayland wayland-native wayland-protocols"
 
 inherit autotools pkgconfig
 
-S = "${WORKDIR}/git"
 
 PACKAGES = " \
     ${PN} \

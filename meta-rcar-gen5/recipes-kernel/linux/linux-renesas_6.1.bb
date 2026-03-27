@@ -44,24 +44,25 @@ do_install:append:rcar-gen5() {
     # Install dmatest module
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     mv ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/kernel/drivers/dma/dmatest.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
-    install -m 644 ${WORKDIR}/rcar_hwspinlock_test.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${UNPACKDIR}/rcar_hwspinlock_test.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
 
 do_install:append:r8a78000() {
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
-    install -m 644 ${WORKDIR}/mvq32xx.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
-    install -m 644 ${WORKDIR}/ar0820.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
-    install -m 644 ${WORKDIR}/imx728.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
-    install -m 644 ${WORKDIR}/max96712.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${UNPACKDIR}/mvq32xx.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${UNPACKDIR}/ar0820.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${UNPACKDIR}/imx728.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+    install -m 644 ${UNPACKDIR}/max96712.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
 
 # Install MP-PHY firmware to staging directory if enabled for R-Car X5H board
 do_install_mp_phy_firmware () {
-    if [ "${MACHINE}" = "ironhide" ] && [ -f ${WORKDIR}/rcar_gen5_mp_phy.bin ]; then
+    if [ "${MACHINE}" = "ironhide" ] && [ -f ${UNPACKDIR}/rcar_gen5_mp_phy.bin ]; then
         install -d ${STAGING_KERNEL_DIR}/firmware
-        install -m 644 ${WORKDIR}/rcar_gen5_mp_phy.bin ${STAGING_KERNEL_DIR}/firmware/
-        install -m 644 ${WORKDIR}/rcar_gen5_pcie6_iccm.bin ${STAGING_KERNEL_DIR}/firmware/
-        install -m 644 ${WORKDIR}/rcar_gen5_pcie6_dccm.bin ${STAGING_KERNEL_DIR}/firmware/
+        install -m 644 ${UNPACKDIR}/rcar_gen5_mp_phy.bin ${STAGING_KERNEL_DIR}/firmware/
+        install -m 644 ${UNPACKDIR}/rcar_gen5_pcie6_iccm.bin ${STAGING_KERNEL_DIR}/firmware/
+        install -m 644 ${UNPACKDIR}/rcar_gen5_pcie6_dccm.bin ${STAGING_KERNEL_DIR}/firmware/
+        install -m 644 ${UNPACKDIR}/rcar_gen5_mp_phy.bin ${STAGING_KERNEL_DIR}/firmware/
     fi
 }
 

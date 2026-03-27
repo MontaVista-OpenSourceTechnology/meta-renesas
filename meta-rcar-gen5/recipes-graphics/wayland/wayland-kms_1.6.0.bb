@@ -10,7 +10,6 @@ SRCREV = "15184e5bd3701938a6b30b8f03b471477fc742e8"
 SRC_URI = "git://github.com/renesas-rcar/wayland-kms.git;branch=rcar-gen3;protocol=https"
 
 COMPATIBLE_MACHINE = "x5h|ironhide"
-S = "${WORKDIR}/git"
 DEPENDS = "libdrm wayland gles-user-module wayland-native"
 
 inherit autotools pkgconfig

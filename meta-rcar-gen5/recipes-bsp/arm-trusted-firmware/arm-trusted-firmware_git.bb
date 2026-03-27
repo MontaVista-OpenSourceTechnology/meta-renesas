@@ -7,7 +7,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy
 
-S = "${WORKDIR}/git"
 
 BRANCH:x5h = "rcar_gen5_2.12.0_vdk"
 BRANCH:r8a78000 = "rcar_gen5_2.12.0"
@@ -24,7 +23,7 @@ ATFW_OPT:x5h = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 SPD=none LOG_LEVEL=40 DEBUG=0
 ATFW_OPT:r8a78000 = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 LOG_LEVEL=20 DEBUG=0 SET_SCMI_PARAM=1"
 
 # requires CROSS_COMPILE set by hand as there is no configure script
-export CROSS_COMPILE="${TARGET_PREFIX}"
+export CROSS_COMPILE = "${TARGET_PREFIX}"
 
 # Let the Makefile handle setting up the CFLAGS and LDFLAGS as it is a standalone application
 CFLAGS[unexport] = "1"

@@ -22,7 +22,7 @@ sha256sum=43d07f6ded7dbe2f3f034838cfed99b962334c702b8ada66d7d1d8b6f0dcd4c0"
 
 SRC_URI:append = " file://blacklist.conf"
 
-S = "${WORKDIR}/rogue_km"
+S = "${UNPACKDIR}/rogue_km"
 
 KBUILD_DIR = "${S}/build/linux/r8a78000_linux"
 KBUILD_OUTDIR = "binary_r8a78000_linux_nullws_drm_release/target_aarch64/kbuild"
@@ -49,7 +49,7 @@ module_do_install() {
     rm ${D}/etc/powervr_ddk_install_km.log
     # Install blacklist config file
     install -d ${D}${sysconfdir}/modprobe.d
-    install -m 644 ${WORKDIR}/blacklist.conf ${D}${sysconfdir}/modprobe.d/blacklist.conf
+    install -m 644 ${UNPACKDIR}/blacklist.conf ${D}${sysconfdir}/modprobe.d/blacklist.conf
     if ${@bb.utils.contains('DISTRO_FEATURES', 'usrmerge', 'true', 'false', d)}; then
         mv ${D}/lib/modules/${KERNEL_VERSION}/* ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/
         rm -rf ${D}/lib

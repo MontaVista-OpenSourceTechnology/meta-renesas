@@ -22,7 +22,6 @@ COMPATIBLE_MACHINE = "ironhide"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-S = "${WORKDIR}/git"
 
 EXTRA_OEMAKE = "PKG_CONFIG=pkg-config  RPMB_EMU=0"
 
@@ -49,7 +48,7 @@ do_install () {
     # Install systemd service configure file for OP-TEE client
     if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
         install -d ${D}/${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/optee.service ${D}/${systemd_system_unitdir}
+        install -m 0644 ${UNPACKDIR}/optee.service ${D}/${systemd_system_unitdir}
     fi
 }
 

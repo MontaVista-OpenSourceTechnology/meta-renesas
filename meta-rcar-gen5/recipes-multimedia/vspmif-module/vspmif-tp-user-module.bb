@@ -6,7 +6,6 @@ DEPENDS = "vspmif-user-module"
 PN = "vspmif-tp-user-module"
 PR = "r0"
 
-S = "${WORKDIR}/git"
 VSPMIF_TP_DIR = "vspm_if-tp-user/files/vspm_if"
 
 # Get Wordsize of test app and change their names later to avoid override

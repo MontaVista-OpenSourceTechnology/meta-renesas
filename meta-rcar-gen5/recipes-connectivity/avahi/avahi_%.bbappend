@@ -4,7 +4,7 @@ SRC_URI:append = " \
 "
 
 do_install:append() {
-    install -m 644 ${WORKDIR}/ssh.service ${D}${sysconfdir}/avahi/services
+    install -m 644 ${UNPACKDIR}/ssh.service ${D}${sysconfdir}/avahi/services
 }
 
 FILES:avahi-daemon:append = " \

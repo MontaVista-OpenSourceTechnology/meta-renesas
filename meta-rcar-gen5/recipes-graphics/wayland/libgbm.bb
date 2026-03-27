@@ -8,7 +8,6 @@ LIC_FILES_CHKSUM = " \
 SRCREV = "538889dee7940cbcd8f384ff24436c785181cfdb"
 SRC_URI = "git://github.com/renesas-rcar/libgbm;branch=match-mesa-20.0.1;protocol=https"
 
-S = "${WORKDIR}/git"
 
 COMPATIBLE_MACHINE = "x5h|ironhide"
 DEPENDS = "wayland-kms udev"

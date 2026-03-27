@@ -6,7 +6,6 @@ DEPENDS = "kernel-module-vspm-if"
 PN = "vspmif-user-module"
 PR = "r0"
 
-S = "${WORKDIR}/git"
 VSPMIF_LIB_DIR = "vspm_if-module/files/vspm_if"
 
 EXTRA_OEMAKE = "ARCH=${TARGET_ARCH}"

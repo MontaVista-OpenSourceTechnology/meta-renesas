@@ -14,7 +14,6 @@ SRC_URI = " \
 "
 SRCREV = "0c9bd4e3fe26ec32928d2a3e93b618857ff50e26"
 
-S = "${WORKDIR}/git"
 
 LICENSE = "GPL-2.0-or-later & LGPL-2.0-or-later & LGPL-2.1-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=73a5855a8119deb017f5f13cf327095d \

@@ -11,3 +11,8 @@ DEPENDS = "sysfsutils"
 
 inherit cmake
 
+EXTRA_OECMAKE += " \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    -DCMAKE_PROJECT_NAME=libmetal \
+    -DWITH_TESTS=OFF \
+"

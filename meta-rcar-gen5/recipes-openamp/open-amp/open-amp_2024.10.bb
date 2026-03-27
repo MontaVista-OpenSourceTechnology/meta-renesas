@@ -20,6 +20,7 @@ EXTRA_OECMAKE = " \
     -DLIBMETAL_INCLUDE_DIR=${STAGING_INCDIR} \
     -DLIBMETAL_LIB=${STAGING_LIBDIR}/libmetal.so \
     -DCMAKE_C_FLAGS='-I${S}/lib/include' \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 "
 
 FILES:${PN} = " \

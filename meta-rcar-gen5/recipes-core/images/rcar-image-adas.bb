@@ -4,7 +4,6 @@ require recipes-core/images/rcar-image-minimal.bb
 
 # Handle extra features
 RENESAS_EXTRA_IMAGE_FEATURES = " \
-    debug-tweaks \
     dev-pkgs \
     tools-sdk \
     tools-profile \

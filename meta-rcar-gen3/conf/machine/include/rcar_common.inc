@@ -44,3 +44,6 @@ PREFERRED_VERSION_gstreamer1.0-plugins-base = "${@bb.utils.contains('MACHINE_FEA
 PREFERRED_VERSION_gstreamer1.0-plugins-bad = "${@bb.utils.contains('MACHINE_FEATURES', 'multimedia', '1.20.3', '', d)}"
 PREFERRED_VERSION_gstreamer1.0-plugins-good = "${@bb.utils.contains('MACHINE_FEATURES', 'multimedia', '1.20.3', '', d)}"
 PREFERRED_VERSION_gstreamer1.0-plugins-ugly = "${@bb.utils.contains('MACHINE_FEATURES', 'multimedia', '1.20.3', '', d)}"
+
+# for e2fsprogs
+PREFERRED_VERSION_e2fsprogs = "1.47.1"

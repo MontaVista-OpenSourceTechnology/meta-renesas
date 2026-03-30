@@ -13,7 +13,7 @@ SRC_URI = "file://RTM8RC0000ZNA3SS00JFL3E.tar.gz"
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
-S = "${WORKDIR}/RTM8RC0000ZNA3SS00JFL3E"
+S = "${UNPACKDIR}/RTM8RC0000ZNA3SS00JFL3E"
 
 do_install() {
     # create the firmware dir

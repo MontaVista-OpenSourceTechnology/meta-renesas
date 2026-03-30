@@ -15,7 +15,7 @@ export USE_MMNGR = "${USE_MULTIMEDIA}"
 PN = "iccom-tp-user-module"
 PR = "r0"
 
-S = "${WORKDIR}/libiccom"
+S = "${UNPACKDIR}/libiccom"
 
 do_compile() {
     cd ${S}/sample_test

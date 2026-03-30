@@ -16,8 +16,7 @@ SRC_URI = " \
     ${SRC_CMSDGC} \
 "
 
-S = "${WORKDIR}/${BPN}-${PV}"
-UNPACKDIR = "${S}"
+S = "${UNPACKDIR}/RTM8RC0000ZVC2LQ00JPL3E"
 
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"

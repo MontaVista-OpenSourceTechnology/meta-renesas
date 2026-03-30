@@ -14,7 +14,7 @@ PR = "r0"
 # (the setting of 4 means that ERROR and FATAL log are output)
 export MEG_LEV = "4"
 
-S = "${WORKDIR}/libiccom"
+S = "${UNPACKDIR}/libiccom"
 B = "${S}/source"
 
 includedir = "${RENESAS_DATADIR}/include"

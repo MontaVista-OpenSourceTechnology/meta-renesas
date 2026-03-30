@@ -9,7 +9,7 @@ DEPENDS = "kernel-module-avb-streaming"
 
 SRC_URI:append = " file://0003-avbtool-allow-to-append-application-cflags.patch"
 
-S = "${WORKDIR}/git/avbtool"
+S = "${UNPACKDIR}/${BP}/avbtool"
 
 EXTRA_OEMAKE = "'CC=${CC}'"
 

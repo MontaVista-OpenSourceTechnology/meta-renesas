@@ -12,7 +12,7 @@ REQUIRED_DISTRO_FEATURES = "adsp"
 
 SRC_URI = "file://RTM8RC0000ZNA1SS00JFL3E.tar.gz"
 
-S = "${WORKDIR}/RTM8RC0000ZNA1SS00JFL3E"
+S = "${UNPACKDIR}/RTM8RC0000ZNA1SS00JFL3E"
 
 # Don't need to do_configure
 do_configure[noexec] = "1"

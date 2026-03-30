@@ -12,7 +12,7 @@ REQUIRED_DISTRO_FEATURES = "imr"
 
 SRC_URI = "file://RTM8RC0000ZRRDSS00JPL3E.tar.gz"
 
-S = "${WORKDIR}/drivers/imr"
+S = "${UNPACKDIR}/drivers/imr"
 
 RCAR_SOC:r8a7795 = "h3"
 RCAR_SOC:r8a7796 = "m3"

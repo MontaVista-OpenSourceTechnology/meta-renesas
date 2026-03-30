@@ -17,7 +17,7 @@ PR = "r0"
 SRC_URI = "file://iccom-hwspinlock-sample.tar.bz2"
 SRC_URI:append = " file://0001-iccom-hwspinlock-sample-rename-ioremap-nocache.patch"
 
-S = "${WORKDIR}/iccom-hwspinlock-sample"
+S = "${UNPACKDIR}/iccom-hwspinlock-sample"
 B = "${S}/iccom-hwspinlock-sample"
 
 # Build ICCOM kernel module without suffix

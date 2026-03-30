@@ -14,7 +14,7 @@ SRC_URI = " \
     file://RTM8RC0000ZSAL2S00JPL3E.tar.bz2 \
     file://51-uio.rules \
 "
-S = "${WORKDIR}/os"
+S = "${UNPACKDIR}/os"
 
 do_configure[noexec] = "1"
 

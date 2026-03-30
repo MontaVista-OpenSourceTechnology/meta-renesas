@@ -1,6 +1,7 @@
 FILESEXTRAPATHS:prepend:rcar-gen3 := "${THISDIR}/${PN}:"
 
 SRC_URI:append:rcar-gen3 = " file://drm-backend-remove-gbm-version-check.patch"
+SRC_URI:append:rcar-gen3 = " file://HACK-remove-gl-renderer-assert.patch"
 
 require include/gles-control.inc
 require include/multimedia-control.inc

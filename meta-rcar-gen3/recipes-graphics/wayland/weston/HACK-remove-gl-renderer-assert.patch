@@ -1,0 +1,28 @@
+Upstream-Status: Inappropriate [oe specific]
+---
+diff --git a/libweston/renderer-gl/gl-renderer.c b/libweston/renderer-gl/gl-renderer.c
+index 8064b41..ef3cfe6 100644
+--- a/libweston/renderer-gl/gl-renderer.c
++++ b/libweston/renderer-gl/gl-renderer.c
+@@ -4789,8 +4789,8 @@ gl_renderer_setup(struct weston_compositor *ec)
+ 	if (gr->gl_version >= gr_gl_version(3, 0)) {
+ 		gr->map_buffer_range = (void *) eglGetProcAddress("glMapBufferRange");
+ 		gr->unmap_buffer = (void *) eglGetProcAddress("glUnmapBuffer");
+-		assert(gr->map_buffer_range);
+-		assert(gr->unmap_buffer);
++		//assert(gr->map_buffer_range);
++		//assert(gr->unmap_buffer);
+ 		gr->pbo_usage = GL_STREAM_READ;
+ 		gr->has_pbo = true;
+ 	} else if (gr->gl_version >= gr_gl_version(2, 0) &&
+@@ -4799,8 +4799,8 @@ gl_renderer_setup(struct weston_compositor *ec)
+ 		   weston_check_egl_extension(extensions, "GL_OES_mapbuffer")) {
+ 		gr->map_buffer_range = (void *) eglGetProcAddress("glMapBufferRangeEXT");
+ 		gr->unmap_buffer = (void *) eglGetProcAddress("glUnmapBufferOES");
+-		assert(gr->map_buffer_range);
+-		assert(gr->unmap_buffer);
++		//assert(gr->map_buffer_range);
++		//assert(gr->unmap_buffer);
+ 		/* Reading isn't exposed to BufferData() on ES 2.0 and
+ 		 * NV_pixel_buffer_object mentions that "glMapBufferOES does not
+ 		 * allow reading from the mapped pointer". EXT_map_buffer_range

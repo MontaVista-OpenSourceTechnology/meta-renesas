@@ -14,7 +14,7 @@ do_compile[noexec] = "1"
 
 do_install () {
     install -d ${D}${sysconfdir}/init.d/
-    install -m 0755 ${S}/set_nvme_rq_affinity.sh ${D}${sysconfdir}/init.d/
+    install -m 0755 ${UNPACKDIR}/set_nvme_rq_affinity.sh ${D}${sysconfdir}/init.d/
 }
 
 RDEPENDS:${PN} = "bash"

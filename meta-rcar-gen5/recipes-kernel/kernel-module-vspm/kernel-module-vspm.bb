@@ -16,11 +16,8 @@ PN = "kernel-module-vspm"
 PR = "r0"
 
 VSPM_DRV_URL = "git://github.com/renesas-rcar/vspm_drv.git"
-BRANCH:x5h = "rcar_gen5_v4.18.0"
-SRCREV:x5h = "e83fc3a5d5592bcd84c5f5eddc77280b2b6f1e9e"
-
-BRANCH:r8a78000 = "rcar_gen5_v4.26.0"
-SRCREV:r8a78000 = "5b2b41e643cd610fa9cdaa9f35245a2d2cb55577"
+BRANCH = "rcar_gen5_v4.18.0"
+SRCREV = "e83fc3a5d5592bcd84c5f5eddc77280b2b6f1e9e"
 
 SRC_URI = "${VSPM_DRV_URL};branch=${BRANCH};protocol=https"
 

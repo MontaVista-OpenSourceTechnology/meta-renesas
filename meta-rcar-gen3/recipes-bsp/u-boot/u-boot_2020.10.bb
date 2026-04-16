@@ -1,5 +1,5 @@
 require u-boot-common.inc
-require u-boot.inc
+require recipes-bsp/u-boot/u-boot.inc
 
 DEPENDS += "lzop-native srecord-native"
 

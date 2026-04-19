@@ -12,14 +12,14 @@ COMPATIBLE_MACHINE = "salvator-x|h3ulcb|m3ulcb|m3nulcb|ebisu|draak|geist"
 
 RENESAS_BSP_URL = " \
     git://github.com/renesas-rcar/linux-bsp.git"
-BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v5.10.235/rcar-5.3.8.rc1", d)}"
+BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v6.1.166/rcar-5.3.9.rc1", d)}"
 SRCREV = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", \
     "e2037726e5f6c3d6de6bc7d78b50ea9e2248a00d", \
-    "4cf264797ea1872baba7cec392eb4d98c97a6828", d)}"
+    "c3dd56d2f3ef8b5eecdd589b143f823ac7611eb2", d)}"
 
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${BRANCH};protocol=https"
 
-LINUX_VERSION ?= "5.10.235"
+LINUX_VERSION ?= "6.1.166"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 PR = "r1"
 
@@ -32,10 +32,6 @@ SRC_URI:append = " \
     ${@oe.utils.conditional("USE_AVB", "1", " file://usb-video-class.cfg", "", d)} \
 "
 
-# Add module.lds
-SRC_URI:append = " \
-    file://0001-scripts-Add-module.lds-to-fix-out-of-tree-modules-bu.patch \
-"
 
 # Enable RPMSG_VIRTIO; device tree H3/M3-W+/M3-W/M3N depend on ICCOM
 SUPPORT_ICCOM = " \
@@ -80,8 +76,6 @@ SRC_URI:append = " \
     ${@bb.utils.contains('MACHINE_FEATURES', 'usb3', 'file://usb3.cfg', 'file://disable_fw_loader_user_helper.cfg', d)} \
 "
 
-# Work-around to fix perf build error
-SRC_URI:append = " file://init_disassemble_info-signature-changes-causes-compile-failures.patch"
 
 do_download_firmware () {
     install -d ${STAGING_KERNEL_DIR}/firmware

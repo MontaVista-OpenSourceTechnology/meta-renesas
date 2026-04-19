@@ -19,7 +19,7 @@ SERIAL_CONSOLES = "115200;ttySC0"
 
 # Configuration for kernel
 PREFERRED_PROVIDER_virtual/kernel = "linux-renesas"
-OLDEST_KERNEL = "5.10"
+OLDEST_KERNEL = "6.1"
 
 # Configuration for ARM Trusted Firmware
 EXTRA_IMAGEDEPENDS += " arm-trusted-firmware optee-os"

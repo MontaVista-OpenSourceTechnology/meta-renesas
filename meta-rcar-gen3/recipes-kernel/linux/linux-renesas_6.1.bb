@@ -29,6 +29,7 @@ KBUILD_DEFCONFIG = "defconfig"
 
 SRC_URI:append = " \
     file://touch.cfg \
+    file://disable_localversion_auto.cfg \
     ${@oe.utils.conditional("USE_AVB", "1", " file://usb-video-class.cfg", "", d)} \
 "
 

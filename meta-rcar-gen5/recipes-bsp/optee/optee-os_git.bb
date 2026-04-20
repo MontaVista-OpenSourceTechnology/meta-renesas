@@ -12,7 +12,7 @@ inherit deploy python3native
 PV = "4.4+renesas+git${SRCPV}"
 
 BRANCH = "rcar-gen5_4.4.0"
-SRCREV = "5382260cfe20a6ae12dfdc8661a8e975f16cefb5"
+SRCREV = "03f315805131bed4d4282045464e04b504797099"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
@@ -47,9 +47,9 @@ do_deploy() {
     install -d ${DEPLOYDIR}
 
     # Copy TEE OS to deploy folder
-    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.elf ${DEPLOYDIR}/tee-${MACHINE}.elf
-    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.bin ${DEPLOYDIR}/tee-${MACHINE}.bin
-    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.srec ${DEPLOYDIR}/tee-${MACHINE}.srec
+    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.elf ${DEPLOYDIR}/apu-tee-${MACHINE}.elf
+    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.bin ${DEPLOYDIR}/apu-tee-${MACHINE}.bin
+    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.srec ${DEPLOYDIR}/apu-tee-${MACHINE}.srec
 }
 
 addtask deploy before do_build after do_compile

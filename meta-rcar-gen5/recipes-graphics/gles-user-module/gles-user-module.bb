@@ -20,7 +20,7 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI:r8a78000 = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=37fad8530d67fef5098640c4007ed20fffca265b533c9a1aa538036fb777a960"
+sha256sum=b92b7914ee3a224e20634c1c7ce36ff68ff56dda89794d22aa2c68fcfe8362fa"
 
 SRC_URI:x5h = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
 sha256sum=37fad8530d67fef5098640c4007ed20fffca265b533c9a1aa538036fb777a960"
@@ -77,7 +77,7 @@ do_install() {
     # Install pre-built binaries
     install -d ${D}${libdir}
     install -d ${D}${libdir}/cmake/VulkanLoader
-    install -m 755 ${S}/usr/lib/*.so ${D}${libdir}/
+    install -m 755 ${S}/usr/lib/*.so* ${D}${libdir}/
     install -d ${D}${RENESAS_DATADIR}/bin
     install -m 755 ${S}/usr/local/bin/dlcsrv_REL ${D}${RENESAS_DATADIR}/bin/dlcsrv_REL
     install -d ${D}${nonarch_base_libdir}/firmware
@@ -93,7 +93,6 @@ do_install() {
     cd ${D}${libdir}
     ln -s libEGL.so libEGL.so.1
     ln -s libGLESv2.so libGLESv2.so.2
-    ln -s libvulkan.so libvulkan.so.1
     ln -s libPVROCL.so libPVROCL.so.1
 
     # Install systemd service

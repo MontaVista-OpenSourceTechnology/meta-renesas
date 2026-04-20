@@ -15,7 +15,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 require include/rcar-gfx-common.inc
 
 SRC_URI:r8a78000 = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
-sha256sum=12eebdb68068782adf6ada9956db488e177cc0715a1c33086e6836fd8c0bf74c"
+sha256sum=d32906f32f973ca3bca3bb86e3f80e2eb565efbffb16833d02358f726de7ab3a"
 
 SRC_URI:x5h = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
 sha256sum=43d07f6ded7dbe2f3f034838cfed99b962334c702b8ada66d7d1d8b6f0dcd4c0"

@@ -4,8 +4,8 @@ HOMEPAGE = "https://github.com/OpenAMP/open-amp"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dfc0adf4d04cc738ba65b7d3f587dca5"
 
-SRC_URI = "git://github.com/renesas-rcar/open-amp.git;protocol=https;branch=v2024.10/rcar_v2025.06"
-SRCREV = "b656279a38a51bfc2e207c2df2f4c794c5f236e2"
+SRC_URI = "git://github.com/renesas-rcar/open-amp.git;protocol=https;branch=v2024.10/rcar_v2026.04"
+SRCREV = "606aed30695aac6695ec7a3aab60aa5a74792560"
 
 S = "${WORKDIR}/git"
 

@@ -26,6 +26,9 @@ DEPENDS = "python3-pycryptodome-native python3-pyelftools-native"
 
 export CROSS_COMPILE64 = "${TARGET_PREFIX}"
 
+# Avoid compile error "cannot find libgcc.a" with GCC 15.0.2
+CFLAGS += "--sysroot=${STAGING_DIR_TARGET}"
+
 # Let the Makefile handle setting up the flags as it is a standalone application
 #LD[unexport] = "1"
 LDFLAGS[unexport] = "1"

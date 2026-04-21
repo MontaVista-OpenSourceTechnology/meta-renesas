@@ -41,6 +41,9 @@ EXTRA_OEMAKE = "-e MAKEFLAGS="
 # Avoid compile error with GCC 10.2.0
 CFLAGS += "-mno-outline-atomics"
 
+# Avoid compile error "cannot find libgcc.a" with GCC 15.0.2
+CFLAGS += "--sysroot=${STAGING_DIR_TARGET}"
+
 do_compile() {
     export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
     oe_runmake PLATFORM=${PLATFORM} CFG_ARM64_core=y

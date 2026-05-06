@@ -2,20 +2,16 @@ SUMMARY = "System call tracing tool"
 HOMEPAGE = "http://strace.io"
 SECTION = "console/utils"
 LICENSE = "LGPL-2.1-or-later & GPL-2.0-or-later"
-LIC_FILES_CHKSUM = "file://COPYING;md5=c756d9d5dabc27663df64f0bf492166c"
+LIC_FILES_CHKSUM = "file://COPYING;md5=cbd758b0545b678cd7ac09c683ade002"
 
 SRC_URI = "https://strace.io/files/${PV}/strace-${PV}.tar.xz \
-           file://disable-git-version-gen.patch \
-           file://update-gawk-paths.patch \
-           file://Makefile-ptest.patch \
            file://run-ptest \
            file://mips-SIGEMT.patch \
-           file://0001-caps-abbrev.awk-fix-gawk-s-path.patch \
            file://ptest-spacesave.patch \
-           file://uintptr_t.patch \
+           file://update-gawk-paths.patch \
            file://0001-strace-fix-reproducibilty-issues.patch \
            "
-SRC_URI[sha256sum] = "fe3982ea4cd9aeb3b4ba35f6279f0b577a37175d3282be24b9a5537b56b8f01c"
+SRC_URI[sha256sum] = "2579e9cec37dbb786f6ea0bebd15f40dd561ef2bde2a2a2ecdce5963b01859fd"
 
 inherit autotools ptest
 
@@ -35,7 +31,7 @@ PTEST_BUILD_HOST_PATTERN = "^(DEB_CHANGELOGTIME|RPM_CHANGELOGTIME|WARN_CFLAGS_FO
 
 do_install:append() {
 	# We don't ship strace-graph here because it needs perl
-	rm ${D}${bindir}/strace-graph
+	rm -rf ${D}${bindir}/strace-graph
 }
 
 do_compile_ptest() {

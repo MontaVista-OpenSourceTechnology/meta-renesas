@@ -18,7 +18,11 @@ SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
 
 # Add MP-PHY firmware conditionally for R-Car X5H board
 SRC_URI:append:r8a78000 = " \
-    ${@bb.utils.contains('MACHINE_FEATURES', 'mp-phy', 'file://rcar_gen5_mp_phy.bin file://mp-phy.cfg', '', d)} \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'rcar-firmware', \
+        'file://rcar_gen5_mp_phy.bin \
+        file://rcar_gen5_pcie6_iccm.bin \
+        file://rcar_gen5_pcie6_dccm.bin \
+        file://rcar-fw.cfg', '', d)} \
 "
 
 LINUX_VERSION ?= "6.1.102"
@@ -56,6 +60,8 @@ do_install_mp_phy_firmware () {
     if [ "${MACHINE}" = "ironhide" ] && [ -f ${WORKDIR}/rcar_gen5_mp_phy.bin ]; then
         install -d ${STAGING_KERNEL_DIR}/firmware
         install -m 644 ${WORKDIR}/rcar_gen5_mp_phy.bin ${STAGING_KERNEL_DIR}/firmware/
+        install -m 644 ${WORKDIR}/rcar_gen5_pcie6_iccm.bin ${STAGING_KERNEL_DIR}/firmware/
+        install -m 644 ${WORKDIR}/rcar_gen5_pcie6_dccm.bin ${STAGING_KERNEL_DIR}/firmware/
     fi
 }
 

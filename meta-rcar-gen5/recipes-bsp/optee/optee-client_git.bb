@@ -15,7 +15,7 @@ SRC_URI += " \
     file://0001-tee-supplicant-Delete-the-sleep-time-when-writing-da.patch \
 "
 
-inherit python3native systemd
+inherit python3native systemd pkgconfig
 SYSTEMD_SERVICE:${PN} = "optee.service"
 
 COMPATIBLE_MACHINE = "ironhide"

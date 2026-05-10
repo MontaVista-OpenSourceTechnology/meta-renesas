@@ -1,0 +1,28 @@
+From f66aa0e8c372f91a7e8f29f4e45961ca6ba9e8ce Mon Sep 17 00:00:00 2001
+From: Dy Le <dy.le.yb@bp.renesas.com>
+Date: Sun, 10 May 2026 18:19:37 +0700
+Subject: [PATCH] video: Include gstvideodmabufpool.h from video.h
+
+Upstream-Status: Backport [https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10411]
+
+Signed-off-by: Dy Le <dy.le.yb@bp.renesas.com>
+---
+ gst/librfb/gstrfbsrc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gst/librfb/gstrfbsrc.h b/gst/librfb/gstrfbsrc.h
+index 81ebd45bb..fcad1c226 100644
+--- a/gst/librfb/gstrfbsrc.h
++++ b/gst/librfb/gstrfbsrc.h
+@@ -24,7 +24,7 @@
+ 
+ #include <gst/gst.h>
+ #include <gst/base/gstpushsrc.h>
+-#include <gst/video/gstvideopool.h>
++#include <gst/video/video.h>
+ 
+ #include "rfbdecoder.h"
+ 
+-- 
+2.25.1
+

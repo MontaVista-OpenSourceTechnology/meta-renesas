@@ -7,6 +7,7 @@ BUGTRACKER = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/issues"
 SRC_URI = " \
     gitsm://github.com/renesas-rcar/gst-plugins-bad.git;branch=RCAR-GEN5/1.16.3;protocol=https \
     file://0001-meson-build-gir-even-when-cross-compiling-if-introsp.patch \
+    file://0002-video-Include-gstvideodmabufpool.h-from-video.h.patch \
     file://fix-maybe-uninitialized-warnings-when-compiling-with-Os.patch \
     file://avoid-including-sys-poll.h-directly.patch \
     file://ensure-valid-sentinels-for-gst_structure_get-etc.patch \

@@ -6,7 +6,7 @@ DEPENDS = "kernel-module-pci-interface"
 PN = "pci-interface-lib"
 PR = "r0"
 
-S = "${WORKDIR}/git/rpci_if-module"
+S = "${UNPACKDIR}/git/rpci_if-module"
 
 do_install() {
     # Create destination directories

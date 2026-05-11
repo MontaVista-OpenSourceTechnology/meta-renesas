@@ -6,7 +6,7 @@ DEPENDS = "pci-interface-lib"
 PN = "pci-interface-tp"
 PR = "r0"
 
-S = "${WORKDIR}/git/rpci_if-tp-user"
+S = "${UNPACKDIR}/git/rpci_if-tp-user"
 
 do_compile() {
     cd ${S}

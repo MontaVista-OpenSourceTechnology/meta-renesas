@@ -21,7 +21,7 @@ SRCREV = "e83fc3a5d5592bcd84c5f5eddc77280b2b6f1e9e"
 
 SRC_URI = "${VSPM_DRV_URL};branch=${BRANCH};protocol=https"
 
-B = "${WORKDIR}/git/vspm-module/files/vspm/drv"
+B = "${UNPACKDIR}/git/vspm-module/files/vspm/drv"
 includedir = "${RENESAS_DATADIR}/include"
 
 # Build VSP Manager kernel module without suffix

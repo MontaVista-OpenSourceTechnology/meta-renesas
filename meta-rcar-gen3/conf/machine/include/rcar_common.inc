@@ -7,6 +7,7 @@ USE_32BIT_WAYLAND ?= "0"
 USE_32BIT_MMP ?= "0"
 
 MACHINE_FEATURES = ""
+require include/linux-rt-control.inc
 
 KERNEL_IMAGETYPE = "Image"
 IMAGE_FSTYPES += " tar.bz2 ext4 wic.xz wic.bmap wic.xz.sha256sum"

@@ -12,10 +12,16 @@ COMPATIBLE_MACHINE = "salvator-x|h3ulcb|m3ulcb|m3nulcb|ebisu|draak|geist"
 
 RENESAS_BSP_URL = " \
     git://github.com/renesas-rcar/linux-bsp.git"
-BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v6.1.166/rcar-5.3.9.rc1", d)}"
-SRCREV = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", \
-    "e2037726e5f6c3d6de6bc7d78b50ea9e2248a00d", \
-    "c3dd56d2f3ef8b5eecdd589b143f823ac7611eb2", d)}"
+BRANCH = "${@ \
+    'rcar-5.1.4.rc3/saferendering.rc9' if d.getVar('USE_SAFE_RENDERING') == '1' else \
+    'v6.1.166/rcar-5.3.9-RT.rc1' if d.getVar('USE_LINUX_RT') == '1' else \
+    'v6.1.166/rcar-5.3.9.rc1' \
+}"
+SRCREV = "${@ \
+    'e2037726e5f6c3d6de6bc7d78b50ea9e2248a00d' if d.getVar('USE_SAFE_RENDERING') == '1' else \
+    'c4af994430598863d59fb694ed78ff7604012e17' if d.getVar('USE_LINUX_RT') == '1' else \
+    'c3dd56d2f3ef8b5eecdd589b143f823ac7611eb2' \
+}"
 
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${BRANCH};protocol=https"
 

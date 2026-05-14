@@ -3912,7 +3912,7 @@ index 0000000..cdac9db
 +
 +	snd_pcm_lib_preallocate_pages_for_all(runtime->pcm,
 +			SNDRV_DMA_TYPE_CONTINUOUS,
-+			snd_dma_continuous_data(GFP_KERNEL),
++			&component->dev ,
 +			alsa_buf_sz, alsa_buf_sz);
 +	return 0;
 +}
@@ -7867,7 +7867,7 @@ index 0000000..a445916
 +
 +	snd_pcm_lib_preallocate_pages_for_all(runtime->pcm,
 +			SNDRV_DMA_TYPE_CONTINUOUS,
-+			snd_dma_continuous_data(GFP_KERNEL),
++			&component->dev ,
 +			alsa_buf_sz, alsa_buf_sz);
 +	return 0;
 +}

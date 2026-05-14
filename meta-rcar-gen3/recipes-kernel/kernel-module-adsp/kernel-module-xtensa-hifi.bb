@@ -14,6 +14,10 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/xtensa-hifi:"
 
 SRC_URI = "file://RTM8RC0000ZNA2DS00JFL3E.tar.gz"
 
+SRC_URI:append = " \
+    file://0001-Update-progress-IRQ-to-adapt-with-Kernel-v6.1.166.patch \
+"
+
 S = "${WORKDIR}/RTM8RC0000ZNA2DS00JFL3E"
 
 # Define the extra config for using module.bbclass to build ADSP driver

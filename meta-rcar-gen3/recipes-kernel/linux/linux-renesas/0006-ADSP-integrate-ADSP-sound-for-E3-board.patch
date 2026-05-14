@@ -1,19 +1,25 @@
-Subject: ADSP integrate ADSP sound for E3 board
+From c6749a7ca9cc17280cd786f1d5119920b388f254 Mon Sep 17 00:00:00 2001
+From: Manh Hoang <manh.hoang.uh@bp.renesas.com>
+Date: Mon, 11 May 2026 12:38:00 +0700
+Subject: [PATCH] integrate ADSP sound for E3 board
 
 Integrating ADSP sound for E3 board,
 in case we use ADSP
-
 Upstream-Status: Inappropriate [configuration]
 
+Signed-off-by: Manh Hoang <manh.hoang.uh@bp.renesas.com>
 Signed-off-by: Loc Nguyen <loc.nguyen.wt@renesas.com>
-
 ---
+ arch/arm64/boot/dts/renesas/ebisu.dtsi        | 125 +++++++++++++++---
+ .../boot/dts/renesas/r8a77990-es10-ebisu.dts  | 114 +++++++++++++---
+ arch/arm64/boot/dts/renesas/r8a77990.dtsi     |   5 +
+ 3 files changed, 208 insertions(+), 36 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts b/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts
-index d2110f529f61..6768ee16375c 100644
---- a/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts
-+++ b/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts
-@@ -244,21 +244,28 @@
+diff --git a/arch/arm64/boot/dts/renesas/ebisu.dtsi b/arch/arm64/boot/dts/renesas/ebisu.dtsi
+index 8bb5a4f2b71d..1eb7dcb4c943 100644
+--- a/arch/arm64/boot/dts/renesas/ebisu.dtsi
++++ b/arch/arm64/boot/dts/renesas/ebisu.dtsi
+@@ -287,22 +287,29 @@ reg_12p0v: regulator-12p0v {
  		regulator-always-on;
  	};
  
@@ -32,6 +38,7 @@ index d2110f529f61..6768ee16375c 100644
 -		sndcpu: simple-audio-card,cpu {
 -			sound-dai = <&rcar_sound>;
 -		};
+-	};
 +	sound_card: sound {
 +		compatible = "audio-graph-scu-card";
 +
@@ -54,10 +61,11 @@ index d2110f529f61..6768ee16375c 100644
 +			&adsp_port2
 +			&adsp_port3
 +			&rsnd_port0>;
- 	};
++ 	};
  
  	vbus0_usb2: regulator-vbus0-usb2 {
-@@ -561,6 +568,31 @@
+ 		compatible = "regulator-fixed";
+@@ -603,6 +610,33 @@ ak4613: codec@10 {
  		asahi-kasei,out4-single-end;
  		asahi-kasei,out5-single-end;
  		asahi-kasei,out6-single-end;
@@ -86,10 +94,12 @@ index d2110f529f61..6768ee16375c 100644
 +				remote-endpoint = <&rsnd_endpoint0>;
 +			};
 +		};
++
++
  	};
  
  	cs2000: clk-multiplier@4f {
-@@ -749,6 +781,45 @@
+@@ -808,6 +842,46 @@ &pwm5 {
  	status = "okay";
  };
  
@@ -132,17 +142,18 @@ index d2110f529f61..6768ee16375c 100644
 +	};
 +};
 +
++
  &rcar_sound {
  	pinctrl-0 = <&sound_pins>, <&sound_clk_pins>;
  	pinctrl-names = "default";
-@@ -780,13 +851,22 @@
+@@ -839,10 +913,21 @@ &rcar_sound {
  		 <&audio_clk_a>, <&cs2000>, <&audio_clk_c>,
  		 <&cpg CPG_CORE R8A77990_CLK_ZA2>;
  
 -	rcar_sound,dai {
 -		dai0 {
 -			playback = <&ssi0>, <&src0>, <&dvc0>;
--			capture  = <&ssi1>, <&src1>, <&dvc1>;
+-			capture = <&ssi1>, <&src1>, <&dvc1>;
 +	ports {
 +		#address-cells = <1>;
 +		#size-cells = <0>;
@@ -157,40 +168,36 @@ index d2110f529f61..6768ee16375c 100644
 +				playback = <&ssi0 &src0 &dvc0>;
 +				capture  = <&ssi1 &src1 &dvc1>;
 +			};
++
  		};
  	};
--
- };
  
- &rwdt {
 diff --git a/arch/arm64/boot/dts/renesas/r8a77990-es10-ebisu.dts b/arch/arm64/boot/dts/renesas/r8a77990-es10-ebisu.dts
-index da4a2ca0d151..aa63d681ea85 100644
+index da4a2ca0d151..99a067223acf 100644
 --- a/arch/arm64/boot/dts/renesas/r8a77990-es10-ebisu.dts
 +++ b/arch/arm64/boot/dts/renesas/r8a77990-es10-ebisu.dts
-@@ -244,21 +244,28 @@
+@@ -244,21 +244,29 @@ reg_12p0v: regulator2 {
  		regulator-always-on;
  	};
  
 -	rsnd_ak4613: sound {
 -		compatible = "simple-audio-card";
--
+ 
 -		simple-audio-card,name = "rsnd-ak4613";
 -		simple-audio-card,format = "left_j";
 -		simple-audio-card,bitclock-master = <&sndcpu>;
 -		simple-audio-card,frame-master = <&sndcpu>;
--
++	sound_card: sound {
++		compatible = "audio-graph-scu-card";
+ 
 -		sndcodec: simple-audio-card,codec {
 -			sound-dai = <&ak4613>;
 -		};
--
++		label = "rcar-sound";
+ 
 -		sndcpu: simple-audio-card,cpu {
 -			sound-dai = <&rcar_sound>;
 -		};
-+	sound_card: sound {
-+		compatible = "audio-graph-scu-card";
-+
-+		label = "rcar-sound";
-+
 +		prefix = "ak4613";
 +		routing = "ak4613 Playback", "Playback0",
 +				"ak4613 Playback", "Playback1",
@@ -211,7 +218,7 @@ index da4a2ca0d151..aa63d681ea85 100644
  	};
  
  	vbus0_usb2: regulator-vbus0-usb2 {
-@@ -568,6 +575,31 @@
+@@ -568,6 +576,31 @@ ak4613: codec@10 {
  		asahi-kasei,out4-single-end;
  		asahi-kasei,out5-single-end;
  		asahi-kasei,out6-single-end;
@@ -243,7 +250,7 @@ index da4a2ca0d151..aa63d681ea85 100644
  	};
  
  	cs2000: clk-multiplier@4f {
-@@ -753,6 +785,45 @@
+@@ -753,6 +786,45 @@ &pwm5 {
  	status = "okay";
  };
  
@@ -289,7 +296,7 @@ index da4a2ca0d151..aa63d681ea85 100644
  &rcar_sound {
  	pinctrl-0 = <&sound_pins &sound_clk_pins>;
  	pinctrl-names = "default";
-@@ -784,13 +855,22 @@
+@@ -784,10 +856,20 @@ &rcar_sound {
  		 <&audio_clk_a>, <&cs2000>, <&audio_clk_c>,
  		 <&cpg CPG_CORE R8A77990_CLK_ZA2>;
  
@@ -313,23 +320,23 @@ index da4a2ca0d151..aa63d681ea85 100644
 +			};
  		};
  	};
--
- };
  
- &rwdt {
 diff --git a/arch/arm64/boot/dts/renesas/r8a77990.dtsi b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-index 0cb655720e55..a118c13a1bc3 100644
+index 2503ccdd12a2..93ab18bb356f 100644
 --- a/arch/arm64/boot/dts/renesas/r8a77990.dtsi
 +++ b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-@@ -183,6 +183,11 @@
+@@ -162,6 +162,11 @@ psci {
  		method = "smc";
  	};
  
-+    rcar_adsp_sound: adsp_sound {
-+               compatible =  "renesas,rcar_adsp_sound_gen3";
-+               status = "disabled";
-+       };
++    	rcar_adsp_sound: adsp_sound {
++                compatible =  "renesas,rcar_adsp_sound_gen3";
++                status = "disabled";
++        };
 +
  	/* External SCIF clock - to be overridden by boards that provide it */
  	scif_clk: scif {
  		compatible = "fixed-clock";
+-- 
+2.34.1
+

@@ -1,0 +1,63 @@
+From 3d5c1fc91eaceedbfbe0d6bec3db6a30792da621 Mon Sep 17 00:00:00 2001
+From: Manh Hoang <manh.hoang.uh@bp.renesas.com>
+Date: Tue, 12 May 2026 17:37:59 +0700
+Subject: [PATCH] Update-progress-IRQ-to-adapt-with-Kernel-v6.1.166
+
+---
+ include/sys/xt-shmem/xf-drv-shmem.h | 4 ++--
+ src/xf-rcar.c                       | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/include/sys/xt-shmem/xf-drv-shmem.h b/include/sys/xt-shmem/xf-drv-shmem.h
+index 922e0f1e..57b87dce 100644
+--- a/include/sys/xt-shmem/xf-drv-shmem.h
++++ b/include/sys/xt-shmem/xf-drv-shmem.h
+@@ -203,7 +203,7 @@ typedef struct xf_proxy_ipc_data {
+ 	u32                     core;
+ 
+ 	/* ...ADSP IRQ resources */
+-	struct resource        *irq;
++	int                     irq;
+ 
+ 	/* ...ADSP registers memory */
+ 	void __iomem           *regs;
+@@ -318,4 +318,4 @@ extern int  xf_ipc_init(struct device *dev);
+ /* ...IPC layer cleanup */
+ extern void xf_ipc_exit(struct device *dev);
+ 
+-#endif 
+\ No newline at end of file
++#endif 
+diff --git a/src/xf-rcar.c b/src/xf-rcar.c
+index 3286cf4b..4ae93fda 100644
+--- a/src/xf-rcar.c
++++ b/src/xf-rcar.c
+@@ -553,13 +553,13 @@ static int __init lx_adsp_probe(struct platform_device *pdev)		/* PRQA S 3450 */
+ 	}
+ 
+ 	/* ...process IRQ */
+-	ipc->irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!(ipc->irq)) {
++	ipc->irq = platform_get_irq(pdev, 0);
++	if (ipc->irq < 0) {
+ 		pr_err("failed to get irq resource");
+ 		return -ENOENT;
+ 	}
+ 
+-	res = devm_request_irq(&pdev->dev, ipc->irq->start, &xf_ipi_interrupt, 0, "xa-ipi", ipc);
++	res = devm_request_irq(&pdev->dev, ipc->irq, &xf_ipi_interrupt, 0, "xa-ipi", ipc);
+ 	if (res != 0) {
+ 		pr_err("failed to setup irq: %d", res);
+ 		return res;
+@@ -782,7 +782,7 @@ static int __exit lx_adsp_remove(struct platform_device *pdev)			/* PRQA S 3450
+ 		pm_runtime_disable(&pdev->dev);
+ 	}
+ 
+-	devm_free_irq(&pdev->dev, ipc->irq->start, ipc);
++	devm_free_irq(&pdev->dev, ipc->irq, ipc);
+ 	devm_iounmap(&pdev->dev, ipc->regs);
+ #if !TARGET_BOARD_E3
+ 	devm_iounmap(&pdev->dev, ipc->itcm0.kaddr);
+-- 
+2.34.1
+

@@ -7,21 +7,20 @@ require recipes-kernel/linux/linux-yocto.inc
 COMPATIBLE_MACHINE = "spider|s4sk"
 
 RENESAS_BSP_URL = " \
-    git://github.com/renesas-rcar/linux-bsp.git"
-BRANCH = "v5.10.235/rcar-5.1.10.rc1"
-SRCREV = "3b9a5e5efc1da1705076b66a6b0290f5c3580fee"
+     git://github.com/renesas-rcar/linux-bsp.git"
+BRANCH = "v6.1.166/rcar-5.3.9.s4.rc1"
+SRCREV = "32bef39947da68bc4a0d3c0df4a4981f8e6c6e74"
 
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${BRANCH};protocol=https \
     file://0001-arm64-dts-renesas-r8a779f0-Add-Native-device-support.patch \
     file://0002-arm64-dts-renesas-r8a779f0-Enable-IPMMU-main-and-HC-.patch \
     file://0003-arm64-dts-renesas-r8a779f0-Enable-IPMMU-for-PCIe0-1.patch \
     file://0004-arm64-dts-renesas-r8a779f0-Enable-IPMMU-for-eMMC.patch \
-    file://init_disassemble_info-signature-changes-causes-compile-failures.patch \
     file://ufs.cfg \
     file://r8a779f0_ufs.bin \
 "
 
-LINUX_VERSION ?= "5.10.235"
+LINUX_VERSION ?= "6.1.166"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 PR = "r1"
 
@@ -34,7 +33,6 @@ KBUILD_DEFCONFIG_KMACHINE ?= "${@oe.utils.conditional('USE_OPTIMIZE_KCONFIG', '1
 
 SUPPORT_OPTIMIZE_KCONFIG = " \
     file://r8a779f0_defconfig \
-    file://0005-soc-renesas-rcar-sysc-Add-r8a779f0-support.patch \
 "
 
 SRC_URI:append = " \

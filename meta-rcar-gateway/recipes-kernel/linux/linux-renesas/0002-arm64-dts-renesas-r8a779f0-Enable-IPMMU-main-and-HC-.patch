@@ -1,8 +1,8 @@
-From ab6b5cbfd2ad3b985fbe13fa3734bc9af3f504e7 Mon Sep 17 00:00:00 2001
-From: Nam Nguyen <nam.nguyen.yh@renesas.com>
-Date: Mon, 10 Apr 2023 22:29:40 +0700
-Subject: [PATCH 2/4] arm64: dts: renesas: r8a779f0: Enable IPMMU main and
- HC/DS0 caches
+From 341921d00e8242e79f570bd7a992b0b5b388000c Mon Sep 17 00:00:00 2001
+From: Thanh Le <thanh.le.xv@renesas.com>
+Date: Sat, 16 May 2026 14:41:53 +0700
+Subject: [PATCH] arm64: dts: renesas: r8a779f0: Enable IPMMU main and HC/DS0
+ caches
 
 Enable IPMMU-MM and IPMMU-HC/DS0 by default.
 
@@ -35,5 +35,5 @@ index 92185faf86a5..728dd3c38fd0 100644
  			status = "okay";
  		};
 -- 
-2.25.1
+2.34.1
 

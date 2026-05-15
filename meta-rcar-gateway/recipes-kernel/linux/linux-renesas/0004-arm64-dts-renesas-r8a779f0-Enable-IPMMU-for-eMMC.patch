@@ -1,7 +1,7 @@
-From 6850b4cf71f1de968bffe7eb129799d415dcaf8f Mon Sep 17 00:00:00 2001
-From: Nam Nguyen <nam.nguyen.yh@renesas.com>
-Date: Mon, 10 Apr 2023 22:34:30 +0700
-Subject: [PATCH 4/4] arm64: dts: renesas: r8a779f0: Enable IPMMU for eMMC
+From 40a9c8fa0c0fbed10acd65c67f431d5f3254bc1a Mon Sep 17 00:00:00 2001
+From: Thanh Le <thanh.le.xv@renesas.com>
+Date: Sat, 16 May 2026 14:45:03 +0700
+Subject: [PATCH] arm64: dts: renesas: r8a779f0: Enable IPMMU for eMMC
 
 Enable IPMMU for eMMC by default.
 
@@ -26,5 +26,5 @@ index 1a39c791e73b..fdaee2e7ce03 100644
  			status = "okay";
  		};
 -- 
-2.25.1
+2.34.1
 

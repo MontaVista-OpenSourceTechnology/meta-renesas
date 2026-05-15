@@ -1,7 +1,7 @@
-From 22441d8958c823fe106ef092b2c69a9ec4254c19 Mon Sep 17 00:00:00 2001
-From: Nam Nguyen <nam.nguyen.yh@renesas.com>
-Date: Mon, 10 Apr 2023 22:33:07 +0700
-Subject: [PATCH 3/4] arm64: dts: renesas: r8a779f0: Enable IPMMU for PCIe0/1
+From bb2843a7f6949320c8adacbe71170c89622d0b40 Mon Sep 17 00:00:00 2001
+From: Thanh Le <thanh.le.xv@renesas.com>
+Date: Sat, 16 May 2026 14:43:49 +0700
+Subject: [PATCH] arm64: dts: renesas: r8a779f0: Enable IPMMU for PCIe0/1
 
 Enable IPMMU for PCIe0/1 by default.
 
@@ -38,5 +38,5 @@ index 728dd3c38fd0..1a39c791e73b 100644
  			status = "okay";
  		};
 -- 
-2.25.1
+2.34.1
 

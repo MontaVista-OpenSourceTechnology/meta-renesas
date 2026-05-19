@@ -3,7 +3,7 @@ DESCRIPTION = "AVB MSE Driver for Linux for the R-Car Gen3"
 require include/avb-control.inc
 require include/rcar-gen3-modules-common.inc
 
-LICENSE = "GPLv2 & MIT"
+LICENSE = "GPL-2.0-only & MIT"
 LIC_FILES_CHKSUM = " \
     file://GPL-COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
     file://MIT-COPYING;md5=98449101c5d5452a9429b88d6ead1ba4 \
@@ -15,7 +15,10 @@ DEPENDS = "linux-renesas kernel-module-avb-streaming kernel-module-avb-mch"
 
 REQUIRED_DISTRO_FEATURES = "avb"
 
-SRC_URI = "git://github.com/renesas-rcar/avb-mse.git;branch=rcar-gen3;protocol=https"
+SRC_URI = " \
+    git://github.com/renesas-rcar/avb-mse.git;branch=rcar-gen3;protocol=https \
+    file://0001-Fix-error-avb-mse-to-adapt-kernel-v6.patch \
+"
 SRCREV = "c32d413a8c76a38e46b3b8985371ce0176ea4b41"
 
 S = "${WORKDIR}/git"

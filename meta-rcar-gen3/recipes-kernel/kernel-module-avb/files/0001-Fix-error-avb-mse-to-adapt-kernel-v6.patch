@@ -1,0 +1,25 @@
+From 3e4e004fa65ac050f3c7112ee954e6a7f6ca37b2 Mon Sep 17 00:00:00 2001
+From: Nam Nguyen <nam.nguyen.nx@bp.renesas.com>
+Date: Tue, 19 May 2026 15:21:17 +0700
+Subject: [PATCH] Fix error avb-mse to adapt kernel v6
+
+---
+ mse_adapter_alsa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mse_adapter_alsa.c b/mse_adapter_alsa.c
+index ce23007..c4ef5a7 100644
+--- a/mse_adapter_alsa.c
++++ b/mse_adapter_alsa.c
+@@ -692,7 +692,7 @@ static int mse_adapter_alsa_probe(struct snd_card *card, int devno)
+ 	/* pre-allocation of buffers */
+ 	snd_pcm_lib_preallocate_pages_for_all(pcm,
+ 				SNDRV_DMA_TYPE_CONTINUOUS,
+-				snd_dma_continuous_data(GFP_KERNEL),
++				NULL,
+ 				MSE_ADAPTER_ALSA_PAGE_SIZE,
+ 				MSE_ADAPTER_ALSA_PAGE_SIZE);
+ 
+-- 
+2.34.1
+

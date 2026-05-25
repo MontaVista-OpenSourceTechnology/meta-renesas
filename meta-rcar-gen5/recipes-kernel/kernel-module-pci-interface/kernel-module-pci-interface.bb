@@ -5,8 +5,8 @@ require include/rcar-bsp-path-common.inc
 
 LICENSE = "GPL-2.0-only & MIT"
 LIC_FILES_CHKSUM = " \
-    file://${UNPACKDIR}/git/GPL-COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
-    file://${UNPACKDIR}/git/MIT-COPYING;md5=b00fbfbdda19f05fbe4c74fa86ec073b \
+    file://../GPL-COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
+    file://../MIT-COPYING;md5=b00fbfbdda19f05fbe4c74fa86ec073b \
 "
 
 inherit module
@@ -21,7 +21,7 @@ SRCREV = "624d6e934a855204eb4e43dba38db06270fdf229"
 
 SRC_URI = "${RPCI_DRV_URL};branch=${BRANCH};protocol=https"
 
-S = "${UNPACKDIR}/git/rpci-module"
+S = "${UNPACKDIR}/${BP}/rpci-module"
 
 KERNEL_MODULE_PACKAGE_SUFFIX = ""
 

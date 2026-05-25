@@ -31,12 +31,13 @@ B = "${KBUILD_DIR}"
 
 EXTRA_OEMAKE = "KERNELDIR=${STAGING_KERNEL_BUILDDIR}"
 EXTRA_OEMAKE += "CROSS_COMPILE=${CROSS_COMPILE}"
+EXTRA_OEMAKE += "KCFLAGS='-Wno-error=type-limits -Wno-type-limits -Wno-error=missing-field-initializers -Wno-missing-field-initializers'"
 
 # Build GFX kernel module without suffix
 KERNEL_MODULE_PACKAGE_SUFFIX = ""
 
 module_do_compile() {
-    unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
+    unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS CC
     cd ${KBUILD_DIR}
     oe_runmake
 }

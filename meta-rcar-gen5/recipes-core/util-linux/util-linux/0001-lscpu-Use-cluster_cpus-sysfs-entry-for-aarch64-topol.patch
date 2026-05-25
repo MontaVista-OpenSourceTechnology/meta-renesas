@@ -1,0 +1,161 @@
+From 8590772b96ba8bbba855c239a90587f3b3f9cacb Mon Sep 17 00:00:00 2001
+From: Khanh Le <khanh.le.xr@renesas.com>
+Date: Tue, 7 Apr 2026 15:45:06 +0700
+Subject: [PATCH] lscpu: Use cluster_cpus sysfs entry for aarch64 topology
+
+On aarch64 platforms, lscpu recognizes that the hardware topology uses
+clusters instead of sockets, but still incorrectly reports the number
+of cluster(s) as well as the number of core(s) per cluster.
+
+Parse cpuX/topology/cluster_cpus from sysfs to obtain accurate
+cluster topology and display the correct cluster information.
+
+Signed-off-by: Khanh Le <khanh.le.xr@renesas.com>
+
+Upstream-Status: Inappropriate [R-Car specific feature]
+
+---
+ sys-utils/lscpu-topology.c | 11 +++++++++++
+ sys-utils/lscpu.c          | 23 ++++++++++++++++++-----
+ sys-utils/lscpu.h          |  5 +++++
+ 3 files changed, 34 insertions(+), 5 deletions(-)
+
+diff --git a/sys-utils/lscpu-topology.c b/sys-utils/lscpu-topology.c
+index 6e0782f64..ee267289d 100644
+--- a/sys-utils/lscpu-topology.c
++++ b/sys-utils/lscpu-topology.c
+@@ -161,6 +161,7 @@ static int cputype_read_topology(struct lscpu_cxt *cxt, struct lscpu_cputype *ct
+ 		struct lscpu_cpu *cpu = cxt->cpus[i];
+ 		cpu_set_t *thread_siblings = NULL, *core_siblings = NULL;
+ 		cpu_set_t *book_siblings = NULL, *drawer_siblings = NULL;
++		cpu_set_t *cluster_cpus = NULL;
+ 		int num, n = 0;
+
+ 		if (!cpu || cpu->type != ct)
+@@ -189,6 +190,8 @@ static int cputype_read_topology(struct lscpu_cxt *cxt, struct lscpu_cputype *ct
+ 					"cpu%d/topology/book_siblings", num);
+ 		ul_path_readf_cpuset(sys, &drawer_siblings, cxt->maxcpus,
+ 					"cpu%d/topology/drawer_siblings", num);
++		ul_path_readf_cpuset(sys, &cluster_cpus, cxt->maxcpus,
++					"cpu%d/topology/cluster_cpus", num);
+
+ 		if (thread_siblings)
+ 			n = CPU_COUNT_S(cxt->setsize, thread_siblings);
+@@ -213,6 +216,8 @@ static int cputype_read_topology(struct lscpu_cxt *cxt, struct lscpu_cputype *ct
+ 			ct->bookmaps = xcalloc(npos, sizeof(cpu_set_t *));
+ 		if (!ct->drawermaps && drawer_siblings)
+ 			ct->drawermaps = xcalloc(npos, sizeof(cpu_set_t *));
++		if (!ct->clustermaps && cluster_cpus)
++			ct->clustermaps = xcalloc(npos, sizeof(cpu_set_t *));
+
+ 		/* add to topology maps */
+ 		if (thread_siblings)
+@@ -223,6 +228,8 @@ static int cputype_read_topology(struct lscpu_cxt *cxt, struct lscpu_cputype *ct
+ 			add_cpuset_to_array(ct->bookmaps, &ct->nbooks, book_siblings, cxt->setsize, temp_set);
+ 		if (drawer_siblings)
+ 			add_cpuset_to_array(ct->drawermaps, &ct->ndrawers, drawer_siblings, cxt->setsize, temp_set);
++		if (cluster_cpus)
++			add_cpuset_to_array(ct->clustermaps, &ct->nclusters, cluster_cpus, cxt->setsize, temp_set);
+
+ 	}
+ 	CPU_FREE(temp_set);
+@@ -266,12 +273,16 @@ static int cputype_read_topology(struct lscpu_cxt *cxt, struct lscpu_cputype *ct
+
+ 	if (!sw_topo) {
+ 		ct->ncores_per_socket = ct->nsockets ? ct->ncores / ct->nsockets : 0;
++		ct->ncores_per_cluster = ct->nclusters ? ct->ncores / ct->nclusters : 0;
+ 		ct->nsockets_per_book = ct->nbooks   ? ct->nsockets / ct->nbooks : 0;
+ 		ct->nbooks_per_drawer = ct->ndrawers ? ct->nbooks / ct->ndrawers : 0;
+ 		ct->ndrawers_per_system = ct->ndrawers;
++		ct->nclusters_per_system = ct->nclusters;
+ 	}
+
+ 	DBG(TYPE, ul_debugobj(ct, " nthreads: %zu (per core)", ct->nthreads_per_core));
++	DBG(TYPE, ul_debugobj(ct, "   ncores: %zu (%zu per cluster)", ct->ncores, ct->ncores_per_cluster));
++	DBG(TYPE, ul_debugobj(ct, "nclusters: %zu (%zu per system)", ct->nclusters, ct->nclusters_per_system));
+ 	DBG(TYPE, ul_debugobj(ct, "   ncores: %zu (%zu per socket)", ct->ncores, ct->ncores_per_socket));
+ 	DBG(TYPE, ul_debugobj(ct, " nsockets: %zu (%zu per books)", ct->nsockets, ct->nsockets_per_book));
+ 	DBG(TYPE, ul_debugobj(ct, "   nbooks: %zu (%zu per drawer)", ct->nbooks, ct->nbooks_per_drawer));
+diff --git a/sys-utils/lscpu.c b/sys-utils/lscpu.c
+index 108efb1d6..8a545390a 100644
+--- a/sys-utils/lscpu.c
++++ b/sys-utils/lscpu.c
+@@ -368,8 +368,15 @@ static char *get_cell_data(
+ 		fill_id(cxt, cpu, socket, buf, bufsz);
+ 		break;
+ 	case COL_CPU_CLUSTER:
+-		if (cxt->is_cluster)
+-			fill_id(cxt, cpu, socket, buf, bufsz);
++		if (cxt->is_cluster) {
++			struct lscpu_cputype *ct = lscpu_cputype_get_default(cxt);
++
++			if (ct->nclusters)
++				fill_id(cxt, cpu, cluster, buf, bufsz);
++			else
++				fill_id(cxt, cpu, socket, buf, bufsz);
++		}
++
+ 		break;
+ 	case COL_CPU_DRAWER:
+ 		fill_id(cxt, cpu, drawer, buf, bufsz);
+@@ -897,7 +904,10 @@ print_summary_cputype(struct lscpu_cxt *cxt,
+
+ 	add_summary_n(tb, sec, _("Thread(s) per core:"), ct->nthreads_per_core);
+ 	if (cxt->is_cluster)
+-		add_summary_n(tb, sec, _("Core(s) per cluster:"), ct->ncores_per_socket);
++		if (ct->nclusters)
++			add_summary_n(tb, sec, _("Core(s) per cluster:"), ct->ncores_per_cluster);
++		else
++			add_summary_n(tb, sec, _("Core(s) per cluster:"), ct->ncores_per_socket);
+ 	else
+ 		add_summary_n(tb, sec, _("Core(s) per socket:"), ct->ncores_per_socket);
+
+@@ -915,8 +925,11 @@ print_summary_cputype(struct lscpu_cxt *cxt,
+ 			else
+ 				add_summary_s(tb, sec, _("Socket(s):"), "-");
+
+-			add_summary_n(tb, sec, _("Cluster(s):"),
+-					ct->nsockets_per_book ?: ct->nsockets);
++			if (ct->nclusters)
++				add_summary_n(tb, sec, _("Cluster(s):"), ct->nclusters);
++			else
++				add_summary_n(tb, sec, _("Cluster(s):"),
++					      ct->nsockets_per_book ?: ct->nsockets);
+ 		} else
+ 			add_summary_n(tb, sec, _("Socket(s):"),
+ 					ct->nsockets_per_book ?: ct->nsockets);
+diff --git a/sys-utils/lscpu.h b/sys-utils/lscpu.h
+index 64570f60b..e4137e994 100644
+--- a/sys-utils/lscpu.h
++++ b/sys-utils/lscpu.h
+@@ -93,9 +93,11 @@ struct lscpu_cputype {
+
+ 	size_t	nthreads_per_core;
+ 	size_t	ncores_per_socket;
++	size_t	ncores_per_cluster;
+ 	size_t	nsockets_per_book;
+ 	size_t	nbooks_per_drawer;
+ 	size_t	ndrawers_per_system;
++	size_t	nclusters_per_system;
+
+ 	char	*dynamic_mhz;	/* s390; copy from the first CPU */
+ 	char	*static_mhz;	/* s390; copy from the first CPU */
+@@ -109,6 +111,8 @@ struct lscpu_cputype {
+ 	cpu_set_t	**bookmaps;
+ 	size_t		ndrawers;
+ 	cpu_set_t	**drawermaps;
++	size_t		nclusters;
++	cpu_set_t	**clustermaps;
+
+ 	bool	has_freq,
+ 		has_configured,
+@@ -153,6 +157,7 @@ struct lscpu_cpu {
+ 	int	socketid;
+ 	int	bookid;
+ 	int	drawerid;
++	int	clusterid;
+
+ 	int	polarization;	/* POLAR_* */
+ 	int	address;	/* physical cpu address */
+-- 
+2.34.1

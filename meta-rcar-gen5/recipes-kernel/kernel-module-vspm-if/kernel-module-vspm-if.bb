@@ -22,7 +22,8 @@ SRCREV = "dfed7e10a054718c875b1657afccbf112569378a"
 
 SRC_URI = "${VSPMIF_DRV_URL};branch=${BRANCH};protocol=https"
 
-B = "${UNPACKDIR}/git/vspm_if-module/files/vspm_if/drv"
+S = "${UNPACKDIR}/${BP}"
+B = "${S}/vspm_if-module/files/vspm_if/drv"
 
 includedir = "${RENESAS_DATADIR}/include"
 

@@ -1,3 +1,5 @@
+Upstream-Status: Inappropriate [R-Car specific feature
+
 diff --git a/vspm_if-module/files/vspm_if/drv/Makefile b/vspm_if-module/files/vspm_if/drv/Makefile
 index bf082d7..c7f2809 100644
 --- a/vspm_if-module/files/vspm_if/drv/Makefile

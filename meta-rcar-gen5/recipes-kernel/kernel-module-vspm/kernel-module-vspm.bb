@@ -21,7 +21,13 @@ SRCREV = "e83fc3a5d5592bcd84c5f5eddc77280b2b6f1e9e"
 
 SRC_URI = "${VSPM_DRV_URL};branch=${BRANCH};protocol=https"
 
-B = "${UNPACKDIR}/git/vspm-module/files/vspm/drv"
+S = "${UNPACKDIR}/${BP}"
+B = "${S}/vspm-module/files/vspm/drv"
+
+do_compile:prepend() {
+    export KCFLAGS="${DEBUG_PREFIX_MAP}"
+}
+
 includedir = "${RENESAS_DATADIR}/include"
 
 # Build VSP Manager kernel module without suffix
@@ -88,8 +94,8 @@ FILES:${PN} = " \
     ${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/vspm.ko \
 "
 
-FILES:${PN}-dbg = ""
-ALLOW_EMPTY:${PN}-dbg = "1"
+#FILES:${PN}-dbg = ""
+#ALLOW_EMPTY:${PN}-dbg = "1"
 
 # Machine specific autoload configuration
 KERNEL_MODULE_AUTOLOAD:x5h += "vspm"

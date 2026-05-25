@@ -5,7 +5,7 @@ require util-linux.inc
 
 inherit autotools gettext pkgconfig
 
-S = "${WORKDIR}/util-linux-${PV}"
+S = "${UNPACKDIR}/util-linux-${PV}"
 
 EXTRA_AUTORECONF += "--exclude=gtkdocize"
 EXTRA_OECONF += "--disable-all-programs --enable-libuuid"

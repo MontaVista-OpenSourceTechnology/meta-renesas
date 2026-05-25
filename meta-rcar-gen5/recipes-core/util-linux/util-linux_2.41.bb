@@ -86,6 +86,7 @@ EXTRA_OECONF:append:class-native = " --without-cap-ng --disable-setpriv"
 EXTRA_OECONF:append:class-nativesdk = " --without-cap-ng --disable-setpriv"
 EXTRA_OECONF:append = " --disable-hwclock-gplv3"
 
+
 # enable pcre2 for native/nativesdk to match host distros
 # this helps to keep same expectations when using the SDK or
 # build host versions during development
@@ -172,7 +173,7 @@ do_compile:prepend () {
 }
 
 do_compile:append () {
-	cp ${WORKDIR}/fcntl-lock.c ${S}/fcntl-lock.c
+	cp ${UNPACKDIR}/fcntl-lock.c ${S}/fcntl-lock.c
 	${CC} ${CFLAGS} ${LDFLAGS} ${S}/fcntl-lock.c -o ${B}/fcntl-lock
 }
 
@@ -212,8 +213,8 @@ do_install:append () {
 do_install:append:class-target () {
 	if [ "${@bb.utils.filter('PACKAGECONFIG', 'pam', d)}" ]; then
 		install -d ${D}${sysconfdir}/pam.d
-		install -m 0644 ${WORKDIR}/runuser.pamd ${D}${sysconfdir}/pam.d/runuser
-		install -m 0644 ${WORKDIR}/runuser-l.pamd ${D}${sysconfdir}/pam.d/runuser-l
+		install -m 0644 ${UNPACKDIR}/runuser.pamd ${D}${sysconfdir}/pam.d/runuser
+		install -m 0644 ${UNPACKDIR}/runuser-l.pamd ${D}${sysconfdir}/pam.d/runuser-l
 		# Required for "su -" aka "su --login" because
 		# otherwise it uses "other", which has "auth pam_deny.so"
 		# and thus prevents the operation.

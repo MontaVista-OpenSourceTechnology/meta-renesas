@@ -6,10 +6,10 @@ DEPENDS = "pci-interface-lib"
 PN = "pci-interface-tp"
 PR = "r0"
 
-S = "${UNPACKDIR}/git/rpci_if-tp-user"
+S = "${UNPACKDIR}/${BP}"
 
 do_compile() {
-    cd ${S}
+    cd ${S}/rpci_if-tp-user
     make all
 }
 
@@ -18,8 +18,8 @@ do_install() {
     install -d ${D}${bindir}
 
     # Copy user test program
-    install -m 755 ${S}/rcar_pci_host ${D}${bindir}/
-    install -m 755 ${S}/rcar_pci_ep ${D}${bindir}/
+    install -m 755 ${S}/rpci_if-tp-user/rcar_pci_host ${D}${bindir}/
+    install -m 755 ${S}/rpci_if-tp-user/rcar_pci_ep ${D}${bindir}/
 }
 
 PACKAGES = " \

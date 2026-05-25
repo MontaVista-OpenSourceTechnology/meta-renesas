@@ -6,7 +6,12 @@ DEPENDS = "kernel-module-pci-interface"
 PN = "pci-interface-lib"
 PR = "r0"
 
-S = "${UNPACKDIR}/git/rpci_if-module"
+S = "${UNPACKDIR}/${BP}"
+
+do_compile() {
+    cd ${S}/rpci_if-module
+    oe_runmake
+}
 
 do_install() {
     # Create destination directories
@@ -14,10 +19,10 @@ do_install() {
     install -d ${D}/${includedir}
 
     # Copy shared library
-    install -m 755 ${S}/librpci.so* ${D}/${libdir}/
+    install -m 755 ${S}/rpci_if-module/librpci.so* ${D}/${libdir}/
 
     # Install shared header file
-    install -m 644 ${S}/rcar_pci_api.h ${D}/${includedir}/
+    install -m 644 ${S}/rpci_if-module/rcar_pci_api.h ${D}/${includedir}/
 }
 
 PACKAGES = " \

@@ -54,6 +54,7 @@ RDEPENDS:packagegroup-bsp-devpkg = " \
     libdrm-tests \
     libgpiod libgpiod-tools \
     libsysfs \
+    opencsd  \
 "
 
 # Various packages needed for testing

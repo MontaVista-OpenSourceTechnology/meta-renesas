@@ -82,4 +82,4 @@ module_conf_uio_pdrv_genirq:append = ' options uio_pdrv_genirq of_id="generic-ui
 module_conf_i3c-rcar-master = "blacklist i3c-rcar-master"
 module_conf_at24 = "blacklist at24"
 module_conf_rcar_canfd = "blacklist rcar_canfd"
-
+INSANE_SKIP += "buildpaths"

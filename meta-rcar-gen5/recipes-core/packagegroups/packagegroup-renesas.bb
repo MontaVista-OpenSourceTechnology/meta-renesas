@@ -50,6 +50,7 @@ RDEPENDS:packagegroup-renesas = " \
     pcie-test \
     libmetal \
     open-amp \
+    kernel-module-hwspinlocktest \
 "
 # Temporarily remove
 RDEPENDS:packagegroup-renesas:remove = "${CPURTT_PKGS}"

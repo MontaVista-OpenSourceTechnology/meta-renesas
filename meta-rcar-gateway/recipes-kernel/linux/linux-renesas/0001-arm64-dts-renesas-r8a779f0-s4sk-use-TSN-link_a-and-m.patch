@@ -1,0 +1,53 @@
+From 1749f7dd456fe3eb8bb7650e06f001824adc3cbf Mon Sep 17 00:00:00 2001
+From: Thanh Le <thanh.le.xv@renesas.com>
+Date: Thu, 28 May 2026 13:38:49 +0700
+Subject: [PATCH] arm64: dts: renesas: r8a779f0-s4sk: use TSN link_a and mdio_b
+ pin groups
+
+Update the TSN pinctrl settings on the r8a779f0-s4sk board DTS
+to use the correct pin groups for TSN0 and TSN1.
+---
+ arch/arm64/boot/dts/renesas/r8a779f0-s4sk.dts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a779f0-s4sk.dts b/arch/arm64/boot/dts/renesas/r8a779f0-s4sk.dts
+index b6c61a20cd0d..dcc2fc54c5aa 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779f0-s4sk.dts
++++ b/arch/arm64/boot/dts/renesas/r8a779f0-s4sk.dts
+@@ -176,14 +176,14 @@ pcie1_pins: pcie1 {
+ 
+ 	tsn0_pins: tsn0 {
+ 		mux {
+-			groups = "tsn0_link", "tsn0_mdio";
++			groups = "tsn0_link_a", "tsn0_mdio_b";
+ 			function = "tsn0";
+ 			drive-strength = <18>;
+ 			power-source = <3300>;
+ 		};
+ 
+ 		pins_mdio {
+-			groups = "tsn0_mdio";
++			groups = "tsn0_mdio_b";
+ 			drive-strength = <18>;
+ 			power-source = <3300>;
+ 		};
+@@ -191,14 +191,14 @@ pins_mdio {
+ 
+ 	tsn1_pins: tsn1 {
+ 		mux {
+-			groups = "tsn1_link", "tsn1_mdio";
++			groups = "tsn1_link_a", "tsn1_mdio_b";
+ 			function = "tsn1";
+ 			drive-strength = <18>;
+ 			power-source = <3300>;
+ 		};
+ 
+ 		pins_mdio {
+-			groups = "tsn1_mdio";
++			groups = "tsn1_mdio_b";
+ 			drive-strength = <18>;
+ 			power-source = <3300>;
+ 		};
+-- 
+2.34.1
+

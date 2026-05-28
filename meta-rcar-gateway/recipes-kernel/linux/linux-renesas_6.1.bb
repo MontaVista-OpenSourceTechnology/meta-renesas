@@ -18,6 +18,7 @@ SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${BRANCH};protocol=https \
     file://0004-arm64-dts-renesas-r8a779f0-Enable-IPMMU-for-eMMC.patch \
     file://ufs.cfg \
     file://r8a779f0_ufs.bin \
+    file://0001-arm64-dts-renesas-r8a779f0-s4sk-use-TSN-link_a-and-m.patch \
 "
 
 LINUX_VERSION ?= "6.1.166"

@@ -13,8 +13,8 @@ PV = "0.1"
 RENESAS_CMEM_URL ?= "git://github.com/renesas-rcar/cmem.git;protocol=https"
 SRC_URI = "${RENESAS_CMEM_URL};nobranch=1"
 
-SRCREV:x5h = "6c187a3b58adad920a4fe2a194b5ad5406be9524"
-SRCREV:r8a78000 = "e67f473cddb089f71abead8bf18f618d42f515da"
+SRCREV:x5h = "cbff149453ab1bb3597560cbfa3cec005bae0735"
+SRCREV:r8a78000 = "cbff149453ab1bb3597560cbfa3cec005bae0735"
 
 
 do_install:append () {

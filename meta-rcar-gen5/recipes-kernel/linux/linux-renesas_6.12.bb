@@ -25,7 +25,7 @@ SRC_URI:append:r8a78000 = " \
         file://rcar-fw.cfg', '', d)} \
 "
 
-LINUX_VERSION ?= "6.1.102"
+LINUX_VERSION ?= "6.12.80"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 PR = "r1"
 

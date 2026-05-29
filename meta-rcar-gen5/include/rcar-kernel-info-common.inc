@@ -2,14 +2,14 @@ RENESAS_BSP_URL = " \
     git://github.com/renesas-rcar/linux-bsp.git;protocol=https"
 
 RENESAS_BSP_BRANCH = "${@oe.utils.conditional("MACHINE", "x5h", \
-    "v6.1.102/rcar-5.2.0.rc11_vpf.rc27", \
-    "v6.1.102/rcar-6.0.0.rc12", d)}"
+    "v6.12.80/rcar-6.1.0_vpf", \
+    "v6.12.80/rcar-6.1.0", d)}"
 RENESAS_BSP_SRCREV = "${@oe.utils.conditional("MACHINE", "x5h", \
-    "c728dcecf817075b5389264c059dfeae26d7c6e5", \
-    "ff9ce02daad0f5a4e64984d725f488faf3cf3e71", d)}"
+    "40281fc49851dae33b7a66f886beba8bcc8b74c1", \
+    "45b80618049ff2de38afe433dff096facdc84f88", d)}"
 
 # Renesas Yocto BSP version
-BSP_RENESAS_VERSION = "Renesas-Yocto-v7.25.0"
+BSP_RENESAS_VERSION = "Renesas-Yocto-v7.26.0"
 
 # Renesas SDK version
-SDK_VERSION = "v4.35.0"
+SDK_VERSION = "v4.36.0"

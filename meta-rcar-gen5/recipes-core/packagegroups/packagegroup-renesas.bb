@@ -42,11 +42,7 @@ RDEPENDS:packagegroup-renesas = " \
     udev-rules-cvlib \
     linux-renesas-uapi \
     bsp-config \
-    capture \
     ${CPURTT_PKGS} \
-    kernel-module-qos \
-    qosif-user-module \
-    qosif-tp-user-module \
     ${@bb.utils.contains('MACHINE_FEATURES', 'gsx', '${GFX_PKGS}' '${WAYLAND_PKGS}', '', d)} \
     nvme-initscripts \
     bsp-test-apps \

@@ -48,7 +48,6 @@ RDEPENDS:packagegroup-renesas = " \
     bsp-test-apps \
     ${VSPM_PKGS} \
     pcie-test \
-    kernel-module-pci-interface \
     libmetal \
     open-amp \
 "

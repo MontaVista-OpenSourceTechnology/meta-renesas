@@ -12,16 +12,14 @@ require include/rcar-kernel-info-common.inc
 DEPENDS += "flex-native bison-native bc-native dtc-native lzop-native srecord-native gnutls-native"
 
 UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
-BRANCH:x5h = "v2025.01/rcar-7.0.0.rc2"
-BRANCH:r8a78000 = "v2025.01/rcar-7.0.0.rc8"
+BRANCH = "v2026.01/rcar-8.0.0"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
 SRC_URI:append:r8a78000 = " file://0001-config-Disable-LOCALVERSION_AUTO.patch"
 
-SRCREV:x5h = "ad4e16cb4a9cc88b469bef8ff3e80f9657031786"
-SRCREV:r8a78000 = "5a82342bae34678618da6283a6750e4d13337f1b"
+SRCREV = "30d9373835b7ea427af0f4d1ec07953b802ec233"
 
-PV = "v2025.01+git${SRCPV}"
+PV = "v2026.01+git${SRCPV}"
 
 UBOOT_SREC_SUFFIX = "srec"
 UBOOT_SREC ?= "u-boot-elf.${UBOOT_SREC_SUFFIX}"

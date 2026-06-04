@@ -16,6 +16,7 @@ SRC_URI = "${RENESAS_CMEM_URL};nobranch=1"
 SRCREV:x5h = "cbff149453ab1bb3597560cbfa3cec005bae0735"
 SRCREV:r8a78000 = "cbff149453ab1bb3597560cbfa3cec005bae0735"
 
+EXTRA_OEMAKE += "INSTALL_MOD_DIR=extra"
 
 do_install:append () {
     install -d ${D}${includedir}/linux

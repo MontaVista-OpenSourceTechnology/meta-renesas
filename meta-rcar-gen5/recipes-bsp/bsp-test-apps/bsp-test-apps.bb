@@ -43,6 +43,11 @@ do_install() {
     # Install PTP tp
     install -m 755 ${S}/testptp ${D}${ROOT_HOME}/
 
+    # Install DMA-BUF tp
+    install -m 755 ${S}/producer ${D}${ROOT_HOME}/
+    install -m 755 ${S}/consumer ${D}${ROOT_HOME}/
+    install -m 755 ${S}/sample_dmabuf ${D}${ROOT_HOME}/
+
 }
 
 FILES:${PN} = "${ROOT_HOME}/*"

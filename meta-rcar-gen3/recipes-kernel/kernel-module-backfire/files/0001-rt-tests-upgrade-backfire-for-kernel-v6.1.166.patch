@@ -1,0 +1,210 @@
+From 9004e7e44522ffecf7946a605e9448d746022063 Mon Sep 17 00:00:00 2001
+From: Thinh Le <thinh.le.yn@renesas.com>
+Date: Mon, 8 Jun 2026 14:55:05 +0700
+Subject: [PATCH] rt-tests: upgrade backfire for kernel v6.1.166
+
+Upstream-Status: Pending
+
+Signed-off-by: Thinh Le <thinh.le.yn@renesas.com>
+---
+ src/backfire/backfire.c | 129 +++++++++++++++++++++++-----------------
+ 1 file changed, 75 insertions(+), 54 deletions(-)
+
+diff --git a/src/backfire/backfire.c b/src/backfire/backfire.c
+index 81a31d4..a27850a 100644
+--- a/src/backfire/backfire.c
++++ b/src/backfire/backfire.c
+@@ -5,26 +5,23 @@
+  */
+ 
+ #include <linux/module.h>
+-
+-#include <linux/sched.h>
+-#include <linux/cpumask.h>
+-#include <linux/time.h>
+-#include <linux/smp_lock.h>
+-#include <linux/types.h>
+ #include <linux/errno.h>
++#include <linux/fs.h>
+ #include <linux/miscdevice.h>
+-#include <linux/proc_fs.h>
++#include <linux/pid.h>
++#include <linux/sched.h>
++#include <linux/sched/signal.h>
+ #include <linux/spinlock.h>
++#include <linux/timekeeping.h>
++#include <linux/types.h>
+ #include <linux/uaccess.h>
+ 
+-#include <asm/system.h>
+-
+ #define BACKFIRE_MINOR MISC_DYNAMIC_MINOR
+ 
+-static spinlock_t backfire_state_lock = SPIN_LOCK_UNLOCKED;
++static DEFINE_SPINLOCK(backfire_state_lock);
+ static int backfire_open_cnt; /* #times opened */
+ static int backfire_open_mode; /* special open modes */
+-static struct timeval sendtime; /* when the most recent signal was sent */
++static struct timespec64 sendtime; /* when the most recent signal was sent */
+ #define BACKFIRE_WRITE 1 /* opened for writing (exclusive) */
+ #define BACKFIRE_EXCL 2 /* opened with O_EXCL */
+ 
+@@ -32,50 +29,75 @@ static struct timeval sendtime; /* when the most recent signal was sent */
+  * These are the file operation function for user access to /dev/backfire
+  */
+ static ssize_t
+-backfire_read(struct file *file, char *buf, size_t count, loff_t *ppos)
++backfire_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ {
+-	return snprintf(buf, count, "%d,%d\n", (int) sendtime.tv_sec,
+-		(int) sendtime.tv_usec);
++	char temp[32];
++	int len;
++	size_t out;
++
++	(void)file;
++	(void)ppos;
++
++	len = scnprintf(temp, sizeof(temp), "%lld,%ld\n",
++			(long long)sendtime.tv_sec, sendtime.tv_nsec / 1000);
++
++	out = count;
++	if (out > (size_t)len)
++		out = (size_t)len;
++	if (copy_to_user(buf, temp, out))
++		return -EFAULT;
++	return out;
+ }
+ 
+ static ssize_t
+-backfire_write(struct file *file, const char *buf, size_t count, loff_t *ppos)
++backfire_write(struct file *file, const char __user *buf, size_t count, loff_t *ppos)
+ {
++	char temp[16];
+ 	int signo;
+-	struct pid *pid;
+-
+-	if (sscanf(buf, "%d", &signo) >= 1) {
+-		if (signo > 0 && signo < 32) {
+-			pid = get_pid(task_pid(current));
+-			do_gettimeofday(&sendtime);
+-			kill_pid(pid, signo, 1);
+-		} else
+-			printk(KERN_ERR "Invalid signal no. %d\n", signo);
++	size_t len;
++
++	(void)file;
++	(void)ppos;
++
++	len = min(count, sizeof(temp) - 1);
++	if (copy_from_user(temp, buf, len))
++		return -EFAULT;
++	temp[len] = '\0';
++
++	if (kstrtoint(temp, 0, &signo))
++		return -EINVAL;
++
++	if (signo <= 0 || signo >= 32) {
++		pr_err("backfire: invalid signal no. %d\n", signo);
++		return -EINVAL;
+ 	}
+-	return strlen(buf);
++
++	ktime_get_real_ts64(&sendtime);
++	kill_pid(task_pid(current), signo, 1);
++
++	return count;
+ }
+ 
+ static int
+ backfire_open(struct inode *inode, struct file *file)
+ {
+ 	spin_lock(&backfire_state_lock);
+-
+-	if ((backfire_open_cnt && (file->f_flags & O_EXCL)) ||
+-	    (backfire_open_mode & BACKFIRE_EXCL)) {
+-		spin_unlock(&backfire_state_lock);
+-		return -EBUSY;
+-	}
+-
+-	if (file->f_flags & O_EXCL)
+-		backfire_open_mode |= BACKFIRE_EXCL;
+-	if (file->f_mode & 2)
+-		backfire_open_mode |= BACKFIRE_WRITE;
+-	backfire_open_cnt++;
++	if ((backfire_open_cnt && (file->f_flags & O_EXCL)) ||
++	    (backfire_open_mode & BACKFIRE_EXCL)) {
++		spin_unlock(&backfire_state_lock);
++		return -EBUSY;
++	}
++
++	if (file->f_flags & O_EXCL)
++		backfire_open_mode |= BACKFIRE_EXCL;
++	if (file->f_mode & FMODE_WRITE)
++		backfire_open_mode |= BACKFIRE_WRITE;
++	backfire_open_cnt++;
+ 
+ 	spin_unlock(&backfire_state_lock);
+-
+-	return 0;
+-}
++
++	return 0;
++}
+ 
+ static int
+ backfire_release(struct inode *inode, struct file *file)
+@@ -86,7 +108,7 @@ backfire_release(struct inode *inode, struct file *file)
+ 
+ 	if (backfire_open_cnt == 1 && backfire_open_mode & BACKFIRE_EXCL)
+ 		backfire_open_mode &= ~BACKFIRE_EXCL;
+-	if (file->f_mode & 2)
++	if (file->f_mode & FMODE_WRITE)
+ 		backfire_open_mode &= ~BACKFIRE_WRITE;
+ 
+ 	spin_unlock(&backfire_state_lock);
+@@ -94,19 +116,19 @@ backfire_release(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
+-static struct file_operations backfire_fops = {
+-	.owner		= THIS_MODULE,
+-	.llseek		= no_llseek,
+-	.open		= backfire_open,
+-	.read		= backfire_read,
+-	.write		= backfire_write,
+-	.release	= backfire_release,
++static const struct file_operations backfire_fops = {
++	.owner		= THIS_MODULE,
++	.llseek		= no_llseek,
++	.open		= backfire_open,
++	.read		= backfire_read,
++	.write		= backfire_write,
++	.release	= backfire_release,
+ };
+ 
+ static struct miscdevice backfire_dev = {
+-	BACKFIRE_MINOR,
+-	"backfire",
+-	&backfire_fops
++	.minor = BACKFIRE_MINOR,
++	.name = "backfire",
++	.fops = &backfire_fops,
+ };
+ 
+ static int __init backfire_init(void)
+@@ -115,10 +137,9 @@ static int __init backfire_init(void)
+ 
+ 	ret = misc_register(&backfire_dev);
+ 	if (ret)
+-		printk(KERN_ERR "backfire: can't register dynamic misc device\n");
++		pr_err("backfire: can't register dynamic misc device\n");
+ 	else
+-		printk(KERN_INFO "backfire driver misc device %d\n",
+-			backfire_dev.minor);
++		pr_info("backfire driver misc device %d\n", backfire_dev.minor);
+ 	return ret;
+ }
+ 
+-- 
+2.34.1

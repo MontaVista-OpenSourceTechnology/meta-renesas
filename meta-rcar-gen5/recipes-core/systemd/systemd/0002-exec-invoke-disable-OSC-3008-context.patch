@@ -1,0 +1,15 @@
+Upstream-Status: Inappropriate [configuration]
+
+diff --git a/src/core/exec-invoke.c b/src/core/exec-invoke.c
+index 903cf683dfd..639ec691c2b 100644
+--- a/src/core/exec-invoke.c
++++ b/src/core/exec-invoke.c
+@@ -4932,8 +4932,6 @@ static void prepare_terminal(
+
+         (void) exec_context_apply_tty_size(context, STDIN_FILENO, STDOUT_FILENO, /* tty_path= */ NULL);
+
+-        if (use_ansi)
+-                (void) osc_context_open_service(p->unit_id, p->invocation_id, /* ret_seq= */ NULL);
+ }
+
+ static int setup_term_environment(const ExecContext *context, char ***env) {

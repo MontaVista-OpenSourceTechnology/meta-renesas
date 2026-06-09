@@ -42,6 +42,7 @@ RDEPENDS:packagegroup-renesas = " \
     udev-rules-cvlib \
     linux-renesas-uapi \
     bsp-config \
+    capture \
     ${CPURTT_PKGS} \
     ${@bb.utils.contains('MACHINE_FEATURES', 'gsx', '${GFX_PKGS}' '${WAYLAND_PKGS}', '', d)} \
     nvme-initscripts \

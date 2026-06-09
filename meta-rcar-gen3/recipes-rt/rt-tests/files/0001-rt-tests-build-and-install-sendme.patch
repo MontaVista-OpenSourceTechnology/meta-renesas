@@ -1,0 +1,63 @@
+From d6380b6885019569e982210993f1ac0cdd6d3e27 Mon Sep 17 00:00:00 2001
+From: Thinh Le <thinh.le.yn@renesas.com>
+Date: Tue, 9 Jun 2026 09:52:43 +0700
+Subject: [PATCH] rt-tests: build and install sendme
+
+The sendme userspace test is shipped in src/backfire, but it is not part
+of the default rt-tests build targets. Add it to the common target list so
+the existing install rule places the binary in bindir together with the
+other rt-tests tools.
+
+Upstream-Status: Pending
+
+Signed-off-by: Thinh Le <thinh.le.yn@renesas.com>
+---
+ Makefile | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index a735584..1ccb062 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,7 +19,8 @@ sources = cyclictest.c \
+ 	  deadline_test.c \
+ 	  queuelat.c \
+ 	  ssdd.c \
+-	  oslat.c
++	  oslat.c \
++	  sendme.c
+ 
+ TARGETS = $(sources:.c=)
+ LIBS	= -lrt -lpthread
+@@ -57,7 +58,8 @@ MANPAGES = src/cyclictest/cyclictest.8 \
+ 	   src/sched_deadline/deadline_test.8 \
+ 	   src/ssdd/ssdd.8 \
+ 	   src/sched_deadline/cyclicdeadline.8 \
+-	   src/oslat/oslat.8
++	   src/oslat/oslat.8 \
++	   src/backfire/sendme.8
+ 
+ ifdef PYLIB
+ 	MANPAGES += src/cyclictest/get_cyclictest_snapshot.8 \
+@@ -101,7 +103,8 @@ VPATH	+= src/hackbench:
+ VPATH	+= src/sched_deadline:
+-VPATH	+= src/queuelat:	
++VPATH	+= src/queuelat:
+ VPATH	+= src/ssdd:
+ VPATH	+= src/oslat:
++VPATH	+= src/backfire:
+ 
+ $(OBJDIR)/%.o: %.c | $(OBJDIR)
+ 	$(CC) -D VERSION=$(VERSION) -c $< $(CFLAGS) $(CPPFLAGS) -o $@
+@@ -128,6 +131,9 @@ signaltest: $(OBJDIR)/signaltest.o $(OBJDIR)/librttest.a $(OBJDIR)/librttestnum
+ pi_stress: $(OBJDIR)/pi_stress.o $(OBJDIR)/librttest.a
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LIBS) $(RTTESTLIB)
+ 
++sendme: $(OBJDIR)/sendme.o $(OBJDIR)/librttest.a
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LIBS) $(RTTESTLIB) $(EXTRA_LIBS)
++
+ hwlatdetect:  src/hwlatdetect/hwlatdetect.py
+ 	chmod +x src/hwlatdetect/hwlatdetect.py
+ 	ln -s src/hwlatdetect/hwlatdetect.py hwlatdetect
+-- 
+2.34.1

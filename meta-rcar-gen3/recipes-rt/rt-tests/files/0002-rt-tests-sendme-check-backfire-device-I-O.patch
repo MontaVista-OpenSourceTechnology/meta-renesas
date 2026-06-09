@@ -1,0 +1,60 @@
+From 2a6a718d6b189c6358f4deb27776cfb4b48e42fe Mon Sep 17 00:00:00 2001
+From: Thinh Le <thinh.le.yn@renesas.com>
+Date: Tue, 9 Jun 2026 09:56:50 +0700
+Subject: [PATCH] rt-tests: sendme: check backfire device I/O
+
+sendme is built with _FORTIFY_SOURCE enabled in Yocto, which warns when
+the return values from read() and write() are ignored. Check both
+operations and terminate the loop cleanly when the backfire device cannot
+accept a signal number or return a timestamp.
+
+Upstream-Status: Pending
+
+Signed-off-by: Thinh Le <thinh.le.yn@renesas.com>
+---
+ src/backfire/sendme.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/src/backfire/sendme.c b/src/backfire/sendme.c
+index d963723..60aa7f7 100644
+--- a/src/backfire/sendme.c
++++ b/src/backfire/sendme.c
+@@ -248,14 +248,34 @@ int main(int argc, char *argv[])
+ 
+ 		while (1) {
+ 			struct timespec ts;
++			ssize_t bytes;
++			size_t siglen;
+ 
+ 			ts.tv_sec = interval / USEC_PER_SEC;
+ 			ts.tv_nsec = (interval % USEC_PER_SEC) * 1000;
+ 
+ 			gettimeofday(&before, NULL);
+-			write(path, sigtest, strlen(sigtest));
++			siglen = strlen(sigtest);
++			bytes = write(path, sigtest, siglen);
++			if (bytes < 0) {
++				perror("write");
++				retval = 1;
++				break;
++			}
++			if ((size_t)bytes != siglen) {
++				fprintf(stderr, "ERROR: short write to backfire device\n");
++				retval = 1;
++				break;
++			}
+ 			while (after.tv_sec == 0);
+-			read(path, timestamp, sizeof(timestamp));
++			bytes = read(path, timestamp, sizeof(timestamp) - 1);
++			if (bytes <= 0) {
++				if (bytes < 0)
++					perror("read");
++				retval = 1;
++				break;
++			}
++			timestamp[bytes] = '\0';
+ 			if (sscanf(timestamp, "%lu,%lu\n", &sendtime.tv_sec,
+ 			    &sendtime.tv_usec) != 2)
+ 				break;
+-- 
+2.34.1

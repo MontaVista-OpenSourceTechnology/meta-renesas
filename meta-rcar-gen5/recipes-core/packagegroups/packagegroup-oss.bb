@@ -86,6 +86,7 @@ RDEPENDS:packagegroup-bsp-testpkg = " \
     inetutils \
     stress-ng \
     htop \ 
+    net-tools \
 "
 
 # Python3 packages requested by Renesas

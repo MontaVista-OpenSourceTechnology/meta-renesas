@@ -1,0 +1,35 @@
+From c445f4adcbe7e9157fb28c3579dbbf08d0381794 Mon Sep 17 00:00:00 2001
+From: Manh Hoang <manh.hoang.uh@bp.renesas.com>
+Date: Thu, 11 Jun 2026 15:19:35 +0700
+Subject: [PATCH] ADSP Fix No Soundcards Found on H3Ne
+
+Add support for ADSP sound for H3Ne board
+
+Signed-off-by: Manh Hoang <manh.hoang.uh@bp.renesas.com>
+Signed-off-by: Tri Do <tri.do.aj@bp.renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a779mb-salvator-xs.dts | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a779mb-salvator-xs.dts b/arch/arm64/boot/dts/renesas/r8a779mb-salvator-xs.dts
+index dc9288cc60bc..7828e8bf0484 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779mb-salvator-xs.dts
++++ b/arch/arm64/boot/dts/renesas/r8a779mb-salvator-xs.dts
+@@ -133,8 +133,12 @@ port@1 {
+ 	/delete-node/ hdmi1-out;
+ 
+ 	sound_card: sound {
+-		dais = <&rsnd_port0 /* ak4613 */
+-				&rsnd_port1>; /* HDMI0 */
++		dais = <&adsp_port0
++			&adsp_port1
++			&adsp_port2
++			&adsp_port3
++			&rsnd_port0 /* ak4613 */
++			&rsnd_port1>; /* HDMI0 */
+ 	};
+ };
+ 
+-- 
+2.34.1
+

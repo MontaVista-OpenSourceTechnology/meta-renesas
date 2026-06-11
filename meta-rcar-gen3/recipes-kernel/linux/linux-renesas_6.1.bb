@@ -66,6 +66,7 @@ SUPPORT_ADSP_ASOC = " \
     file://0004-ADSP-integrate-ADSP-sound-for-H3-M3-M3N-board.patch \
     file://0005-ADSP-add-build-for-ADSP-sound-driver.patch \
     file://0006-ADSP-integrate-ADSP-sound-for-E3-board.patch \
+    file://0007-ADSP-Fix-No-Soundcards-Found-on-H3Ne.patch \
     file://adsp.cfg \
 "
 

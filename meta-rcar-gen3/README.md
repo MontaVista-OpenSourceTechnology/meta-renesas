@@ -27,20 +27,35 @@ Currently, this supports boards and the SoCs of the following:
 
 This layer depends on:
 
-* poky
+* bitbake
 
 ```bash
-    URI: git://git.yoctoproject.org/poky
-    layers: meta, meta-poky, meta-yocto-bsp
-    branch: dunfell
+    URI: https://git.openembedded.org/bitbake
+    branch: 2.18
+```
+
+* openembedded-core
+
+```bash
+    URI: https://git.openembedded.org/openembedded-core
+    layers: meta
+    branch: wrynose
+```
+
+* meta-yocto
+
+```bash
+    URI: https://git.yoctoproject.org/meta-yocto
+    layers: meta-poky
+    branch: wrynose
 ```
 
 * meta-openembedded
 
 ```bash
-    URI: git://git.openembedded.org/meta-openembedded
+    URI: https://git.openembedded.org/meta-openembedded
     layers: meta-oe, meta-python
-    branch: dunfell
+    branch: wrynose
 ```
 
 ## Build Instructions
@@ -55,10 +70,10 @@ The following instructions require a Poky installation (or equivalent).
    $ git config --global user.name "Your Name"
 ```
 
-* Initialize a build using the 'oe-init-build-env' script in Poky. e.g.:
+* Initialize a build using the 'oe-init-build-env' script in openembedded-core. e.g.:
 
 ```bash
-    $ source poky/oe-init-build-env
+    $ source openembedded-core/oe-init-build-env
 ```
 
 * After that, initialized configure bblayers.conf by adding meta-rcar-gen3 layer.
@@ -66,9 +81,9 @@ e.g.:
 
 ```bash
     BBLAYERS ?= " \
-        <path to layer>/poky/meta \
-        <path to layer>/poky/meta-poky \
-        <path to layer>/poky/meta-yocto-bsp \
+        <path to layer>/openembedded-core/meta \
+        <path to layer>/meta-yocto/meta-poky \
+        <path to layer>/meta-yocto/meta-yocto-bsp \
         <path to layer>/meta-renesas/meta-rcar-gen3 \
         <path to layer>/meta-openembedded/meta-python \
         <path to layer>/meta-openembedded/meta-oe \
@@ -127,8 +142,7 @@ Draak|MACHINE = "draak"
 * Configure for systemd init in local.conf:
 
 ```bash
-    DISTRO_FEATURES:append = " usrmerge systemd"
-    VIRTUAL-RUNTIME_init_manager = "systemd"
+    INIT_MANAGER = "systemd"
 ```
 
 * Configure for ivi-shell and ivi-extension

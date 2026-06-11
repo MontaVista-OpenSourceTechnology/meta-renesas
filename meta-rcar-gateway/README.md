@@ -5,11 +5,17 @@ Please see the corresponding sections below for details.
 Dependencies
 ============
 
-  URI: git://git.yoctoproject.org/poky
-  branch: kirkstone
+  URI: https://git.openembedded.org/bitbake
+  branch: 2.18
 
-  URI: git://git.openembedded.org/meta-openembedded
-  branch: kirkstone
+  URI: https://git.openembedded.org/openembedded-core
+  branch: wrynose
+
+  URI: https://git.yoctoproject.org/meta-yocto
+  branch: wrynose
+
+  URI: https://git.openembedded.org/meta-openembedded
+  branch: wrynose
 
 Patches
 =======
@@ -42,10 +48,10 @@ The following instructions require a Poky installation (or equivalent).
    $ git config --global user.name "Your Name"
 ```
 
-* Initialize a build using the 'oe-init-build-env' script in Poky. e.g.:
+* Initialize a build using the 'oe-init-build-env' script in openembedded-core. e.g.:
 
 ```bash
-    $ source poky/oe-init-build-env
+    $ source openembedded-core/oe-init-build-env
 ```
 
 * After that, initialized configure bblayers.conf by adding meta-rcar-gateway layer.
@@ -53,9 +59,9 @@ e.g.:
 
 ```bash
     BBLAYERS ?= " \
-        <path to layer>/poky/meta \
-        <path to layer>/poky/meta-poky \
-        <path to layer>/poky/meta-yocto-bsp \
+        <path to layer>/openembedded-core/meta \
+        <path to layer>/meta-yocto/meta-poky \
+        <path to layer>/meta-yocto/meta-yocto-bsp \
         <path to layer>/meta-renesas/meta-rcar-gateway \
         <path to layer>/meta-openembedded/meta-python \
         <path to layer>/meta-openembedded/meta-oe \

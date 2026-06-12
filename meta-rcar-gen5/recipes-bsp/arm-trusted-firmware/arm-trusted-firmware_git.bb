@@ -13,7 +13,7 @@ BRANCH:r8a78000 = "rcar_gen5_2.12.0"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
 
 SRCREV:x5h = "d241e3cedf24854b43a9b212e5e203d84e406de9"
-SRCREV:r8a78000 = "6b2865ac95eb276c8016eae5d18befc777dc4ff9"
+SRCREV:r8a78000 = "c61d3d3e403ebb8993a603a3173dd1b368d78973"
 
 PV = "v2.5+renesas+git${SRCPV}"
 

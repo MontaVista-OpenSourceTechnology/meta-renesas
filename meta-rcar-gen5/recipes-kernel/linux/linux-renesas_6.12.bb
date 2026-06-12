@@ -13,6 +13,7 @@ SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
     file://ar0820.ko \
     file://imx728.ko \
     file://max96712.ko \
+    file://rpmsg.cfg \
 "
 
 # Add MP-PHY firmware conditionally for R-Car X5H board

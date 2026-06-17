@@ -38,8 +38,14 @@ do_compile() {
     oe_runmake PLATFORM=${PLATFORM} CFG_ARM64_core=y
 }
 
-# do_install() nothing
-do_install[noexec] = "1"
+do_install () {
+    #install TA devkit
+    install -d ${D}/usr/include/optee/export-user_ta/
+
+    for f in  ${B}/out/arm-plat-${PLATFORM}/export-ta_arm64/* ; do
+        cp -aR  $f  ${D}/usr/include/optee/export-user_ta/
+    done
+}
 
 do_deploy() {
     # Create deploy folder
@@ -52,4 +58,15 @@ do_deploy() {
 }
 
 addtask deploy before do_build after do_compile
+
+
+FILES:${PN}-staticdev += " \
+    /usr/include/optee/export-user_ta/lib/*.a \
+"
+
+FILES:${PN}-dev:remove = " \
+    /usr/include/optee/export-user_ta/lib/*.a \
+"
+
+INSANE_SKIP:${PN}-dev += "buildpaths"
 

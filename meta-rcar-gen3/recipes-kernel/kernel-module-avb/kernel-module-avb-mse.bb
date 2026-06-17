@@ -17,9 +17,8 @@ REQUIRED_DISTRO_FEATURES = "avb"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/avb-mse.git;branch=rcar-gen3;protocol=https \
-    file://0001-Fix-error-avb-mse-to-adapt-kernel-v6.patch \
 "
-SRCREV = "c32d413a8c76a38e46b3b8985371ce0176ea4b41"
+SRCREV = "ee514c86e42f62dbcd3cceb88d7872cd1f652046"
 
 S = "${WORKDIR}/git"
 

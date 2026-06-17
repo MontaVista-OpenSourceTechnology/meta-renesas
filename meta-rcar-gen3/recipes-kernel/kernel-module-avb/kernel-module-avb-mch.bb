@@ -17,9 +17,8 @@ REQUIRED_DISTRO_FEATURES = "avb"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/avb-mch.git;branch=rcar-gen3;protocol=https \
-    file://0001-Adding-ravb_hw_info-to-adapt-kernel-v6.patch \
 "
-SRCREV = "631cdf022e555a67d3606d669cfa996b274b6976"
+SRCREV = "907068142a84570b3d2b9e3f3871fa036540540f"
 
 S = "${WORKDIR}/git"
 

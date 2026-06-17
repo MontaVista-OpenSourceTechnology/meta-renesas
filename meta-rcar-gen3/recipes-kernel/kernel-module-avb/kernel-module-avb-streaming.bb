@@ -17,9 +17,8 @@ REQUIRED_DISTRO_FEATURES = "avb"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/avb-streaming.git;branch=rcar-gen3;protocol=https \
-    file://0001-Fix-error-avb-streaming-to-adapt-kernel-v6.patch \
 "
-SRCREV = "671bf9c3249551cb182ff23fa67da4844098bd24"
+SRCREV = "9551842b1078f07618cd14f34147a6c567190087"
 
 S = "${WORKDIR}/git"
 

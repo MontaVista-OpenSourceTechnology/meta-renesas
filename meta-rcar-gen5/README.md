@@ -70,7 +70,7 @@ e.g.:
 
 Board|MACHINE
 -----|-------
-X5H|MACHINE = "x5h"
+X5H on Virtual Platform|MACHINE = "x5h_vpf"
 Ironhide|MACHINE = "ironhide"
 
 * Configure for systemd init in local.conf:

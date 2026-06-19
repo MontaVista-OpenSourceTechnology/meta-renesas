@@ -1,14 +1,10 @@
-#@TYPE: Machine
-#@NAME: x5h machine
-#@DESCRIPTION: Machine configuration for running X5H
-
-SOC_FAMILY = "x5h"
+SOC_FAMILY =. "rcar-gen5-vpf:"
 
 DEFAULTTUNE ?= "aarch64"
 require conf/machine/include/arm/arch-arm64.inc
 require conf/machine/include/rcar-gen5-common.inc
 
-# Device tree for X5H
+# Device tree for X5H on Virtual Platform
 KERNEL_DEVICETREE = " \
     renesas/r8a78000-rfs2x.dtb \
     renesas/r8a78000-rfs2x-uio.dtb \
@@ -16,7 +12,7 @@ KERNEL_DEVICETREE = " \
     renesas/r8a78000-rfs2x-uio-gsx.dtb \
 "
 
-# X5H u-boot configure
+# X5H on Virtual Platform u-boot configure
 UBOOT_MACHINE = "r8a78000_ironhide_defconfig"
 
 BBMASK += "meta-renesas/meta-rcar-gen5/recipes-core/busybox/"

@@ -9,8 +9,8 @@ inherit pkgconfig
 
 SRC_URI = "git://github.com/renesas-rcar/capture.git;protocol=https;nobranch=1"
 
-SRCREV:x5h = "1271dfe4c4d1acb2a13b3bd1461aaf2ff8c2bf6f"
-SRCREV:r8a78000 = "5ceb54306e1db6333ee4fc982273748f8edd4872"
+SRCREV:rcar-gen5-vpf = "1271dfe4c4d1acb2a13b3bd1461aaf2ff8c2bf6f"
+SRCREV:rcar-gen5-evb = "5ceb54306e1db6333ee4fc982273748f8edd4872"
 
 do_compile() {
     cd ${S}

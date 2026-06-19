@@ -9,15 +9,15 @@ DEPENDS += "linux-renesas"
 PN = "kernel-module-gles"
 PR = "r0"
 
-COMPATIBLE_MACHINE = "x5h|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 require include/rcar-gfx-common.inc
 
-SRC_URI:r8a78000 = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
+SRC_URI:rcar-gen5-evb = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
 sha256sum=b9d22ce6aa4f977497ad22a9e1775e9b576d9e1109365cc8e815428b1aea6238"
 
-SRC_URI:x5h = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
+SRC_URI:rcar-gen5-vpf = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
 sha256sum=60d50ced467c05c6ed1084d2f283aeace22808337bb6a1beb1e2e16b5d096a51"
 
 SRC_URI:append = " file://blacklist.conf"

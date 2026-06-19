@@ -98,4 +98,4 @@ FILES:${PN} = " \
 #ALLOW_EMPTY:${PN}-dbg = "1"
 
 # Machine specific autoload configuration
-KERNEL_MODULE_AUTOLOAD:x5h += "vspm"
+KERNEL_MODULE_AUTOLOAD:rcar-gen5-vpf += "vspm"

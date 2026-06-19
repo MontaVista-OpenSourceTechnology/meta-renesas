@@ -8,19 +8,19 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit deploy
 
 
-BRANCH:x5h = "rcar_gen5_2.12.0_vdk"
-BRANCH:r8a78000 = "rcar_gen5_2.12.0"
+BRANCH:rcar-gen5-vpf = "rcar_gen5_2.12.0_vdk"
+BRANCH:rcar-gen5-evb = "rcar_gen5_2.12.0"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
 
-SRCREV:x5h = "d241e3cedf24854b43a9b212e5e203d84e406de9"
-SRCREV:r8a78000 = "c61d3d3e403ebb8993a603a3173dd1b368d78973"
+SRCREV:rcar-gen5-vpf = "d241e3cedf24854b43a9b212e5e203d84e406de9"
+SRCREV:rcar-gen5-evb = "c61d3d3e403ebb8993a603a3173dd1b368d78973"
 
 PV = "v2.5+renesas+git${SRCPV}"
 
-COMPATIBLE_MACHINE = "x5h|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
 PLATFORM = "rcar_gen5"
-ATFW_OPT:x5h = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 SPD=none LOG_LEVEL=40 DEBUG=0 SET_SCMI_PARAM=1 VDK_ENV=1"
-ATFW_OPT:r8a78000 = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 LOG_LEVEL=20 DEBUG=0 SET_SCMI_PARAM=1"
+ATFW_OPT:rcar-gen5-vpf = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 SPD=none LOG_LEVEL=40 DEBUG=0 SET_SCMI_PARAM=1 VDK_ENV=1"
+ATFW_OPT:rcar-gen5-evb = "LSI=X5H CTX_INCLUDE_AARCH32_REGS=0 LOG_LEVEL=20 DEBUG=0 SET_SCMI_PARAM=1"
 
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE = "${TARGET_PREFIX}"

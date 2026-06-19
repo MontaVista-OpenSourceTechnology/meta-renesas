@@ -31,7 +31,7 @@ IMAGE_INSTALL:append = " \
     kernel-devicetree \
     kernel-modules \
 "
-IMAGE_INSTALL:append:r8a78000 = " \
+IMAGE_INSTALL:append:rcar-gen5-evb = " \
     packagegroup-gstreamer1.0-plugins \
 "
 

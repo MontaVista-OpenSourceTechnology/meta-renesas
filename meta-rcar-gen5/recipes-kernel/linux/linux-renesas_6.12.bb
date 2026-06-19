@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 require recipes-kernel/linux/linux-yocto.inc
 require include/rcar-kernel-info-common.inc
 
-COMPATIBLE_MACHINE = "x5h|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
 
 SRCREV = "${RENESAS_BSP_SRCREV}"
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
@@ -17,7 +17,7 @@ SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
 "
 
 # Add MP-PHY firmware conditionally for R-Car X5H board
-SRC_URI:append:r8a78000 = " \
+SRC_URI:append:rcar-gen5-evb = " \
     ${@bb.utils.contains('MACHINE_FEATURES', 'rcar-firmware', \
         'file://rcar_gen5_mp_phy.bin \
         file://rcar_gen5_pcie6_iccm.bin \
@@ -46,7 +46,7 @@ do_install:append:rcar-gen5() {
     mv ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/kernel/drivers/dma/dmatest.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
 
-do_install:append:r8a78000() {
+do_install:append:rcar-gen5-evb() {
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     install -m 644 ${UNPACKDIR}/mvq32xx.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     install -m 644 ${UNPACKDIR}/ar0820.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/

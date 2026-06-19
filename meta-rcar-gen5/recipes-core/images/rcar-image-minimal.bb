@@ -2,7 +2,7 @@ SUMMARY = "A small image just capable of allowing a device to boot."
 
 require recipes-core/images/core-image-minimal.bb
 
-COMPATIBLE_MACHINE = "x5h|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
 
 # Enable package manager
 EXTRA_IMAGE_FEATURES += "package-management"
@@ -15,4 +15,4 @@ IMAGE_INSTALL:append = " \
     coreutils \
     media-ctl \
 "
-IMAGE_INSTALL:append:r8a78000 = " optee-client"
+IMAGE_INSTALL:append:rcar-gen5-evb = " optee-client"

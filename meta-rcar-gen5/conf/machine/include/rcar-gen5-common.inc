@@ -18,7 +18,7 @@ EXTRA_IMAGEDEPENDS += " u-boot"
 # Add variable to Build Configuration in build log
 BUILDCFG_VARS:append = " SOC_FAMILY"
 
-# Set Image & SDK name for Gen5
+# Set Image & SDK name for Gen5 (temporary x5h, will be changed to rcar-gen5 when adding new SOCs)
 IMAGE_NAME = "${IMAGE_BASENAME}-x5h${IMAGE_VERSION_SUFFIX}"
 IMAGE_LINK_NAME = "${IMAGE_BASENAME}-x5h"
 SDK_NAME:rcar-gen5 = "${DISTRO}-${TCLIBC}-${SDKMACHINE}-${IMAGE_BASENAME}-${TUNE_PKGARCH}-x5h"

@@ -7,7 +7,7 @@ require include/rcar-bsp-path-common.inc
 PN = "gles-user-module"
 PR = "r0"
 
-COMPATIBLE_MACHINE = "x5h|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 DEPENDS = "kernel-module-gles"
@@ -19,10 +19,10 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 
 require include/rcar-gfx-common.inc
 
-SRC_URI:r8a78000 = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
+SRC_URI:rcar-gen5-evb = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
 sha256sum=5bacad8807eb9bfc2bc715a20b6b99252aa5194c542153da0c8687250f16022c"
 
-SRC_URI:x5h = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
+SRC_URI:rcar-gen5-vpf = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
 sha256sum=5bacad8807eb9bfc2bc715a20b6b99252aa5194c542153da0c8687250f16022c"
 
 SRC_URI:append = " file://rc.pvr.service"

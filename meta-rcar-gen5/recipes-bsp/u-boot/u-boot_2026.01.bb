@@ -15,7 +15,7 @@ UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
 BRANCH = "v2026.01/rcar-8.0.0"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
-SRC_URI:append:r8a78000 = " file://0001-config-Disable-LOCALVERSION_AUTO.patch"
+SRC_URI:append:rcar-gen5-evb = " file://0001-config-Disable-LOCALVERSION_AUTO.patch"
 
 SRCREV = "30d9373835b7ea427af0f4d1ec07953b802ec233"
 

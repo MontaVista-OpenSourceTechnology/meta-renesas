@@ -1,10 +1,10 @@
 RENESAS_BSP_URL = " \
     git://github.com/renesas-rcar/linux-bsp.git;protocol=https"
 
-RENESAS_BSP_BRANCH = "${@oe.utils.conditional("MACHINE", "x5h", \
+RENESAS_BSP_BRANCH = "${@oe.utils.conditional("MACHINE", "x5h_vpf", \
     "v6.12.80/rcar-6.1.0_vpf", \
     "v6.12.80/rcar-6.1.0", d)}"
-RENESAS_BSP_SRCREV = "${@oe.utils.conditional("MACHINE", "x5h", \
+RENESAS_BSP_SRCREV = "${@oe.utils.conditional("MACHINE", "x5h_vpf", \
     "b88700836be3c18ee4f8b30d18e18150571c317d", \
     "b5ce8d1a749fdcd2a640877a7d6b92e0b7e379bd", d)}"
 

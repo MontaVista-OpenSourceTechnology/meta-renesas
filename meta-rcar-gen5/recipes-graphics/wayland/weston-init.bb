@@ -76,14 +76,17 @@ do_install() {
     install -d ${D}/${sysconfdir}/profile.d
     install -m 0755 ${S}/weston.sh ${D}/${sysconfdir}/profile.d/weston.sh
 
-    # Add DP-1 output configuration for ironhide machine
-    if [ "${MACHINE}" = "ironhide" ]; then
+    # Add DP-1 output configuration for x5h_evb|ironhide|perceptor machine
+    case "${MACHINE}" in
+        x5h_evb|ironhide|perceptor)
         sed -e '$a\\' \
             -e '$a\[output]' \
             -e '$a\name=DP-1' \
             -e '$a\mode=2560x1440' \
             -i ${D}/${sysconfdir}/xdg/weston/weston.ini
-    fi
+
+        ;;
+    esac
 
     # Fix weston.service and weston@.service run simultaneously.
     mv ${D}/${sysconfdir}/init.d/weston ${D}/${sysconfdir}/init.d/weston@

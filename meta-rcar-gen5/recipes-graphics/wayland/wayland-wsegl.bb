@@ -8,7 +8,7 @@ SRC_URI = "git://github.com/renesas-rcar/wayland-wsegl.git;branch=rcar_gen5;prot
 
 SRCREV = "ef1e31db2b99bc3fe53d37e1dc8159d478505972"
 
-COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|x5h_evb|ironhide|perceptor"
 
 DEPENDS = "libgbm wayland-kms libdrm wayland wayland-native wayland-protocols"
 

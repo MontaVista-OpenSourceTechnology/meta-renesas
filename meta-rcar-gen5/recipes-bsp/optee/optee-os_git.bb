@@ -18,7 +18,7 @@ SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \
 "
 
-COMPATIBLE_MACHINE = "ironhide"
+COMPATIBLE_MACHINE = "x5h_evb|ironhide|perceptor"
 PLATFORM = "rcar_gen5"
 
 DEPENDS = "python3-pycryptodome-native python3-pyelftools-native python3-cryptography-native libgcc"

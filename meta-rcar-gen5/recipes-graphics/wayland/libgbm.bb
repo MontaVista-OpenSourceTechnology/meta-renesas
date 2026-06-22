@@ -9,7 +9,7 @@ SRCREV = "538889dee7940cbcd8f384ff24436c785181cfdb"
 SRC_URI = "git://github.com/renesas-rcar/libgbm;branch=match-mesa-20.0.1;protocol=https"
 
 
-COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|x5h_evb|ironhide|perceptor"
 DEPENDS = "wayland-kms udev"
 
 inherit autotools pkgconfig

@@ -18,7 +18,7 @@ SRC_URI += " \
 inherit python3native systemd pkgconfig
 SYSTEMD_SERVICE:${PN} = "optee.service"
 
-COMPATIBLE_MACHINE = "ironhide"
+COMPATIBLE_MACHINE = "x5h_evb|ironhide|perceptor"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

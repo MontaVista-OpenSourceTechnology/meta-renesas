@@ -71,7 +71,9 @@ e.g.:
 Board|MACHINE
 -----|-------
 X5H on Virtual Platform|MACHINE = "x5h_vpf"
+X5H on Evaluation Board|MACHINE = "x5h_evb"
 Ironhide|MACHINE = "ironhide"
+Perceptor|MACHINE = "perceptor"
 
 * Configure for systemd init in local.conf:
 

@@ -2,7 +2,7 @@ SUMMARY = "A small image just capable of allowing a device to boot."
 
 require recipes-core/images/core-image-minimal.bb
 
-COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|x5h_evb|ironhide|perceptor"
 
 # Enable package manager
 EXTRA_IMAGE_FEATURES += "package-management"

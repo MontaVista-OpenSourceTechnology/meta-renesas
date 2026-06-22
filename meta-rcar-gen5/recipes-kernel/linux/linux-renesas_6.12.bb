@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 require recipes-kernel/linux/linux-yocto.inc
 require include/rcar-kernel-info-common.inc
 
-COMPATIBLE_MACHINE = "x5h_vpf|ironhide"
+COMPATIBLE_MACHINE = "x5h_vpf|x5h_evb|ironhide|perceptor"
 
 SRCREV = "${RENESAS_BSP_SRCREV}"
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${RENESAS_BSP_BRANCH} \
@@ -60,18 +60,19 @@ do_install:append:rcar-gen5-vpf() {
     echo "blacklist ucie-dummy-rcar" >> ${D}${sysconfdir}/modprobe.d/blacklist.conf
 }
 
-# Install MP-PHY firmware to staging directory if enabled for R-Car X5H board
-do_install_mp_phy_firmware () {
-    if [ "${MACHINE}" = "ironhide" ] && [ -f ${UNPACKDIR}/rcar_gen5_mp_phy.bin ]; then
+# Install R-Car Gen5 firmware to staging directory if enabled for R-Car X5H board
+do_install_rcar_gen5_firmware () {
+    case "${MACHINE}" in
+        x5h_evb|ironhide|perceptor)
         install -d ${STAGING_KERNEL_DIR}/firmware
         install -m 644 ${UNPACKDIR}/rcar_gen5_mp_phy.bin ${STAGING_KERNEL_DIR}/firmware/
         install -m 644 ${UNPACKDIR}/rcar_gen5_pcie6_iccm.bin ${STAGING_KERNEL_DIR}/firmware/
         install -m 644 ${UNPACKDIR}/rcar_gen5_pcie6_dccm.bin ${STAGING_KERNEL_DIR}/firmware/
-        install -m 644 ${UNPACKDIR}/rcar_gen5_mp_phy.bin ${STAGING_KERNEL_DIR}/firmware/
-    fi
+        ;;
+    esac
 }
 
-addtask do_install_mp_phy_firmware after do_configure before do_compile
+addtask do_install_rcar_gen5_firmware after do_configure before do_compile
 
 # Deploy vmlinux to deploy directory
 do_deploy:append:rcar-gen5() {

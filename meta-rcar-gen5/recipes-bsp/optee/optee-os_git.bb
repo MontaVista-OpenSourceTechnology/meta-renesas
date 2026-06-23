@@ -46,9 +46,11 @@ do_deploy() {
     install -d ${DEPLOYDIR}
 
     # Copy TEE OS to deploy folder
-    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.elf ${DEPLOYDIR}/apu-tee-${MACHINE}.elf
-    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.bin ${DEPLOYDIR}/apu-tee-${MACHINE}.bin
-    install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.srec ${DEPLOYDIR}/apu-tee-${MACHINE}.srec
+    for machine in ${SECURITY_BSP_MACHINE}; do
+        install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.elf ${DEPLOYDIR}/apu-tee-${machine}.elf
+        install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.bin ${DEPLOYDIR}/apu-tee-${machine}.bin
+        install -m 0644 ${S}/out/arm-plat-${PLATFORM}/core/tee.srec ${DEPLOYDIR}/apu-tee-${machine}.srec
+    done
 }
 
 addtask deploy before do_build after do_compile

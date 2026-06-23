@@ -25,6 +25,8 @@ UBOOT_CONFIG ??= "ironhide perceptor"
 UBOOT_CONFIG[ironhide] = "r8a78000_ironhide_defconfig"
 UBOOT_CONFIG[perceptor] = "r8j78070_perceptor_defconfig"
 
+SECURITY_BSP_MACHINE ??= "ironhide perceptor"
+
 EXTRA_IMAGEDEPENDS += "arm-trusted-firmware optee-os"
 
 # Use Poky default util-linux version to 2.41

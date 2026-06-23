@@ -44,9 +44,11 @@ do_deploy() {
     # Create deploy folder
     install -d ${DEPLOYDIR}
 
-    install -m 0644 ${S}/build/${PLATFORM}/release/bl31.bin ${DEPLOYDIR}/apu-bl31-${MACHINE}.bin
-    install -m 0644 ${S}/build/${PLATFORM}/release/bl31.srec ${DEPLOYDIR}/apu-bl31-${MACHINE}.srec
-    install -m 0644 ${S}/build/${PLATFORM}/release/bl31/bl31.elf ${DEPLOYDIR}/apu-bl31-${MACHINE}.elf
+    for machine in ${SECURITY_BSP_MACHINE}; do
+        install -m 0644 ${S}/build/${PLATFORM}/release/bl31.bin ${DEPLOYDIR}/apu-bl31-${machine}.bin
+        install -m 0644 ${S}/build/${PLATFORM}/release/bl31.srec ${DEPLOYDIR}/apu-bl31-${machine}.srec
+        install -m 0644 ${S}/build/${PLATFORM}/release/bl31/bl31.elf ${DEPLOYDIR}/apu-bl31-${machine}.elf
+    done
 }
 
 addtask deploy before do_build after do_compile

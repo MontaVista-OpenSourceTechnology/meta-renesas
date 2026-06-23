@@ -13,7 +13,9 @@ KERNEL_DEVICETREE = " \
 "
 
 # X5H on Evaluation board u-boot configure
-UBOOT_MACHINE = "r8a78000_ironhide_defconfig"
+UBOOT_CONFIG ??= "ironhide perceptor"
+UBOOT_CONFIG[ironhide] = "r8a78000_ironhide_defconfig"
+UBOOT_CONFIG[perceptor] = "r8j78070_perceptor_defconfig"
 
 EXTRA_IMAGEDEPENDS += "arm-trusted-firmware optee-os"
 

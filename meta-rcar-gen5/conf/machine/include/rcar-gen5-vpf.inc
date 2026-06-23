@@ -13,7 +13,8 @@ KERNEL_DEVICETREE = " \
 "
 
 # X5H on Virtual Platform u-boot configure
-UBOOT_MACHINE = "r8a78000_ironhide_defconfig"
+UBOOT_CONFIG ??= "x5h"
+UBOOT_CONFIG[x5h] = "r8a78000_ironhide_defconfig"
 
 BBMASK += "meta-renesas/meta-rcar-gen5/recipes-core/busybox/"
 

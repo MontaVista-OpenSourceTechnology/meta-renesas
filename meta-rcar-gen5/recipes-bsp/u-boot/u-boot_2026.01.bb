@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=2ca5f2c35c8cc335f0a19756634782f1"
 PE = "1"
 
 
-require u-boot.inc
+require recipes-bsp/u-boot/u-boot.inc
 require include/rcar-kernel-info-common.inc
 
 DEPENDS += "flex-native bison-native bc-native dtc-native lzop-native srecord-native gnutls-native"
@@ -15,9 +15,9 @@ UBOOT_URL = "git://github.com/renesas-rcar/u-boot.git;protocol=https"
 BRANCH = "v2026.01/rcar-8.0.0"
 
 SRC_URI = "${UBOOT_URL};branch=${BRANCH}"
-SRC_URI:append:rcar-gen5-evb = " file://0001-config-Disable-LOCALVERSION_AUTO.patch"
+SRC_URI:append:rcar-gen5-evb = " file://localversion_auto.cfg"
 
-SRCREV = "30d9373835b7ea427af0f4d1ec07953b802ec233"
+SRCREV = "80c6f8a521a7741131d0dc166db15dc50fc78ae1"
 
 PV = "v2026.01+git${SRCPV}"
 
@@ -38,7 +38,7 @@ do_deploy:append() {
                 if [ $j -eq $i ]
                 then
                     type=${type#*_}
-                    install -m 644 ${B}/${config}/${UBOOT_SREC} ${DEPLOYDIR}/u-boot-elf-${type}-${PV}-${PR}.${UBOOT_SREC_SUFFIX}
+                    install -m 644 ${B}/${config}-${type}/${UBOOT_SREC} ${DEPLOYDIR}/u-boot-elf-${type}-${PV}-${PR}.${UBOOT_SREC_SUFFIX}
                     cd ${DEPLOYDIR}
                     ln -sf u-boot-elf-${type}-${PV}-${PR}.${UBOOT_SREC_SUFFIX} u-boot-elf-${type}.${UBOOT_SREC_SUFFIX}
                 fi

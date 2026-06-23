@@ -5,12 +5,20 @@ require conf/machine/include/arm/arch-arm64.inc
 require conf/machine/include/rcar-gen5-common.inc
 
 # Device tree for Ironhide
-KERNEL_DEVICETREE = " \
+KERNEL_DEVICETREE_IRONHIDE = " \
     renesas/r8a78000-ironhide.dtb \
     renesas/r8a78000-ironhide-uio.dtb \
     renesas/r8a78000-ironhide-uio-ca.dtb \
     renesas/r8a78000-ironhide-coresight.dtb \
 "
+# Device tree for Perceptor
+KERNEL_DEVICETREE_PERCEPTOR = " \
+    renesas/r8j78070-perceptor.dtb \
+    renesas/r8j78070-perceptor-uio.dtb \
+    renesas/r8j78070-perceptor-uio-ca.dtb \
+"
+# Device tree for X5H on Evaluation boards common
+KERNEL_DEVICETREE ??= "${KERNEL_DEVICETREE_IRONHIDE} ${KERNEL_DEVICETREE_PERCEPTOR}"
 
 # X5H on Evaluation board u-boot configure
 UBOOT_CONFIG ??= "ironhide perceptor"

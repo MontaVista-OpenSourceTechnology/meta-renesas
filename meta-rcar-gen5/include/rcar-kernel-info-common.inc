@@ -5,11 +5,11 @@ RENESAS_BSP_BRANCH = "${@oe.utils.conditional("MACHINE", "x5h_vpf", \
     "v6.12.80/rcar-6.1.0_vpf", \
     "v6.12.80/rcar-6.1.0", d)}"
 RENESAS_BSP_SRCREV = "${@oe.utils.conditional("MACHINE", "x5h_vpf", \
-    "b88700836be3c18ee4f8b30d18e18150571c317d", \
-    "b5ce8d1a749fdcd2a640877a7d6b92e0b7e379bd", d)}"
+    "308331c3ef741d63bda760bb93ed0919ab4d4f43", \
+    "0bcb5baa8c908ae6793047a5b4ef93273dd520e8", d)}"
 
 # Renesas Yocto BSP version
 BSP_RENESAS_VERSION = "Renesas-Yocto-v7.26.0"
 
 # Renesas SDK version
-SDK_VERSION = "v4.36.0"
+SDK_VERSION = "v4.37.0"

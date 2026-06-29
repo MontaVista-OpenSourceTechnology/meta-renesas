@@ -53,6 +53,13 @@ do_install:append:rcar-gen5-evb() {
     install -m 644 ${UNPACKDIR}/max96712.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
 }
 
+do_install:append:rcar-gen5-vpf() {
+    install -d ${D}${sysconfdir}/modprobe.d/
+    echo "blacklist ucie-ldr-map" >> ${D}${sysconfdir}/modprobe.d/blacklist.conf
+    echo "blacklist ucie-dummy-rcar-host" >> ${D}${sysconfdir}/modprobe.d/blacklist.conf
+    echo "blacklist ucie-dummy-rcar" >> ${D}${sysconfdir}/modprobe.d/blacklist.conf
+}
+
 # Install MP-PHY firmware to staging directory if enabled for R-Car X5H board
 do_install_mp_phy_firmware () {
     if [ "${MACHINE}" = "ironhide" ] && [ -f ${UNPACKDIR}/rcar_gen5_mp_phy.bin ]; then
@@ -72,6 +79,10 @@ do_deploy:append:rcar-gen5() {
 }
 
 FILES:${PN}-uapi = "/usr/include"
+
+FILES:${KERNEL_PACKAGE_NAME}-modules += " \
+    ${sysconfdir}/modprobe.d/blacklist.conf \
+"
 
 # uio_pdrv_genirq and dmatest configuration
 KERNEL_MODULE_AUTOLOAD:append = " uio_pdrv_genirq dmatest"

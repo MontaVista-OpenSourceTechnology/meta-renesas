@@ -20,8 +20,6 @@ sha256sum=edc7dfe01d7ff6f4ee20c5c7000d71a885052b68263371b222efa38570076f8f"
 SRC_URI:rcar-gen5-vpf = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
 sha256sum=60d50ced467c05c6ed1084d2f283aeace22808337bb6a1beb1e2e16b5d096a51"
 
-SRC_URI:append = " file://blacklist.conf"
-
 S = "${UNPACKDIR}/rogue_km"
 
 KBUILD_DIR = "${S}/build/linux/r8a78000_linux"
@@ -48,9 +46,6 @@ module_do_install() {
     cd ${KBUILD_DIR}
     oe_runmake DISCIMAGE="${D}" install
     rm ${D}/etc/powervr_ddk_install_km.log
-    # Install blacklist config file
-    install -d ${D}${sysconfdir}/modprobe.d
-    install -m 644 ${UNPACKDIR}/blacklist.conf ${D}${sysconfdir}/modprobe.d/blacklist.conf
     if ${@bb.utils.contains('DISTRO_FEATURES', 'usrmerge', 'true', 'false', d)}; then
         mv ${D}/lib/modules/${KERNEL_VERSION}/* ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/
         rm -rf ${D}/lib
@@ -73,8 +68,7 @@ module_clean_symbol() {
 
 FILES:${PN} = " \
     ${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/pvrsrvkm.ko \
-    ${sysconfdir}/modules-load.d \
-    ${sysconfdir}/modprobe.d/blacklist.conf \
+    ${sysconfdir} \
 "
 
 RPROVIDES:${PN} += "kernel-module-pvrsrvkm"

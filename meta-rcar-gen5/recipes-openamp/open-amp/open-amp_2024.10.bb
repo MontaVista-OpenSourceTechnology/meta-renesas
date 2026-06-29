@@ -4,8 +4,8 @@ HOMEPAGE = "https://github.com/OpenAMP/open-amp"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dfc0adf4d04cc738ba65b7d3f587dca5"
 
-SRC_URI = "git://github.com/renesas-rcar/open-amp.git;protocol=https;branch=v2024.10/rcar_v2026.04"
-SRCREV = "606aed30695aac6695ec7a3aab60aa5a74792560"
+SRC_URI = "git://github.com/renesas-rcar/open-amp.git;protocol=https;branch=v2024.10/rcar_v2026.06"
+SRCREV = "cbc8320e01b294a4d8adb9e41cf4eab73bfeeece"
 
 
 DEPENDS = "libmetal"
@@ -22,6 +22,8 @@ EXTRA_OECMAKE = " \
     -DCMAKE_C_FLAGS='-I${S}/lib/include' \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 "
+
+EXTRA_OECMAKE:append:rcar-gen5-vpf = " -DRFS2X_ENV=1"
 
 FILES:${PN} = " \
     ${libdir}/*.so* \

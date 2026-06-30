@@ -46,6 +46,10 @@ module_do_install() {
     cd ${KBUILD_DIR}
     oe_runmake DISCIMAGE="${D}" install
     rm ${D}/etc/powervr_ddk_install_km.log
+    # Blacklist pvrsrvkm
+    install -d ${D}${sysconfdir}/modprobe.d/
+    echo "blacklist pvrsrvkm" >> ${D}${sysconfdir}/modprobe.d/gles.conf
+
     if ${@bb.utils.contains('DISTRO_FEATURES', 'usrmerge', 'true', 'false', d)}; then
         mv ${D}/lib/modules/${KERNEL_VERSION}/* ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/
         rm -rf ${D}/lib
@@ -68,7 +72,7 @@ module_clean_symbol() {
 
 FILES:${PN} = " \
     ${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/pvrsrvkm.ko \
-    ${sysconfdir} \
+    ${sysconfdir}/modprobe.d/gles.conf \
 "
 
 RPROVIDES:${PN} += "kernel-module-pvrsrvkm"

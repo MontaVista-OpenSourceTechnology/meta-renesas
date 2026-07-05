@@ -9,10 +9,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy python3native
 
-PV = "4.3.0+renesas+git${SRCPV}"
+PV = "4.10.0+renesas+git${SRCPV}"
 
-BRANCH = "rcar-gen3_4.3.0"
-SRCREV = "e5ad24b60929d5a67c6d2accec9a7da3102f93ad"
+BRANCH = "rcar-gen3_4.10.0"
+SRCREV = "a848a097e8e04fd2ece8550e5676064f2097c83c"
 
 SRC_URI = " \
     git://github.com/renesas-rcar/optee_os.git;branch=${BRANCH};protocol=https \

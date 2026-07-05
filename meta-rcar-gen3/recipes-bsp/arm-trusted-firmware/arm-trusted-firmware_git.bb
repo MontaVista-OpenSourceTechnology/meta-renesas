@@ -14,7 +14,7 @@ PV = "v2.11+renesas+git${SRCPV}"
 
 BRANCH = "rcar_gen3_v2.11"
 SRC_URI = "git://github.com/renesas-rcar/arm-trusted-firmware.git;branch=${BRANCH};protocol=https"
-SRCREV = "14a2c689adc2652272eb1bb42642bca2454b606c"
+SRCREV = "8507654ceac6df2ba98074fa0ea8423784898b19"
 
 
 S = "${WORKDIR}/git"
@@ -41,7 +41,9 @@ ebisu_r8a77990[4d]           = "LSI=E3 RCAR_SA0_SIZE=0 RCAR_AVS_SETTING_ENABLE=0
 draak_r8a77995[default]      = "LSI=D3 RCAR_SA0_SIZE=0 RCAR_AVS_SETTING_ENABLE=0 PMIC_ROHM_BD9571=0 RCAR_SYSTEM_SUSPEND=0 DEBUG=0 ${ATFW_OPT_BOOTMODE}"
 
 salvator_x_r8a7795[4x1g]     = "LSI=H3 RCAR_DRAM_SPLIT=1 RCAR_DRAM_LPDDR4_MEMCONF=0 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
-salvator_x_r8a7795[2x2g]     = "LSI=H3 RCAR_DRAM_SPLIT=2 RCAR_DRAM_CHANNEL=3 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
+salvator_x_r8a7795[2x2g]     = "LSI=H3N RCAR_DRAM_SPLIT=2 RCAR_DRAM_CHANNEL=5 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
+# Just uncomment the line below to test pseudo H3N (it overrides the real H3N [2x2g] config above)
+#salvator_x_r8a7795[2x2g]     = "LSI=H3 RCAR_DRAM_SPLIT=2 RCAR_DRAM_CHANNEL=3 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
 salvator_x_r8a7795[4x2g]     = "LSI=H3 RCAR_DRAM_SPLIT=1 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"
 
 salvator_x_r8a7796[default]  = "LSI=M3 RCAR_DRAM_SPLIT=2 ${ATFW_OPT_LOSSY} ${ATFW_OPT_BOOTMODE}"

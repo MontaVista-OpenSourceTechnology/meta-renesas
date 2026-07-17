@@ -43,6 +43,10 @@ do_install:append:rcar-gen5() {
     # Install dmatest module
     install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
     mv ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/kernel/drivers/dma/dmatest.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/
+
+    install -d ${D}${sysconfdir}/modprobe.d/
+    echo "blacklist max96712" >> ${D}${sysconfdir}/modprobe.d/blacklist.conf
+    echo "blacklist pci_endpoint_test" >> ${D}${sysconfdir}/modprobe.d/blacklist.conf
 }
 
 do_install:append:rcar-gen5-evb() {

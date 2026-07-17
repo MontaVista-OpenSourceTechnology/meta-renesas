@@ -1,0 +1,14 @@
+Upstream-Status: Inappropriate [configuration]
+
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index 0dd0d996e53e9..d59d71f12730a 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -336,6 +336,7 @@ config DRM_VRAM_HELPER
+ 
+ config DRM_TTM_HELPER
+ 	tristate
++	default y
+ 	depends on DRM
+ 	select DRM_TTM
+ 	help

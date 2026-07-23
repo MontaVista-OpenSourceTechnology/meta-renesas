@@ -18,7 +18,7 @@ SRC_URI:rcar-gen5-evb = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
 sha256sum=edc7dfe01d7ff6f4ee20c5c7000d71a885052b68263371b222efa38570076f8f"
 
 SRC_URI:rcar-gen5-vpf = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
-sha256sum=60d50ced467c05c6ed1084d2f283aeace22808337bb6a1beb1e2e16b5d096a51"
+sha256sum=ebc029dbb9421232b28e7aa7fd8aacfec49611985bcf0bd9ea48433cb5c34ad4"
 
 S = "${UNPACKDIR}/rogue_km"
 

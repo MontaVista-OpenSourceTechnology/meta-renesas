@@ -19,8 +19,8 @@ BRANCH = "${@ \
 }"
 SRCREV = "${@ \
     'e2037726e5f6c3d6de6bc7d78b50ea9e2248a00d' if d.getVar('USE_SAFE_RENDERING') == '1' else \
-    'b5e5ec32f57541c3ee2a4c3e3f4a9163ff0e55a0' if d.getVar('USE_LINUX_RT') == '1' else \
-    'efbd6aef6b1427a6d2b38ab5c946e2bc80840d4b' \
+    '80bb5e5033e0717fc11301edaa00ae9eb321a8f0' if d.getVar('USE_LINUX_RT') == '1' else \
+    '238fab7f754dbebb62f108ba2ea87dcb4aa987e7' \
 }"
 
 SRC_URI = "${RENESAS_BSP_URL};nocheckout=1;branch=${BRANCH};protocol=https"

@@ -5,7 +5,7 @@ RENESAS_BSP_URL = " \
 BRANCH = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", "rcar-5.1.4.rc3/saferendering.rc9", "v6.1.166/rcar-5.3.10.rc1", d)}"
 SRCREV = "${@oe.utils.conditional("USE_SAFE_RENDERING", "1", \
     "e2037726e5f6c3d6de6bc7d78b50ea9e2248a00d", \
-    "efbd6aef6b1427a6d2b38ab5c946e2bc80840d4b", d)}"
+    "238fab7f754dbebb62f108ba2ea87dcb4aa987e7", d)}"
 
 SRC_URI = "${RENESAS_BSP_URL};branch=${BRANCH};protocol=https"
 

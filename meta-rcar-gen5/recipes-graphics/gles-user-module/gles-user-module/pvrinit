@@ -1,0 +1,194 @@
+#!/bin/sh
+############################################################################ ###
+# File rc.pvr
+# Copyright Copyright (C) 2013-2016 Renesas Electronics Corporation
+# License Strictly Confidential.
+#### ###########################################################################
+
+# Auto-generated for r8a78000_linux from rogueddk_25.1@6794074
+#
+
+load_pvr()
+{
+	load_modules_exit_status=0
+	# powervr.ini parser
+	if [ -e /etc/powervr.ini ]; then
+		eval `sed -e 's/:space:*\=:space:*/=/g' \
+	            -e 's/;.*$//' \
+	            -e 's/:/_/g' \
+	            -e 's/:space:*$//' \
+	            -e 's/^:space:*//' \
+	            -e "s/^\(.*\)=\([^\"']*\)$/\1=\"\2\"/" \
+	            < /etc/powervr.ini \
+	            | sed -n -e "/^\[default\]/,/^\s*\[/{/^[^;].*\=.*/p;}"`
+		# save params
+		if [ ! ${EnableAPM} = "" ]; then
+			EnableAPM=$EnableAPM
+		else 
+			EnableAPM=0
+		fi
+		if [ ! ${DriverMode} = "" ]; then
+			DriverMode=`echo $DriverMode | tr [:upper:] [:lower:]`
+		else
+			DriverMode=0x7fffffff
+		fi
+		if [ ! ${PVR_SRVKM_PARAMS} = "" ]; then
+			PVR_SRVKM_PARAMS="DriverMode=${DriverMode} ${PVR_SRVKM_PARAMS}"
+		else
+			PVR_SRVKM_PARAMS="DriverMode=${DriverMode}"
+		fi
+	fi
+
+	# update modprobe.d config
+	PVR_SRVKM_OPTIONS="options pvrsrvkm ${PVR_SRVKM_PARAMS}"
+	MODPROBE_CONF="/etc/modprobe.d/pvrsrvkm.conf"
+	if [ -f ${MODPROBE_CONF} ]; then
+		CURRENT_OPTIONS=`cat ${MODPROBE_CONF}`
+	fi
+	if [ ! "${CURRENT_OPTIONS}" = "${PVR_SRVKM_OPTIONS}" ]; then
+		echo ${PVR_SRVKM_OPTIONS} > ${MODPROBE_CONF}
+	fi
+
+	if [ -f /usr/bin/devmem2 ]; then
+		echo "Power ON GPU"
+		devmem2 0xCB510CF0 w 0xA5A5A501 # Write Protect Off
+		devmem2 0xCB51020C w 0x00000001 # PD_GPCA1 Reset
+		devmem2 0xCB51020C w 0x00000003 # PD_GPCA1 Run
+		devmem2 0xCB510208 w 0x00000001 # PD_GPCB1 Reset
+		devmem2 0xCB510208 w 0x00000003 # PD_GPCB1 Run
+		devmem2 0xCB510204 w 0x00000001 # PD_GPCA0 Reset
+		devmem2 0xCB510204 w 0x00000003 # PD_GPCA0 Run
+		devmem2 0xCB510200 w 0x00000001 # PD_GPCB0 Reset
+		devmem2 0xCB510200 w 0x00000003 # PD_GPCB0 Run
+		devmem2 0xCB510CF0 w 0xA5A5A500 # Write Protect On
+		case "$1" in
+		P0S1)
+			echo "Setting to MC2 mode"
+			devmem2 0xCB00A100 word 0x00000000
+			devmem2 0xCB00A100 word
+			devmem2 0xCB000140 word 0x00000003
+			devmem2 0xCB0024E8 word
+			;;
+		P0P1)
+			echo "Setting to MC1 mode"
+			devmem2 0xCB00A100 word 0x00000000
+			devmem2 0xCB00A100 word
+			devmem2 0xCB000140 word 0x00000002
+			devmem2 0xCB0024E8 word
+			;;
+		esac
+	else
+		echo "devmem2 not supported - GPU MC2 mode not set"
+	fi
+
+	# Load the PVR Services module.
+	#
+	
+	if [ -n "$PVR_SRVKM_PARAMS" ] && ! /sbin/modprobe -q pvrsrvkm --dry-run --first-time; then
+		echo "Cannot set parameters for pvrsrvkm. Module already loaded."
+		some_modules_already_loaded=1
+		readonly load_modules_exit_status=1
+	elif ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS; then
+		echo "Module pvrsrvkm failed to load. Retrying."
+		if [ -z $depmod_has_been_run ]; then
+			if [ -e /sbin/depmod ]; then
+				echo "Running /sbin/depmod"
+				/sbin/depmod && depmod_has_been_run=1
+			fi
+		fi
+		if ! /sbin/modprobe -q pvrsrvkm $PVR_SRVKM_PARAMS ; then return; fi
+	fi
+	# This is correct location to set EnableAPM value follow guideline from IMG.
+	# But we will not set EnableAPM value 
+	# because we can't change if PVRSRV_LINUX_DEV_INIT_ON_PROBE is set.
+	# EnableAPM will use default value =2 and will reconsider in future with PVRSRV_LINUX_DEV_INIT_ON_OPEN.
+	# echo $EnableAPM > /sys/kernel/debug/pvr/gpu00/apphint/EnableAPM
+
+	# Load 3rd party module(s).
+	#
+		
+
+	if [ -n "$some_modules_already_loaded" ]; then
+		echo
+		echo "Could not set parameters for some modules."
+		echo "To fix this ensure automatic loading of those modules is disabled and restart the driver."
+		echo "See the platform guide for more details."
+	else
+		echo "Loaded PowerVR consumer services."
+	fi
+
+	return $load_modules_exit_status;
+}
+
+unload_pvr()
+{
+	# Stop the DRM Layer Compositor REL.
+	if ! /usr/local/bin/dlcsrv_REL -q ; then return; fi
+
+
+	# Unload 3rd party module(s).
+	#
+		
+	# Unload the PVR Services module.
+	#
+	if /sbin/modprobe -r pvrsrvkm; then :; else return 1; fi
+
+	devmem2 0xCB510CF0 w 0xA5A5A501 # Write Protect Off
+	devmem2 0xCB51020C w 0x00000001 # PD_GPCA1 Reset
+	devmem2 0xCB510208 w 0x00000001 # PD_GPCB1 Reset
+	devmem2 0xCB510204 w 0x00000001 # PD_GPCA0 Reset
+	devmem2 0xCB510200 w 0x00000001 # PD_GPCB0 Reset
+	devmem2 0xCB510CF0 w 0xA5A5A500 # Write Protect On
+		
+	echo "Unloaded PowerVR consumer services."
+	return 0;
+}
+
+# Deal with the type of invocation we get.
+#
+case "$1" in
+start)
+	load_pvr P0S1
+	;;
+stop)
+	if ! unload_pvr; then
+		echo "Couldn't unload modules" >&2;
+		exit 1
+	fi
+	;;
+reload|restart)
+		case "$2" in
+		P0S1|p0s1|mc2|MC2)
+			if unload_pvr; then
+				load_pvr P0S1
+			else
+				echo "Couldn't unload modules" >&2;
+				exit 1
+			fi
+			;;
+		P0P1|p0p1|mc1|MC1)
+			if unload_pvr; then
+				load_pvr P0P1
+			else
+				echo "Couldn't unload modules" >&2;
+				exit 1
+			fi
+			;;
+		"")
+			if unload_pvr; then
+				load_pvr
+			else
+				echo "Couldn't unload modules" >&2;
+				exit 1
+			fi
+			;;
+		*)
+			echo "$0: unknown argument $1." >&2;
+			;;
+		esac
+		;;
+*)
+	echo "$0: unknown argument $1." >&2;
+	;;
+esac
+

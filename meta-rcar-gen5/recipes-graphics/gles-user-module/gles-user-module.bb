@@ -20,12 +20,15 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI:rcar-gen5-evb = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=41729c473dd7795590972623436a20bb6fbe8e4a356cd8b378817f78837b7261"
+sha256sum=85ad8645b856bef8963d7459529a6e5ce51b847469790588e9732275e12b8b6e"
 
 SRC_URI:rcar-gen5-vpf = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=41729c473dd7795590972623436a20bb6fbe8e4a356cd8b378817f78837b7261"
+sha256sum=85ad8645b856bef8963d7459529a6e5ce51b847469790588e9732275e12b8b6e"
 
-SRC_URI:append = " file://rc.pvr.service"
+SRC_URI:append = " \
+    file://rc.pvr.service \
+    file://pvrinit \
+"
 
 inherit systemd
 
@@ -99,7 +102,7 @@ do_install() {
     install -d ${D}${systemd_system_unitdir}/
     install -m 644 ${UNPACKDIR}/rc.pvr.service ${D}${systemd_system_unitdir}/
     install -d ${D}${exec_prefix}/bin
-    install -m 755 ${S}/etc/init.d/rc.pvr ${D}${exec_prefix}/bin/pvrinit
+    install -m 755 ${UNPACKDIR}/pvrinit ${D}${exec_prefix}/bin/
 }
 
 PACKAGES = "\

@@ -15,10 +15,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 require include/rcar-gfx-common.inc
 
 SRC_URI:rcar-gen5-evb = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
-sha256sum=edc7dfe01d7ff6f4ee20c5c7000d71a885052b68263371b222efa38570076f8f"
+sha256sum=9c36c8127c3a6c3e6882059ee11b665c98ff35ed0a4a61e1c2b3696c5b6cdc17"
 
 SRC_URI:rcar-gen5-vpf = "${GFX_URL}/raw/${BRANCH}/gfxdrv/GSX_KM_X5H.tar.bz2;\
-sha256sum=ebc029dbb9421232b28e7aa7fd8aacfec49611985bcf0bd9ea48433cb5c34ad4"
+sha256sum=3aa00b7ec70ec4fd1a976a82943a8e8e3ab6c5d3cd52ebd09e9a65dab1815861"
 
 S = "${UNPACKDIR}/rogue_km"
 

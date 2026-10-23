@@ -12,6 +12,8 @@ SRC_URI = " \
     file://ufs-config-mdp_sandisk.bin \
     file://ufs-config-mdp_micron.bin \
     file://pcitest_dma_script.sh \
+    file://gPTP-master.cfg \
+    file://gPTP-slave.cfg \
 "
 
 do_install() {
@@ -26,6 +28,10 @@ do_install() {
     install -m 755 ${S}/ufs-config-mdp_sandisk.bin ${D}${ROOT_HOME}/
     install -m 755 ${S}/ufs-config-mdp_micron.bin ${D}${ROOT_HOME}/
     install -m 755 ${S}/pcitest_dma_script.sh ${D}${ROOT_HOME}/
+
+    install -d ${D}${ROOT_HOME}/gPTP_cfg
+    install -m 755 ${S}/gPTP-master.cfg ${D}${ROOT_HOME}/gPTP_cfg
+    install -m 755 ${S}/gPTP-slave.cfg ${D}${ROOT_HOME}/
 }
 
 RDEPENDS:${PN} += "bash"

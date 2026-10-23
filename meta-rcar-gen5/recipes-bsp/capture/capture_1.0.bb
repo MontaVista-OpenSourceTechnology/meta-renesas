@@ -10,7 +10,7 @@ inherit pkgconfig
 SRC_URI = "git://github.com/renesas-rcar/capture.git;protocol=https;nobranch=1"
 
 SRCREV:rcar-gen5-vpf = "1271dfe4c4d1acb2a13b3bd1461aaf2ff8c2bf6f"
-SRCREV:rcar-gen5-evb = "5a4b3269958df0bedc55c5a885df4243c2c18f3b"
+SRCREV:rcar-gen5-evb = "b59e034ccbbfa232367bdc02bcd705a8d8cf53f5"
 
 do_compile() {
     cd ${S}

@@ -20,7 +20,7 @@ PROVIDES = "virtual/gles-user-module virtual/egl virtual/libgles2"
 require include/rcar-gfx-common.inc
 
 SRC_URI:rcar-gen5-evb = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
-sha256sum=8fb921897c41c07969f949c84dcfd464be2906e91dfca13d4309ea2e145ba67b"
+sha256sum=9c5896e5947fecbd5cf72be7f297e86c6c9c6d9a1a8e84dc9e2f20d7fce6edf8"
 
 SRC_URI:rcar-gen5-vpf = "${GFX_URL}/raw/${BRANCH}/opengl/r8a78000_linux_gsx_binaries_gles.tar.bz2;\
 sha256sum=85ad8645b856bef8963d7459529a6e5ce51b847469790588e9732275e12b8b6e"
@@ -103,6 +103,33 @@ do_install() {
     install -m 644 ${UNPACKDIR}/rc.pvr.service ${D}${systemd_system_unitdir}/
     install -d ${D}${exec_prefix}/bin
     install -m 755 ${UNPACKDIR}/pvrinit ${D}${exec_prefix}/bin/
+
+    # Install graphics samples
+    GFX_SAMPLE_SRC=${S}/home/root/gfx_sample
+    GFX_SAMPLE_DST=${D}${ROOT_HOME}/gfx_sample
+
+    install -d ${GFX_SAMPLE_DST}/cl_sample
+    install -m 755 ${GFX_SAMPLE_SRC}/cl_sample/opencl_execution_time ${GFX_SAMPLE_DST}/cl_sample/
+
+    install -d ${GFX_SAMPLE_DST}/es32_sample
+    install -m 755 ${GFX_SAMPLE_SRC}/es32_sample/OES3_Texture ${GFX_SAMPLE_DST}/es32_sample/
+    install -m 644 ${GFX_SAMPLE_SRC}/es32_sample/*.vsh ${GFX_SAMPLE_SRC}/es32_sample/*.fsh ${GFX_SAMPLE_DST}/es32_sample/
+
+    install -d ${GFX_SAMPLE_DST}/es32_sample_EGLImage
+    install -m 755 ${GFX_SAMPLE_SRC}/es32_sample_EGLImage/OES3_Texture_Pixmap_EGLImage ${GFX_SAMPLE_DST}/es32_sample_EGLImage/
+    install -m 644 ${GFX_SAMPLE_SRC}/es32_sample_EGLImage/*.vsh ${GFX_SAMPLE_SRC}/es32_sample_EGLImage/*.fsh ${GFX_SAMPLE_DST}/es32_sample_EGLImage/
+
+    install -d ${GFX_SAMPLE_DST}/es32_sample_EGLImage_dma-buf
+    install -m 755 ${GFX_SAMPLE_SRC}/es32_sample_EGLImage_dma-buf/OES3_Texture_Pixmap_EGLImage_dma-buf ${GFX_SAMPLE_DST}/es32_sample_EGLImage_dma-buf/
+    install -m 644 ${GFX_SAMPLE_SRC}/es32_sample_EGLImage_dma-buf/*.vsh ${GFX_SAMPLE_SRC}/es32_sample_EGLImage_dma-buf/*.fsh ${GFX_SAMPLE_DST}/es32_sample_EGLImage_dma-buf/
+
+    install -d ${GFX_SAMPLE_DST}/es32_sample_ldr
+    install -m 755 ${GFX_SAMPLE_SRC}/es32_sample_ldr/OES3_Texture_Supported_LDR ${GFX_SAMPLE_DST}/es32_sample_ldr/
+    install -m 644 ${GFX_SAMPLE_SRC}/es32_sample_ldr/*.vsh ${GFX_SAMPLE_SRC}/es32_sample_ldr/*.fsh ${GFX_SAMPLE_DST}/es32_sample_ldr/
+
+    install -d ${GFX_SAMPLE_DST}/vk_sample/res
+    install -m 755 ${GFX_SAMPLE_SRC}/vk_sample/vk_sample ${GFX_SAMPLE_DST}/vk_sample/
+    install -m 644 ${GFX_SAMPLE_SRC}/vk_sample/res/*.spv ${GFX_SAMPLE_DST}/vk_sample/res/
 }
 
 PACKAGES = "\
@@ -135,6 +162,7 @@ FILES:${PN} = " \
     ${RENESAS_DATADIR}/bin/* \
     ${exec_prefix}/bin/* \
     ${libdir}/cmake/VulkanLoader/* \
+    ${ROOT_HOME}/gfx_sample \
 "
 FILES:libegl-${PN} = "${libdir}/libEGL.so*"
 FILES:libgles2-${PN} = "${libdir}/libGLESv2.so*"

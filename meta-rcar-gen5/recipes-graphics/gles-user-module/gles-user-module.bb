@@ -103,7 +103,10 @@ do_install() {
     install -m 644 ${UNPACKDIR}/rc.pvr.service ${D}${systemd_system_unitdir}/
     install -d ${D}${exec_prefix}/bin
     install -m 755 ${UNPACKDIR}/pvrinit ${D}${exec_prefix}/bin/
+}
 
+# gfx_sample is only available in the EVB package (not for VPF)
+do_install:append:rcar-gen5-evb() {
     # Install graphics samples
     GFX_SAMPLE_SRC=${S}/home/root/gfx_sample
     GFX_SAMPLE_DST=${D}${ROOT_HOME}/gfx_sample
@@ -162,8 +165,8 @@ FILES:${PN} = " \
     ${RENESAS_DATADIR}/bin/* \
     ${exec_prefix}/bin/* \
     ${libdir}/cmake/VulkanLoader/* \
-    ${ROOT_HOME}/gfx_sample \
 "
+FILES:${PN}:append:rcar-gen5-evb = " ${ROOT_HOME}/gfx_sample"
 FILES:libegl-${PN} = "${libdir}/libEGL.so*"
 FILES:libgles2-${PN} = "${libdir}/libGLESv2.so*"
 
